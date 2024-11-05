@@ -11,14 +11,38 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+bun.lockb
 
 
 # environment variables
 .env
 .env.production
+.env.local
+.env.example
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+.cursorrules
+
+# Local development files
+.vscode/
+*.local
+
+# Coverage directory used by testing tools
+coverage/
+
+# Temporary files
+*.log
+*.cache
+.cache
+.temp
+
+# System Files
+Thumbs.db
+
+# Astro specific
+.astro-i18n/
