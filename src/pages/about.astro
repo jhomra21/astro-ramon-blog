@@ -1,57 +1,11 @@
 ---
-import Tooltip from '@/components/Tooltip';
-import Layout from '../layouts/BlogPost.astro';
+import { getEntry } from 'astro:content';
+import BlogPost from '../layouts/BlogPost.astro';
+
+const about = await getEntry('blog', 'about');
+const { Content } = await about.render();
 ---
 
-<Layout
-	title="About"
-	description="Software Developer specializing in web development and AI applications"
-	
->
-	<h2>Featured Project</h2>
-	<p>
-		I recently developed a real-time AI image generation application using SolidJS, Hono, Fal.ai and Together AI. 
-		You can try it out live at <a href="https://realtime-live-image-gen.pages.dev/" target="_blank"><Tooltip triggerText="realtime-live-image-gen.pages.dev" tooltipContent="Try it out live" client:load/></a>
-	</p>
-	<p>
-		The source code is available on <a href="https://github.com/jhomra21/realtime-live-image-gen" target="_blank"><Tooltip triggerText="GitHub" tooltipContent="Source code" client:load/></a>
-	</p>
-
-	<h2>About Me</h2>
-	<p>
-		I'm Juan Ramon Martinez Bulnes, a Software Developer based in McAllen, TX. I specialize in web development
-		with expertise in multiple programming languages including C++, Python, Java, Ruby, and JavaScript. My focus
-		spans both front-end and back-end development, with particular emphasis on creating efficient, user-friendly
-		interfaces.
-	</p>
-
-	<h2>Education</h2>
-	<p>
-		I hold a Master's degree in Computer Science from the University of Texas Rio Grande Valley (2023), where I
-		also completed my Bachelor's in Computer Science (2020). During my academic journey, I mastered advanced
-		skills in software development, including object-oriented programming, web development, and mobile
-		application creation.
-	</p>
-
-	<h2>Technical Expertise</h2>
-	<ul>
-		<li>Web Development: Ruby on Rails, Node.js, Express, React, Flask, nginx, Heroku, Vercel, Docker</li>
-		<li>Programming Languages: C++, Python, Java, Ruby, Dart/Flutter, Go, JavaScript</li>
-		<li>Database Technologies: SQL, MySQL, PostgreSQL, SQLite, MongoDB</li>
-		<li>Development Tools: GitHub, JIRA Boards (Agile Methodology)</li>
-	</ul>
-
-	<h2>Notable Projects</h2>
-	<ul>
-		<li>AI Image Generation Flask App: A web application enabling users to connect with Replicate for AI image generation</li>
-		<li>Hotel Booking Website: A comprehensive booking system for the RGV area, featuring customer and management interfaces with Stripe payment integration</li>
-		<li>Machine Learning Project: Implemented reinforced learning to solve the Vermilion Gym challenge</li>
-	</ul>
-
-	<h2>Professional Experience</h2>
-	<p>
-		As a Student Web Dev Assistant at UTRGV's IT Web Development Office, I collaborated with faculty on
-		department page design and development, creating site template modules using Velocity in Java to improve
-		content management efficiency.
-	</p>
-</Layout>
+<BlogPost {...about.data}>
+	<Content />
+</BlogPost>
