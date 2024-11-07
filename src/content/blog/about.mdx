@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Badge } from "@/components/ui/badge";
 
 <div className="space-y-12 max-w-4xl mx-auto">
-  <Card className="p-6 border border-zinc-200 bg-primary/5 relative overflow-hidden">
+  <Card className="p-6 max-w-full border border-zinc-300 bg-primary/5 relative overflow-hidden">
     <div className="absolute top-0 right-0 w-32 h-32 -translate-y-16 translate-x-16">
       <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl"></div>
     </div>
@@ -24,8 +24,6 @@ import { Badge } from "@/components/ui/badge";
           target="_blank" 
           className="inline-flex items-center gap-2 hover:text-white transition-colors"
         >
-          
-        
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -111,7 +109,7 @@ import { Badge } from "@/components/ui/badge";
     <CardContent>
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-semibold mb-3">Web Development</h3>
+          <h3 className="text-lg text-zinc-500 font-semibold mb-3">Web Development</h3>
           <div className="flex flex-wrap gap-2">
             <Tooltip client:load 
               triggerText="Ruby on Rails" 
@@ -151,15 +149,15 @@ import { Badge } from "@/components/ui/badge";
               icon="Server" />
             <Tooltip client:load 
               triggerText="Cloudflare" 
-              tooltipContent="Web service"
+              tooltipContent="Deployment platform"
               icon="Cloud" />
             <Tooltip client:load 
               triggerText="Heroku" 
-              tooltipContent="Cloud platform"
+              tooltipContent="Deployment platform"
               icon="Cloud" />
             <Tooltip client:load 
               triggerText="Vercel" 
-              tooltipContent="Cloud platform"
+              tooltipContent="Deployment platform"
               icon="Triangle" />
             <Tooltip client:load 
               triggerText="Docker" 
@@ -169,7 +167,7 @@ import { Badge } from "@/components/ui/badge";
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold mb-3">Programming Languages</h3>
+          <h3 className="text-lg text-zinc-500 font-semibold mb-3">Programming Languages</h3>
           <div className="flex flex-wrap gap-2">
             <Badge>C++</Badge>
             <Badge>Python</Badge>
@@ -183,7 +181,7 @@ import { Badge } from "@/components/ui/badge";
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold mb-3">Database Technologies</h3>
+          <h3 className="text-lg text-zinc-500 font-semibold mb-3">Database Technologies</h3>
           <div className="flex flex-wrap gap-2">
             <Badge variant="outline">SQL</Badge>
             <Badge variant="outline">MySQL</Badge>
@@ -196,7 +194,7 @@ import { Badge } from "@/components/ui/badge";
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold mb-3">Development Tools</h3>
+          <h3 className="text-lg text-zinc-500 font-semibold mb-3">Development Tools</h3>
           <div className="flex flex-wrap gap-2">
             <Badge variant="secondary">GitHub</Badge>
             <Badge variant="secondary">JIRA Boards</Badge>

@@ -191,3 +191,12 @@ article ul {
 article ul li {
   margin-bottom: 0.5em;
 }
+
+@layer base {
+  :root {
+    --shimmer-bg: linear-gradient(90deg, transparent 0%, #000 50%, transparent 100%);
+  }
+  .dark {
+    --shimmer-bg: linear-gradient(90deg, transparent 0%, #fff 50%, transparent 100%);
+  }
+}

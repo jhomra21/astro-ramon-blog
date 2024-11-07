@@ -3,8 +3,9 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import { Button } from "@/components/ui/button";
 import Tooltip from "@/components/Tooltip";
+import { Card } from "@/components/ui/card";
+import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer";
 ---
 
 <!doctype html>
@@ -15,19 +16,34 @@ import Tooltip from "@/components/Tooltip";
 	<body>
 		<Header />
 		<main>
-			<h1 class="text-4xl font-bold mb-4">🧑‍🚀 Hello, Visitor!</h1>
-			
-			<p>
-				Welcome, my name is Juan Martinez. 
-			</p>
-			<p>
-				I'm a software developer, with a passion for web development and robust infrastructure.
-			</p>
+			<Card className="p-6 max-w-4xl mx-auto">
+				<div class="flex items-center gap-2 mb-4">
+					<span class="text-4xl">🧑‍🚀</span>
+					<TextScrambleShimmer 
+						text="Hello, Visitor!"
+						className="text-4xl text-zinc-900 dark:text-zinc-100"
+						scrambleDuration={1.6}
+						shimmerDuration={5}
+						client:load 
+					/>
+				</div>
 
-			<p class="flex items-center gap-2">
-				This site was built with <a href="https://astro.build/"> <Tooltip triggerText="Astro" tooltipContent="Link to Astro's site" client:load/> </a>
-			</p>
-			
+				<p>Welcome, my name is Juan Martinez.</p>
+				<p>
+					I'm a software developer, with a passion for web development
+					and robust infrastructure.
+				</p>
+
+				<p class="flex items-center gap-2">
+					This site was built with <a href="https://astro.build/">
+						<Tooltip
+							triggerText="Astro"
+							tooltipContent="Link to Astro's site"
+							client:load
+						/>
+					</a>
+				</p>
+			</Card>
 		</main>
 		<Footer />
 	</body>
