@@ -13,9 +13,26 @@ import { Badge } from "@/components/ui/badge";
       <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl"></div>
     </div>
     <CardHeader>
-      <div className="flex items-center gap-2 mb-2">
-        <Badge variant="default" className="bg-primary hover:bg-primary">Latest Project</Badge>
-        <Badge variant="outline" className="text-white">2024</Badge>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <Badge variant="default" className="bg-primary hover:bg-primary">Latest Project</Badge>
+          <Badge variant="outline" className="text-white">2024</Badge>
+        </div>
+        <Badge variant="outline" className="flex items-center gap-1.5">
+         <a 
+          href="https://realtime-live-image-gen.pages.dev/" 
+          target="_blank" 
+          className="inline-flex items-center gap-2 hover:text-white transition-colors"
+        >
+          
+        
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          </span>
+          LIVE
+          </a>  
+        </Badge>
       </div>
       <CardTitle className="text-3xl font-bold">Real-time AI Image Generation</CardTitle>
       <CardDescription className="text-lg">
@@ -211,7 +228,7 @@ import { Badge } from "@/components/ui/badge";
         <div>
           <h3 className="text-lg font-semibold mb-2">Machine Learning Project</h3>
           <p className="text-muted-foreground">
-            Implemented reinforced learning to solve the Vermilion Gym challenge
+            Implemented reinforced learning and markov chains to solve the Vermilion Gym challenge
           </p>
         </div>
       </div>
