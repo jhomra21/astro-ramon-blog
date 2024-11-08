@@ -16,10 +16,7 @@ const Card = React.forwardRef<
       "relative",
       className
     )}
-    style={{
-      WebkitBackdropFilter: 'blur(8px)',
-      backdropFilter: 'blur(8px)',
-    }}
+    
     {...props}
   />
 ))
