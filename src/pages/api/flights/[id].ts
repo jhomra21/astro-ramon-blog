@@ -1,12 +1,28 @@
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ params, request }) => {
+  // Get API key from runtime environment
+  const apiKey = import.meta.env.FLIGHT_API_KEY;
+  
+  if (!apiKey) {
+    console.error('FLIGHT_API_KEY is not set in environment');
+    return new Response(JSON.stringify({ 
+      error: 'API configuration error',
+      details: 'API key not configured' 
+    }), { 
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
   if (!params.id) {
     return new Response(JSON.stringify({ error: 'Flight ID is required' }), { status: 400 });
   }
+
   const flightId = params.id;
-  // Parse flight number format (e.g., "DL1234" -> { name: "DL", num: "1234" })
-  const airlineCode = flightId.slice(0, 2);
+  const airlineCode = flightId.slice(0, 2).toUpperCase(); // Ensure uppercase
   const flightNum = flightId.slice(2);
   
   // Get today's date in YYYYMMDD format
@@ -15,23 +31,31 @@ export const GET: APIRoute = async ({ params, request }) => {
     String(today.getMonth() + 1).padStart(2, '0') +
     String(today.getDate()).padStart(2, '0');
   
+  const url = new URL('https://api.flightapi.io/airline/' + apiKey);
+  url.search = new URLSearchParams({
+    num: flightNum,
+    name: airlineCode,
+    date: date
+  }).toString();
+
   try {
-    const response = await fetch(
-      `https://api.flightapi.io/airline/${import.meta.env.FLIGHT_API_KEY}?` + 
-      new URLSearchParams({
-        num: flightNum,
-        name: airlineCode,
-        date: date
-      }),
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+    console.log('Fetching flight data:', { airlineCode, flightNum, date }); // Debug log
+
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json'
       }
-    );
+    });
     
     if (!response.ok) {
-      throw new Error(`API responded with status: ${response.status}`);
+      const errorText = await response.text();
+      console.error('API Error Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText
+      });
+      
+      throw new Error(`API responded with status: ${response.status} - ${errorText}`);
     }
     
     const data = await response.json();
@@ -39,9 +63,7 @@ export const GET: APIRoute = async ({ params, request }) => {
     return new Response(JSON.stringify(data), {
       status: 200,
       headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS'
+        'Content-Type': 'application/json'
       }
     });
   } catch (error) {
@@ -54,8 +76,7 @@ export const GET: APIRoute = async ({ params, request }) => {
       {
         status: 500,
         headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Content-Type': 'application/json'
         }
       }
     );
