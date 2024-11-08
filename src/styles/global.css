@@ -174,10 +174,10 @@ pre > code {
 
   /* Glass effect for cards */
   .glass-card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(144, 188, 250, 0.119);
+    backdrop-filter: blur(80px);
+    -webkit-backdrop-filter: blur(80px);
+    border: 2px solid rgb(50, 116, 174);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   }
 }
