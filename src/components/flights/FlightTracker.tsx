@@ -127,6 +127,7 @@ export default function FlightTracker() {
             <Button 
               type="submit" 
               disabled={isLoading || !flightNumber.trim()}
+              className="bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 border border-blue-500/20 transition-all hover:shadow-md hover:translate-y-[-1px]"
             >
               {isLoading ? (
                 <>
@@ -164,7 +165,7 @@ export default function FlightTracker() {
                 <h3 className="text-base font-medium mb-3">Departures</h3>
                 <div className="flight-details-grid">
                   {data[0].departure.map((dep, index) => (
-                    <Card key={index} className="bg-background/50 backdrop-blur-sm">
+                    <Card key={index} className="bg-background/10 backdrop-blur-sm">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base flex items-center gap-2">
                           <MapPin className="h-4 w-4" />
@@ -197,7 +198,7 @@ export default function FlightTracker() {
                 <h3 className="text-base font-medium mb-3">Arrivals</h3>
                 <div className="flight-details-grid">
                   {data[1].arrival.map((arr, index) => (
-                    <Card key={index} className="bg-background/50 backdrop-blur-sm">
+                    <Card key={index} className="bg-background/10 backdrop-blur-sm">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base flex items-center gap-2">
                           <MapPin className="h-4 w-4" />
@@ -296,6 +297,7 @@ export default function FlightTracker() {
           }
 
           .flight-details-grid {
+            
             display: grid;
             grid-template-columns: 1fr;
             gap: 1rem;
