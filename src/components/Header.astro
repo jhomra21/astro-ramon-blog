@@ -35,10 +35,10 @@ import { SITE_TITLE } from '../consts';
 
 <script>
 	function handleScroll() {
-		const sections = document.querySelectorAll('.Card');
-		const navLinks = document.querySelectorAll('#nav-links a');
+		const navLinks = document.querySelectorAll('.internal-links a');
 		const currentPath = window.location.pathname;
-		const currentLink = document.querySelector(`a[href="${currentPath}"]`);
+		const currentLink = document.querySelector(`.internal-links a[href="${currentPath}"]`) || 
+		                   document.querySelector(`.internal-links a[href="/${currentPath.split('/')[1]}"]`);
 		const siteTitle = document.querySelector('h2 a');
 		
 		const winScroll = document.documentElement.scrollTop;
@@ -50,9 +50,7 @@ import { SITE_TITLE } from '../consts';
 			progressBar.style.width = scrolled + '%';
 		}
 
-		const viewportHeight = window.innerHeight;
 		const scrollPosition = window.scrollY;
-		
 		const isAtTop = scrollPosition < 100;
 		
 		if (isAtTop) {
@@ -64,7 +62,8 @@ import { SITE_TITLE } from '../consts';
 		}
 
 		navLinks.forEach(link => {
-			if (link === currentLink) {
+			if (link.getAttribute('href') === currentPath || 
+			    link.getAttribute('href') === `/${currentPath.split('/')[1]}`) {
 				link.classList.add('text-xl', 'font-bold');
 				link.classList.remove('muted');
 			} else {
@@ -76,8 +75,10 @@ import { SITE_TITLE } from '../consts';
 		siteTitle?.classList.add('text-2xl', 'font-bold');
 	}
 
-	window.addEventListener('scroll', handleScroll);
-	handleScroll();
+	document.addEventListener('DOMContentLoaded', () => {
+		window.addEventListener('scroll', handleScroll);
+		handleScroll();
+	});
 </script>
 
 <style>
@@ -166,9 +167,9 @@ import { SITE_TITLE } from '../consts';
 		font-weight: 700;
 	}
 	nav .internal-links a.text-xl {
-		font-size: 1.25rem;
+		font-size: 1.25rem !important;
 	}
 	nav .internal-links a.font-bold {
-		font-weight: 700;
+		font-weight: 700 !important;
 	}
 </style>
