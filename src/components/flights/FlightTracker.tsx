@@ -165,7 +165,7 @@ export default function FlightTracker() {
                 <h3 className="text-base font-medium mb-3">Departures</h3>
                 <div className="flight-details-grid">
                   {data[0].departure.map((dep, index) => (
-                    <Card key={index} className="bg-background/10 backdrop-blur-sm">
+                    <Card key={index} className="bg-background/50 backdrop-blur-sm">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base flex items-center gap-2">
                           <MapPin className="h-4 w-4" />
@@ -198,7 +198,7 @@ export default function FlightTracker() {
                 <h3 className="text-base font-medium mb-3">Arrivals</h3>
                 <div className="flight-details-grid">
                   {data[1].arrival.map((arr, index) => (
-                    <Card key={index} className="bg-background/10 backdrop-blur-sm">
+                    <Card key={index} className="bg-background/50 backdrop-blur-sm">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base flex items-center gap-2">
                           <MapPin className="h-4 w-4" />
@@ -237,7 +237,7 @@ export default function FlightTracker() {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
-            padding: 0 1rem;
+            padding: 0;
           }
 
           .search-card,
@@ -352,7 +352,7 @@ export default function FlightTracker() {
 
             .flight-tracker-container {
               gap: 1rem;
-              padding: 0 0.5rem;
+              padding: 0;
             }
 
             .search-form {
