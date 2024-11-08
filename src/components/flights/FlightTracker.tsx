@@ -33,6 +33,7 @@ interface FlightData {
 export default function FlightTracker() {
   const [flightNumber, setFlightNumber] = useState('');
   const [date, setDate] = useState<Date>(new Date());
+  const [open, setOpen] = useState(false);
   
   const today = new Date();
   const fromDate = subWeeks(today, 2);
@@ -85,7 +86,7 @@ export default function FlightTracker() {
                 onChange={(e) => setFlightNumber(e.target.value)}
               />
               
-              <Popover>
+              <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant={"outline"}
@@ -108,7 +109,12 @@ export default function FlightTracker() {
                   <Calendar
                     mode="single"
                     selected={date}
-                    onSelect={(date) => date && setDate(date)}
+                    onSelect={(date) => {
+                      if (date) {
+                        setDate(date);
+                        setOpen(false);
+                      }
+                    }}
                     initialFocus
                     disabled={(date) => date < fromDate || date > toDate}
                     fromDate={fromDate}
@@ -230,24 +236,15 @@ export default function FlightTracker() {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
+            padding: 0 1rem;
           }
 
-          .search-card {
-            width: 100%;
-            background: rgba(144, 188, 250, 0.119);
-            backdrop-filter: blur(80px);
-            -webkit-backdrop-filter: blur(80px);
-            border: 2px solid rgb(50, 116, 174, 0.119);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            transition: transform 0.2s ease;
-          }
-          
+          .search-card,
           .results-card {
             width: 100%;
-            backdrop-filter: blur(80px);
-            -webkit-backdrop-filter: blur(80px);
-            border: 1px solid rgb(50, 116, 174);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            background: rgb(144, 188, 250, 0.05);
+            border: 1px solid rgba(50, 116, 174, 0.2);
+            box-shadow: 0 4px 12px rgba(31, 38, 135, 0.1);
             transition: transform 0.2s ease;
           }
 
@@ -271,27 +268,19 @@ export default function FlightTracker() {
           @media (min-width: 640px) {
             .search-inputs {
               flex-direction: row;
-              gap: 1rem;
             }
 
             .search-inputs > * {
               flex: 1;
-              min-width: 0; /* Prevents flex items from overflowing */
+              min-width: 0;
             }
           }
 
           .error-card {
             width: 100%;
-            max-width: min(360px, calc(100% - 2rem));
-            margin: 0 auto;
             background-color: rgba(239, 68, 68, 0.1);
             color: rgb(239, 68, 68);
             border: 1px solid rgba(239, 68, 68, 0.2);
-          }
-
-          .results-card {
-            max-width: 100%;
-            margin: 0;
           }
 
           .flight-segments {
@@ -308,9 +297,26 @@ export default function FlightTracker() {
 
           .flight-details-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: 1fr;
             gap: 1rem;
             width: 100%;
+          }
+
+          @media (min-width: 768px) {
+            .flight-details-grid {
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+          }
+
+          /* Inner cards styling */
+          .bg-background\\/50 {
+            background: rgba(144, 188, 250, 0.05);
+            border: 1px solid rgba(50, 116, 174, 0.2);
+            transition: transform 0.2s ease;
+          }
+
+          .bg-background\\/50:hover {
+            transform: translateY(-1px);
           }
 
           /* Calendar styles */
@@ -321,10 +327,6 @@ export default function FlightTracker() {
 
           /* Responsive calendar popup */
           @media (max-width: 640px) {
-            .flight-tracker-container {
-              padding: 0;
-            }
-
             [data-radix-popper-content-wrapper] {
               position: fixed !important;
               top: 50% !important;
@@ -333,21 +335,6 @@ export default function FlightTracker() {
               max-width: min(calc(100vw - 2rem), 360px) !important;
               margin: 0 auto !important;
               z-index: 1000;
-            }
-
-            .search-card,
-            .results-card,
-            .error-card {
-              max-width: 100%;
-              margin: 0;
-            }
-          }
-
-          /* Support for browsers without backdrop-filter */
-          @supports not (backdrop-filter: blur(80px)) {
-            .search-card,
-            .results-card {
-              background: rgba(144, 188, 250, 0.25);
             }
           }
 
@@ -363,24 +350,12 @@ export default function FlightTracker() {
 
             .flight-tracker-container {
               gap: 1rem;
+              padding: 0 0.5rem;
             }
 
             .search-form {
               gap: 0.75rem;
             }
-          }
-
-          /* Inner cards styling */
-          .bg-background\\/50 {
-            background: rgba(144, 188, 250, 0.08);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(50, 116, 174, 0.3);
-            transition: transform 0.2s ease;
-          }
-
-          .bg-background\\/50:hover {
-            transform: translateY(-1px);
           }
 
           /* Ensure proper spacing in card content */
