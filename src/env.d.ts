@@ -4,6 +4,7 @@ interface ImportMetaEnv {
   readonly FLIGHT_API_KEY: string;
   readonly NODE_ENV: string;
   readonly PLATFORM?: string;
+  readonly DEV: boolean;
 }
 
 interface ImportMeta {

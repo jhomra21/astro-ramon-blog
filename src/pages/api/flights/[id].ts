@@ -1,8 +1,10 @@
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ params, request, locals }) => {
-  // Get API key from locals.runtime.env
-  const apiKey = locals.runtime?.env?.FLIGHT_API_KEY;
+  // Get API key based on environment
+  const apiKey = import.meta.env.DEV 
+    ? import.meta.env.FLIGHT_API_KEY  // Development
+    : locals.runtime?.env?.FLIGHT_API_KEY;  // Production
   
   if (!apiKey) {
     console.error('FLIGHT_API_KEY is not set in environment');
@@ -10,7 +12,7 @@ export const GET: APIRoute = async ({ params, request, locals }) => {
       error: 'API configuration error',
       details: 'API key not configured',
       runtime: {
-        env: locals.runtime?.env?.NODE_ENV,
+        env: import.meta.env.DEV ? 'development' : 'production',
         platform: 'cloudflare'
       }
     }), { 
@@ -25,27 +27,26 @@ export const GET: APIRoute = async ({ params, request, locals }) => {
     return new Response(JSON.stringify({ error: 'Flight ID is required' }), { status: 400 });
   }
 
+  // Get date from query params or use today's date
+  const url = new URL(request.url);
+  const queryDate = url.searchParams.get('date');
+  const date = queryDate || new Date().toISOString().slice(0, 10).replace(/-/g, '');
+
   const flightId = params.id;
   const airlineCode = flightId.slice(0, 2).toUpperCase(); // Ensure uppercase
   const flightNum = flightId.slice(2);
   
-  // Get today's date in YYYYMMDD format
-  const today = new Date();
-  const date = today.getFullYear() +
-    String(today.getMonth() + 1).padStart(2, '0') +
-    String(today.getDate()).padStart(2, '0');
-  
-  const url = new URL('https://api.flightapi.io/airline/' + apiKey);
-  url.search = new URLSearchParams({
+  const apiUrl = new URL('https://api.flightapi.io/airline/' + apiKey);
+  apiUrl.search = new URLSearchParams({
     num: flightNum,
     name: airlineCode,
-    date: date
+    date: date // Use the date from query params or today's date
   }).toString();
 
   try {
     console.log('Fetching flight data:', { airlineCode, flightNum, date }); // Debug log
 
-    const response = await fetch(url, {
+    const response = await fetch(apiUrl, {
       headers: {
         'Content-Type': 'application/json'
       }
