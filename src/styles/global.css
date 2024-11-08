@@ -200,3 +200,9 @@ article ul li {
     --shimmer-bg: linear-gradient(90deg, transparent 0%, #fff 50%, transparent 100%);
   }
 }
+
+@supports not (backdrop-filter: blur()) {
+    .glass-card {
+      background: rgba(255, 255, 255, 0.8);
+    }
+  }
