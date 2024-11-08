@@ -13,8 +13,10 @@ export function TextShimmer({
   className = "text-4xl font-bold mb-4",
   duration = 1,
 }: TextShimmerProps) {
+  const MotionDiv = motion.create('div');
+  
   return (
-    <motion.div
+    <MotionDiv
       className={cn(
         'relative inline-block bg-clip-text text-transparent',
         className
@@ -33,6 +35,6 @@ export function TextShimmer({
       }}
     >
       {text}
-    </motion.div>
+    </MotionDiv>
   );
 }
