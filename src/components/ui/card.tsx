@@ -11,12 +11,15 @@ const Card = React.forwardRef<
     className={cn(
       "rounded-xl",
       "bg-gradient-to-b from-white/15 via-white/5 to-transparent",
-      "backdrop-blur-md",
       "border border-white/20",
       "shadow-[0_8px_32px_rgba(0,0,0,0.12)]",
       "relative",
       className
     )}
+    style={{
+      WebkitBackdropFilter: 'blur(8px)',
+      backdropFilter: 'blur(8px)',
+    }}
     {...props}
   />
 ))
