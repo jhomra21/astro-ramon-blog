@@ -2,16 +2,22 @@
 
 interface ImportMetaEnv {
   readonly FLIGHT_API_KEY: string;
-  readonly NODE_ENV: 'development' | 'production' | 'test';
+  readonly NODE_ENV: string;
+  readonly PLATFORM?: string;
 }
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-declare namespace NodeJS {
-  interface ProcessEnv {
-    readonly FLIGHT_API_KEY: string;
-    readonly NODE_ENV: 'development' | 'production' | 'test';
+// Define runtime env for Cloudflare
+declare namespace App {
+  interface Locals {
+    runtime: {
+      env: {
+        FLIGHT_API_KEY: string;
+        NODE_ENV?: string;
+      };
+    };
   }
 }

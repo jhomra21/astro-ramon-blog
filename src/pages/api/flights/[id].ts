@@ -1,15 +1,18 @@
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ params, request, locals }) => {
-  // Get API key from Cloudflare environment
-  const apiKey = import.meta.env.FLIGHT_API_KEY || process.env.FLIGHT_API_KEY;
+  // Get API key from locals.runtime.env
+  const apiKey = locals.runtime?.env?.FLIGHT_API_KEY;
   
   if (!apiKey) {
     console.error('FLIGHT_API_KEY is not set in environment');
     return new Response(JSON.stringify({ 
       error: 'API configuration error',
       details: 'API key not configured',
-      env: process.env.NODE_ENV // Add this for debugging
+      runtime: {
+        env: locals.runtime?.env?.NODE_ENV,
+        platform: 'cloudflare'
+      }
     }), { 
       status: 500,
       headers: {
