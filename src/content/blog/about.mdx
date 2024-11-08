@@ -1,5 +1,5 @@
 ---
-title: 'About'
+title: 'about'
 description: 'Software Developer specializing in web development and AI applications'
 ---
 
@@ -93,12 +93,29 @@ import { Badge } from "@/components/ui/badge";
       <CardTitle className="text-2xl font-bold">Education</CardTitle>
     </CardHeader>
     <CardContent>
-      <p>
-        I hold a Master's degree in Computer Science from the University of Texas Rio Grande Valley (2023), where I
-        also completed my Bachelor's in Computer Science (2020). During my academic journey, I mastered advanced
-        skills in software development, including object-oriented programming, web development, and mobile
-        application creation.
-      </p>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b">
+              <th className="text-left py-2 px-4 font-semibold text-muted-foreground">Year</th>
+              <th className="text-left py-2 px-4 font-semibold text-muted-foreground">Degree</th>
+              <th className="text-left py-2 px-4 font-semibold text-muted-foreground">Institution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b">
+              <td className="py-3 px-4">2023</td>
+              <td className="py-3 px-4">Master of Science in Computer Science</td>
+              <td className="py-3 px-4">University of Texas Rio Grande Valley</td>
+            </tr>
+            <tr>
+              <td className="py-3 px-4">2020</td>
+              <td className="py-3 px-4">Bachelor of Science in Computer Science</td>
+              <td className="py-3 px-4">University of Texas Rio Grande Valley</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </CardContent>
   </Card>
 
