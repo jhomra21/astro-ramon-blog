@@ -4,6 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE } from '../../consts';
 import FlightTracker from '../../components/flights/FlightTracker';
+import { Plane } from 'lucide-react';
 ---
 
 <!doctype html>
@@ -19,9 +20,14 @@ import FlightTracker from '../../components/flights/FlightTracker';
 		<main>
 			<div class="max-w-5xl mx-auto px-2 sm:px-6">
 				<div class="py-4 sm:py-6">
-					<h1 class="text-3xl sm:text-4xl font-bold mb-2">Flight Tracker</h1>
+					<div class="relative inline-flex items-center gap-3">
+						<h1 class="text-3xl sm:text-4xl font-bold mb-2">Flight Tracker</h1>
+						<div class="plane-animation">
+							<Plane className="h-7 w-7 sm:h-8 sm:w-8 text-blue-500" />
+						</div>
+					</div>
 					<p class="text-sm sm:text-base text-muted-foreground">
-							Track flights in real-time using Flight API
+						Track flights in real-time using Flight API
 					</p>
 				</div>
 				<div class="w-full flex flex-col items-start">
@@ -34,6 +40,65 @@ import FlightTracker from '../../components/flights/FlightTracker';
 		<style>
 			main {
 				width: 100%;
+			}
+
+			.plane-animation {
+				animation: flyPlane 8s infinite;
+				transform: translate(100%, -100%);
+				transition: all 0.3s ease-in-out;
+			}
+
+			.plane-animation:hover {
+				animation-play-state: paused;
+			}
+
+			@keyframes flyPlane {
+				0% {
+					transform: translate(100%, -50%) rotate(-135deg) scale(0.9);
+					opacity: 0;
+				}
+				/* Coming in for landing */
+				15% {
+					transform: translate(50%, -25%) rotate(-135deg) scale(0.95);
+					opacity: 1;
+				}
+				/* Rotating to land */
+				25% {
+					transform: translate(0, 0) rotate(-180deg) scale(1);
+					opacity: 1;
+				}
+				/* Waiting on the ground facing left */
+				50% {
+					transform: translate(0, 0) rotate(-180deg) scale(1);
+					opacity: 1;
+				}
+				/* Rotate to takeoff position */
+				55% {
+					transform: translate(0, 0) rotate(45deg) scale(0.95);
+					opacity: 1;
+				}
+				/* Wait 1 second after rotation */
+				70% {
+					transform: translate(0, 0) rotate(45deg) scale(0.95);
+					opacity: 1;
+				}
+				/* Taking off */
+				85% {
+					transform: translate(50%, -25%) rotate(45deg) scale(0.95);
+					opacity: 1;
+				}
+				/* Flying away */
+				100% {
+					transform: translate(100%, -50%) rotate(45deg) scale(0.9);
+					opacity: 0;
+				}
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				.plane-animation {
+					animation: none;
+					transform: none;
+				}
 			}
 		</style>
 	</body>

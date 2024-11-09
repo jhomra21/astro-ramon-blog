@@ -70,13 +70,13 @@ export default function FlightTracker() {
   return (
     <div className="flight-tracker-container">
       <Card className="search-card">
-        <CardHeader className="pb-4">
+        <CardHeader className="pb-2 px-4">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Plane className="h-5 w-5" />
             Search Flight
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-2 px-4">
           <form onSubmit={handleSearch} className="search-form">
             <div className="search-inputs">
               <Input
@@ -247,6 +247,7 @@ export default function FlightTracker() {
             border: 1px solid rgba(50, 116, 174, 0.2);
             box-shadow: 0 4px 12px rgba(31, 38, 135, 0.1);
             transition: transform 0.2s ease;
+            padding: 0;
           }
 
           .search-card:hover,
@@ -257,18 +258,19 @@ export default function FlightTracker() {
           .search-form {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.75rem;
           }
 
           .search-inputs {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.5rem;
           }
 
           @media (min-width: 640px) {
             .search-inputs {
               flex-direction: row;
+              gap: 0.5rem;
             }
 
             .search-inputs > * {
@@ -291,6 +293,7 @@ export default function FlightTracker() {
           }
 
           .segment-section {
+            padding: 0 !important; 
             display: flex;
             flex-direction: column;
             gap: 1rem;
