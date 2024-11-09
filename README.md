@@ -17,11 +17,13 @@ This site is built using a modern tech stack to ensure high performance, scalabi
 
 ## 🚀 Features
 
-- **Real-time AI Image Generation**: A web application built with SolidJS, Hono, Fal.ai, and Together AI, showcasing the latest project.
+- **Blog**: A blog built with Astro, React, Tailwind CSS, MDX, and Cloudflare, showcasing my latest work and expertise.
+- **mini Flight Tracker**: A simple flight tracker built with Astro, React, tanstack query, and Cloudflare, showcasing my latest work and expertise.
 - **Responsive Design**: Ensures the site looks great on all devices.
 - **SEO Optimized**: Includes canonical URLs and OpenGraph data for better search engine visibility.
 - **Interactive Components**: Built with React and MDX for a dynamic user experience.
 - **Content Management**: Uses Markdown and MDX for easy content creation and management.
+- **Performance**: Optimized for speed and efficiency, ensuring a seamless user experience.
 
 ## 📂 Project Structure
 
@@ -41,7 +43,7 @@ The project is organized into the following directories:
 
 ## 🧞 Commands
 
-Run these commands from the root of the project:
+Commands used:
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
