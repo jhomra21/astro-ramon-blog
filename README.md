@@ -1,6 +1,6 @@
 # Juan.dev: Personal Blog and Portfolio
 
-Welcome to Juan.dev, a personal blog and portfolio site showcasing the work and expertise of Juan Ramon Martinez Bulnes, a software developer specializing in web development and AI applications.
+Welcome to Juan.dev, a personal blog and portfolio site showcasing my work and expertise. I am a software developer specializing in web development.
 
 ## 🌐 Tech Stack
 
