@@ -1,68 +1,57 @@
-# Astro Starter Kit: Blog
+# Juan.dev: Personal Blog and Portfolio
 
-```sh
-npm create astro@latest -- --template blog
-```
+Welcome to Juan.dev, a personal blog and portfolio site showcasing the work and expertise of Juan Ramon Martinez Bulnes, a software developer specializing in web development and AI applications.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/blog)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/blog/devcontainer.json)
+## 🌐 Tech Stack
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+This site is built using a modern tech stack to ensure high performance, scalability, and a seamless user experience:
 
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+- **Astro**: A modern static site generator that allows for fast and optimized web pages. It supports multiple frameworks like React, Vue, and Svelte.
+- **React**: Utilized for building interactive UI components.
+- **Tailwind CSS**: A utility-first CSS framework for styling, providing a responsive and customizable design.
+- **MDX**: Enables the use of JSX in Markdown files, allowing for dynamic content and component integration.
+- **Cloudflare**: Used for deployment, ensuring fast and secure delivery of content.
+- **Framer Motion**: For creating smooth animations and transitions.
+- **Lucide Icons**: A collection of beautiful and customizable icons used throughout the site.
+- **Bun**: A fast JavaScript runtime used for building and running the project, enhancing performance and development speed.
 
-Features:
+## 🚀 Features
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+- **Real-time AI Image Generation**: A web application built with SolidJS, Hono, Fal.ai, and Together AI, showcasing the latest project.
+- **Responsive Design**: Ensures the site looks great on all devices.
+- **SEO Optimized**: Includes canonical URLs and OpenGraph data for better search engine visibility.
+- **Interactive Components**: Built with React and MDX for a dynamic user experience.
+- **Content Management**: Uses Markdown and MDX for easy content creation and management.
 
-## 🚀 Project Structure
+## 📂 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+The project is organized into the following directories:
 
 ```text
-├── public/
+├── public/                # Static assets like images
 ├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+│   ├── components/        # UI components
+│   ├── content/           # Markdown and MDX content
+│   ├── layouts/           # Layout components
+│   └── pages/             # Page components
+├── astro.config.mjs       # Astro configuration
+├── package.json           # Project metadata and dependencies
+└── tsconfig.json          # TypeScript configuration
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
 
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+Run these commands from the root of the project:
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `bun install`             | Installs dependencies using Bun                  |
+| `bun run dev`             | Starts local dev server at `localhost:4321`      |
+| `bun run build`           | Builds the production site to `./dist/`          |
+| `bun run preview`         | Previews the build locally before deploying      |
+| `bun run astro ...`       | Runs Astro CLI commands                          |
+| `bun run astro -- --help` | Displays help for the Astro CLI                  |
 
-## 👀 Want to learn more?
+## 📚 Learn More
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+For more information, visit the [Astro documentation](https://docs.astro.build) or join the [Astro Discord server](https://astro.build/chat).
