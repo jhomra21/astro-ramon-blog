@@ -35,12 +35,16 @@ body {
 	color: #444444;
 	font-size: 18px;
 	line-height: 1.7;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 main {
 	width: 960px;
 	max-width: calc(100% - 2em);
 	margin: auto;
 	padding: 3em 1em;
+	flex: 1;
 }
 h1,
 h2,
