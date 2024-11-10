@@ -1,15 +1,19 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
+import Image from 'astro/components/Image.astro';
 ---
 
 <footer class="relative border-t border-gray-200 mt-auto">
 	<!-- Background Image -->
 	<div class="absolute inset-0 z-0">
-		<img 
+		<Image 
+			loading="eager"
 			src="/NASA-astronaut-Matthew-Dominick-amazing-photo-Milky-Way-Soyuz-spacecraft-ISS-Nikon-Z9-camera-3.jpeg"
 			alt="NASA Milky Way view from ISS"
 			class="w-full h-full object-cover"
+			width={1920}
+			height={1080}
 		/>
 		<!-- Dark overlay for better text readability -->
 		<div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
