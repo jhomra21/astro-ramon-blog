@@ -355,11 +355,17 @@ export default function FlightTracker() {
 
             .flight-tracker-container {
               gap: 1rem;
-              padding: 0;
+              padding: 0 0.5rem;
             }
 
             .search-form {
-              gap: 0.75rem;
+              gap: 0.5rem;
+            }
+
+            /* Ensure buttons stack properly on mobile */
+            .flex-col > a {
+              width: 100%;
+              justify-content: flex-start;
             }
           }
 
