@@ -11,40 +11,60 @@ export function TypewriterEffect({ text, delay = 5000, className = '' }: Typewri
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
+  const [isHighlighted, setIsHighlighted] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
     
     const type = () => {
-      const current = loopNum % text.length;
-      
       if (!isDeleting) {
+        setIsVisible(true);
         setDisplayText(text.substring(0, displayText.length + 1));
         
         if (displayText.length === text.length) {
           timer = setTimeout(() => {
-            setIsDeleting(true);
+            setIsHighlighted(true);
+            setTimeout(() => {
+              setIsHighlighted(false);
+              setIsVisible(false);
+              setTimeout(() => {
+                setDisplayText('');
+                setIsDeleting(false);
+                setLoopNum(loopNum + 1);
+              }, 300);
+            }, 1000);
           }, delay);
         }
       } else {
-        setDisplayText(text.substring(0, displayText.length - 1));
-        
-        if (displayText.length === 0) {
-          setIsDeleting(false);
-          setLoopNum(loopNum + 1);
-        }
+        timer = setTimeout(type, 100);
       }
     };
 
-    timer = setTimeout(type, isDeleting ? 50 : 100);
+    timer = setTimeout(type, 100);
 
     return () => clearTimeout(timer);
   }, [displayText, isDeleting, loopNum, text, delay]);
 
   return (
-    <span className={className}>
-      {displayText}
-      <span className="inline-flex w-3 h-[4px] relative top-[2px] animate-cursor bg-current" />
+    <span className={`${className} relative inline-flex`}>
+      <span 
+        className={`
+          transition-colors duration-300
+          ${isHighlighted ? 'bg-black text-white dark:bg-white dark:text-black' : ''}
+          ${isVisible ? 'opacity-100' : 'opacity-0'}
+        `}
+      >
+        {displayText}
+      </span>
+      <span 
+        className="animate-cursor" 
+        style={{ 
+          marginLeft: '2px'
+        }} 
+      >
+        _
+      </span>
     </span>
   );
 }

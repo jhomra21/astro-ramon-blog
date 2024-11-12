@@ -247,13 +247,11 @@ article ul li {
 }
 
 @keyframes cursor {
-  0%, 100% { opacity: 1; width: 16px; }
-  50% { opacity: 0; width: 8px; }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 .animate-cursor {
   animation: cursor 1s step-end infinite;
-  margin-left: 2px;
-  position: relative;
-  top: -1px;
+  display: inline-block;
 }
