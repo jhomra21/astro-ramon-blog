@@ -1,12 +1,17 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
+import { TypewriterEffect } from './TypewriterEffect';
 ---
 
 <header>
 	<div class="progress-bar" id="scroll-progress"></div>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<h2>
+			<a href="/">
+				<TypewriterEffect client:load text={SITE_TITLE} className="inline-block" />
+			</a>
+		</h2>
 		<div class="internal-links" id="nav-links">
 			<HeaderLink href="/">home</HeaderLink>
 			<HeaderLink href="/about">about</HeaderLink>
