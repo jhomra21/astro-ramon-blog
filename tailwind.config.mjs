@@ -50,8 +50,27 @@ export default {
     				'4': 'hsl(var(--chart-4))',
     				'5': 'hsl(var(--chart-5))'
     			}
-    		}
+    		},
+    		typography: {
+    			DEFAULT: {
+    				css: {
+    					maxWidth: 'none',
+    					h1: {
+    						scrollMarginTop: '6rem',
+    					},
+    					h2: {
+    						scrollMarginTop: '6rem',
+    					},
+    					h3: {
+    						scrollMarginTop: '6rem',
+    					},
+    				},
+    			},
+    		},
     	}
     },
-	plugins: [require("tailwindcss-animate")],
+	plugins: [
+		require("tailwindcss-animate"),
+		require('@tailwindcss/typography'),
+	],
 }
