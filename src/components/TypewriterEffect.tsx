@@ -14,6 +14,9 @@ export function TypewriterEffect({ text, delay = 5000, className = '' }: Typewri
   const [isHighlighted, setIsHighlighted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
+  // Calculate the width based on the text length
+  const textWidth = `${text.length}ch`;
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     
@@ -47,7 +50,7 @@ export function TypewriterEffect({ text, delay = 5000, className = '' }: Typewri
   }, [displayText, isDeleting, loopNum, text, delay]);
 
   return (
-    <span className={`${className} relative inline-flex`}>
+    <span className={`${className} relative inline-flex`} style={{ minWidth: textWidth }}>
       <span 
         className={`
           transition-colors duration-300

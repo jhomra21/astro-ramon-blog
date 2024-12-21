@@ -255,3 +255,29 @@ article ul li {
   animation: cursor 1s step-end infinite;
   display: inline-block;
 }
+
+.iss-tracker-container {
+  position: relative;
+  max-height: 600px;
+  overflow: hidden;
+}
+
+.iss-tracker-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  mask-image: linear-gradient(transparent, black 90%);
+  -webkit-mask-image: linear-gradient(transparent, black 90%);
+  pointer-events: none;
+}
+
+.iss-tracker-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}

@@ -107,6 +107,64 @@ import { Badge } from "@/components/ui/badge";
 					</div>
 				</Card>
 
+				<!-- ISS Tracker Project -->
+				<Card className="p-6 relative glass-card transform transition-all duration-300 ease-out hover:translate-y-[-2px] bg-indigo-100 backdrop-blur-sm hover:bg-indigo-200/50 hover:border-white/20">
+					<div class="relative z-10">
+						<div class="flex items-center justify-between flex-wrap gap-2 mb-4">
+							<div class="flex items-center gap-2">
+								<Badge variant="default" className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-medium px-4 py-1 shadow-lg hover:shadow-xl transition-all duration-300">
+									Featured Project
+								</Badge>
+								<Badge variant="outline">2024</Badge>
+							</div>
+							<Badge variant="outline" className="flex items-center gap-1.5 min-w-[70px] justify-center">
+								<a 
+									href="https://3d-globe-iss-tracker.pages.dev/" 
+									target="_blank" 
+									class="inline-flex items-center gap-2 hover:text-white transition-colors px-1"
+								>
+									<span class="relative flex h-2 w-2">
+										<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+										<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+									</span>
+									LIVE
+								</a>
+							</Badge>
+						</div>
+						<a href="https://3d-globe-iss-tracker.pages.dev/">
+							<h2 class="text-2xl font-bold mb-2">3D Globe ISS Tracker</h2>
+						</a>
+						<p class="text-muted-foreground mb-4">
+							Real-time ISS tracking with an interactive 3D globe visualization, built with modern web technologies
+						</p>
+						<div class="flex flex-wrap gap-2">
+							<Badge variant="secondary">Solid.js</Badge>
+							<Badge variant="secondary">Three.js</Badge>
+							<Badge variant="secondary">D3.js</Badge>
+							<Badge variant="outline">WebGL</Badge>
+							<Badge variant="outline">Real-time</Badge>
+						</div>
+						<div class="flex flex-wrap items-center gap-4 mt-4">
+							<a 
+								href="https://3d-globe-iss-tracker.pages.dev/" 
+								target="_blank" 
+								class="inline-flex items-center gap-2 hover:text-primary transition-colors whitespace-nowrap"
+							>
+								<Tooltip triggerText="Live Demo" tooltipContent="Try it out live" client:load/>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+							</a>
+							
+							<a 
+								href="/blog/3d-globe-iss" 
+								class="inline-flex items-center gap-2 hover:text-primary transition-colors whitespace-nowrap"
+							>
+								<Tooltip triggerText="Read More" tooltipContent="View detailed blog post" client:load/>
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+							</a>
+						</div>
+					</div>
+				</Card>
+
 				<!-- Quick Links -->
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 					<Card className="p-6 transform transition-all duration-300 ease-out hover:translate-y-[-2px] hover:bg-white/5 hover:border-white/20 flex flex-col">
