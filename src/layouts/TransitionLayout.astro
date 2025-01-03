@@ -1,0 +1,88 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+    title: string;
+    description?: string;
+}
+
+const { title, description = 'Personal website and blog' } = Astro.props;
+---
+
+<html lang="en">
+    <head>
+        <BaseHead title={title} description={description} />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+    </head>
+    <body class="bg-zinc-50 dark:bg-zinc-900">
+        <div class="flex min-h-screen flex-col">
+            <Header />
+            <main class="flex-1" transition:animate="slide">
+                <div transition:name="content">
+                    <slot />
+                </div>
+            </main>
+            <Footer />
+        </div>
+    </body>
+</html>
+
+<style is:global>
+    @media (prefers-reduced-motion: no-preference) {
+        @view-transition {
+            navigation: auto;
+        }
+
+        :root {
+            --speed: 0.3s;
+        }
+
+        ::view-transition {
+            background: transparent;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        ::view-transition-old(content),
+        ::view-transition-new(content) {
+            --mask-frames: 20;
+            --from: 100%;
+            --to: 0%;
+            mask-image: url(/sprite-one.svg);
+            mask-repeat: no-repeat;
+            mask-size: calc((var(--mask-frames) + 1) * 100vmax) 100vmax;
+            mask-position: var(--from, 100%) 50%;
+            animation: sweep var(--speed) steps(var(--mask-frames)) both;
+            mix-blend-mode: plus-lighter;
+        }
+
+        ::view-transition-new(content) {
+            --from: 0%;
+            --to: 100%;
+            mask-image: url(/sprite-two.svg);
+            animation-delay: calc(var(--speed) * 0.5);
+        }
+
+        @keyframes sweep {
+            to {
+                mask-position: var(--to) 50%;
+            }
+        }
+    }
+
+    /* Default transition for users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        ::view-transition-old(content),
+        ::view-transition-new(content) {
+            animation: none;
+            mix-blend-mode: normal;
+            opacity: 0;
+        }
+
+        ::view-transition-new(content) {
+            opacity: 1;
+        }
+    }
+</style> 

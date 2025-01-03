@@ -1,10 +1,10 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
-import Image from 'astro/components/Image.astro';
+import { Image } from 'astro:assets';
 ---
 
-<footer class="relative border-t border-gray-200 mt-auto">
+<footer class="relative border-t border-white/10 mt-auto">
 	<!-- Background Image -->
 	<div class="absolute inset-0 z-0">
 		<Image 
@@ -15,54 +15,113 @@ import Image from 'astro/components/Image.astro';
 			width={1920}
 			height={1080}
 		/>
-		<!-- Dark overlay for better text readability -->
-		<div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+		<!-- Dark overlay with industrial feel -->
+		<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/80 to-black/70 backdrop-blur-[2px]"></div>
 	</div>
 
 	<!-- Content -->
-	<div class="relative z-10 mx-auto max-w-[960px] py-8 px-4">
-		<div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+	<div class="relative z-10 mx-auto max-w-[960px] py-12 px-4">
+		<div class="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
 			<!-- Site Info -->
-			<div>
-				<h2 class="text-lg font-semibold text-white">{SITE_TITLE}</h2>
-				<p class="mt-2 text-sm text-gray-300">
+			<div class="space-y-4">
+				<h2 class="font-mono text-lg tracking-tight text-white/90 uppercase">
+					{SITE_TITLE}
+				</h2>
+				<p class="font-mono text-sm tracking-tighter text-white/60">
 					personal blog and portfolio
 				</p>
+				<div class="h-px w-16 bg-gradient-to-r from-white/20 to-transparent"></div>
 			</div>
 
 			<!-- Navigation Links -->
-			<div>
-				<h3 class="text-sm font-semibold text-white">navigation</h3>
-				<div class="mt-2 flex flex-col space-y-2">
-					<HeaderLink href="/" class="text-gray-300 hover:text-white">home</HeaderLink>
-					<HeaderLink href="/about" class="text-gray-300 hover:text-white">about</HeaderLink>
-					<HeaderLink href="/flights" class="text-gray-300 hover:text-white">flights</HeaderLink>
+			<div class="space-y-4">
+				<h3 class="font-mono text-sm tracking-tight text-white/90 uppercase">navigation</h3>
+				<div class="flex flex-col space-y-2">
+					<HeaderLink href="/" class="font-mono text-sm tracking-tighter text-white/60 hover:text-white/90 transition-colors">home</HeaderLink>
+					<HeaderLink href="/about" class="font-mono text-sm tracking-tighter text-white/60 hover:text-white/90 transition-colors">about</HeaderLink>
+					<HeaderLink href="https://3d-globe-iss-tracker.pages.dev/" class="font-mono text-sm tracking-tighter text-white/60 hover:text-white/90 transition-colors">iss tracker</HeaderLink>
 				</div>
+				<div class="h-px w-16 bg-gradient-to-r from-white/20 to-transparent"></div>
 			</div>
 
-			<!-- Social Links -->
-			<div>
-				<h3 class="text-sm font-semibold text-white">social</h3>
-				<div class="mt-2 flex space-x-4">
-					<a href="https://twitter.com/jhomra21" target="_blank" class="text-gray-300 hover:text-white transition-colors">
-						<span class="sr-only">Follow Juan on Twitter</span>
-						<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24" class="fill-current">
-							<path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"></path>
+			<!-- Contact -->
+			<div class="space-y-4">
+				<h3 class="font-mono text-sm tracking-tight text-white/90 uppercase">contact</h3>
+				<div class="font-mono text-sm tracking-tighter text-white/60">
+					<p class="flex items-center gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+							<polyline points="22,6 12,13 2,6"></polyline>
 						</svg>
-					</a>
-					<a href="https://github.com/jhomra21" target="_blank" class="text-gray-300 hover:text-white transition-colors">
-						<span class="sr-only">Go to Juan's GitHub repo</span>
-						<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24" class="fill-current">
-							<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+						<a href="mailto:jhonra121@gmail.com">email me</a>
+					</p>
+					<p class="flex items-center gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
 						</svg>
-					</a>
+						<a href="https://github.com/jhomra21" target="_blank" rel="noopener noreferrer">github.com/jhomra21</a>
+					</p>
 				</div>
+				<div class="h-px w-16 bg-gradient-to-r from-white/20 to-transparent"></div>
 			</div>
 		</div>
-		<div class="mt-8 border-t border-gray-700 pt-8 text-center">
-			<p class="text-sm text-gray-300">
-				© {new Date().getFullYear()} {SITE_TITLE}. All rights reserved.
-			</p>
+
+		<div class="mt-12 pt-8 border-t border-white/10">
+			<div class="flex flex-col items-center justify-center space-y-4">
+				<p class="font-mono text-[0.7rem] tracking-tighter text-white/40 uppercase">
+					© {new Date().getFullYear()} {SITE_TITLE}
+				</p>
+				<div class="font-mono text-[0.7rem] tracking-tighter text-white/40 flex items-center gap-2">
+					<span class="w-2 h-px bg-white/20"></span>
+					<span>Built with Astro</span>
+					<span class="w-2 h-px bg-white/20"></span>
+				</div>
+			</div>
 		</div>
 	</div>
 </footer>
+
+<style>
+	/* Add hover effect for links */
+	a {
+		position: relative;
+		display: inline-block;
+	}
+
+	a::after {
+		content: '';
+		position: absolute;
+		width: 0;
+		height: 1px;
+		bottom: -2px;
+		left: 0;
+		background: linear-gradient(to right, rgba(255,255,255,0.4), transparent);
+		transition: width 0.3s ease;
+	}
+
+	a:hover::after {
+		width: 100%;
+	}
+
+	/* Add subtle animation for gradient borders */
+	.h-px {
+		position: relative;
+		overflow: hidden;
+	}
+
+	.h-px::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 200%;
+		height: 100%;
+		background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+		animation: shimmer 3s infinite;
+	}
+
+	@keyframes shimmer {
+		0% { transform: translateX(0); }
+		100% { transform: translateX(50%); }
+	}
+</style>

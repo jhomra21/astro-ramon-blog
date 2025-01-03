@@ -2,7 +2,19 @@
 import { getEntry } from 'astro:content';
 import BlogPost from '../layouts/BlogPost.astro';
 
-const about = await getEntry('blog', 'about');
+let about;
+try {
+	about = await getEntry('blog', 'about');
+
+	if (!about) {
+		throw new Error('About page content not found in blog collection');
+	}
+} catch (error) {
+	console.error('Error loading about page:', error);
+	throw error;
+}
+
+// Render the content
 const { Content } = await about.render();
 ---
 

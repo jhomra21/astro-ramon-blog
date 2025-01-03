@@ -1,0 +1,87 @@
+---
+interface Props {
+    text: string;
+    delay?: number;
+    className?: string;
+}
+
+const { text, delay = 100, className = '' } = Astro.props;
+---
+
+<typewriter-effect 
+    class={`relative inline-flex ${className}`}
+    style={`width: ${text.length}ch; min-width: ${text.length}ch;`}
+    data-text={text}
+    data-delay={delay}
+>
+    <span 
+        class="typewriter-text transition-colors duration-300 absolute left-0 whitespace-nowrap opacity-0"
+    ></span>
+    <span style="opacity: 0;">{text}</span>
+</typewriter-effect>
+
+<style>
+    .cursor-animation {
+        animation: cursor 1.2s infinite;
+    }
+    @keyframes cursor {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+</style>
+
+<script>
+    class TypewriterEffect extends HTMLElement {
+        private text: string;
+        private delay: number;
+        private displayText: string;
+        private textElement: HTMLElement | null;
+
+        constructor() {
+            super();
+            this.text = this.dataset.text || '';
+            this.delay = parseInt(this.dataset.delay || '100');
+            this.displayText = '';
+            this.textElement = this.querySelector('.typewriter-text');
+            this.init();
+        }
+
+        private init(): void {
+            if (this.textElement) {
+                this.textElement.classList.add('opacity-100');
+                this.type();
+            }
+        }
+
+        private async type(): Promise<void> {
+            if (!this.textElement) return;
+
+            // Type out text
+            for (let i = 0; i <= this.text.length; i++) {
+                this.displayText = this.text.substring(0, i);
+                this.textElement.textContent = this.displayText + (i < this.text.length ? '|' : '');
+                await new Promise(resolve => setTimeout(resolve, this.delay));
+            }
+
+            // Pause at the end
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Fade out
+            this.textElement.style.transition = 'opacity 0.3s ease';
+            this.textElement.style.opacity = '0';
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            // Reset and start over
+            this.textElement.style.transition = '';
+            this.displayText = '';
+            this.textElement.textContent = '';
+            this.textElement.style.opacity = '1';
+            
+            // Small pause before restarting
+            await new Promise(resolve => setTimeout(resolve, 500));
+            this.type();
+        }
+    }
+
+    customElements.define('typewriter-effect', TypewriterEffect);
+</script> 
