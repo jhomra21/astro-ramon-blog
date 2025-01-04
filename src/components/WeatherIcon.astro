@@ -1,0 +1,20 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  icon: string;
+  description: string;
+}
+
+const { icon, description } = Astro.props;
+const iconUrl = 'https://openweathermap.org/img/wn/' + icon + '.png';
+---
+
+<Image 
+  src={iconUrl}
+  alt={description}
+  width={20}
+  height={20}
+  class="w-5 h-5 opacity-90"
+  loading="lazy"
+/> 

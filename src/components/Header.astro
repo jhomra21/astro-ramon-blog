@@ -2,20 +2,26 @@
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
 import TypewriterEffect from './TypewriterEffect.astro';
+import WeatherWidget from './WeatherWidget';
 ---
 
 <header>
 	<div class="progress-bar" id="scroll-progress"></div>
 	<nav class="max-w-[1120px] mx-auto px-4">
 		<h2>
-			<a href="/">
+			<a href="/" class="font-mono">
 				<TypewriterEffect text={SITE_TITLE} />
 			</a>
 		</h2>
-		<div class="internal-links font-mono tracking-tight" id="nav-links">
-			<HeaderLink href="/">home</HeaderLink>
-			<HeaderLink href="/about">about</HeaderLink>
-			<HeaderLink href="https://3d-globe-iss-tracker.pages.dev" target="_blank">iss tracker</HeaderLink>
+		<div class="flex items-center">
+			<WeatherWidget client:load />
+			<div class="h-6 w-px bg-neutral-200 mx-4" />
+			<div class="internal-links font-mono tracking-tight" id="nav-links">
+				<HeaderLink href="/">home</HeaderLink>
+				<HeaderLink href="/about">about</HeaderLink>
+				<HeaderLink href="https://3d-globe-iss-tracker.pages.dev" target="_blank">iss tracker</HeaderLink>
+				<HeaderLink href="https://vidtogifconverter.pages.dev" target="_blank">video to gif</HeaderLink>
+			</div>
 		</div>
 	</nav>
 </header>
@@ -24,26 +30,19 @@ import TypewriterEffect from './TypewriterEffect.astro';
 	header {
 		margin: 0;
 		padding: 0.75em 0;
-		background-color: rgba(18, 18, 18, 0.85);
-		background-image: 
-			linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-		background-size: 20px 20px;
-		backdrop-filter: blur(8px) saturate(150%);
-		-webkit-backdrop-filter: blur(8px) saturate(150%);
+		background-color: white;
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 	}
 
 	.progress-bar {
 		position: absolute;
 		top: 0;
 		left: 0;
-		height: 2px;
-		background: #2563eb;
+		height: 1px;
+		background: rgba(0, 0, 0, 0.1);
 		width: 0%;
 		transition: width 0.1s ease-in-out;
 	}
@@ -51,7 +50,6 @@ import TypewriterEffect from './TypewriterEffect.astro';
 	h2 {
 		margin: 0;
 		font-size: 1em;
-		font-family: 'JetBrains Mono', monospace;
 	}
 
 	nav {
@@ -62,29 +60,29 @@ import TypewriterEffect from './TypewriterEffect.astro';
 	}
 
 	nav a {
-		color: rgba(255, 255, 255, 0.9);
+		color: rgba(0, 0, 0, 0.75);
 		text-decoration: none;
 		font-size: 0.9rem;
 		padding: 0.4em 0.8em;
 		border: 1px solid transparent;
-		transition: all 0.2s ease;
+		transition: all 0.15s ease;
 		letter-spacing: -0.025em;
-		font-weight: 500;
+		font-weight: 450;
 	}
 
 	nav a:hover {
-		background: rgba(255, 255, 255, 0.1);
-		border: 1px solid rgba(255, 255, 255, 0.2);
+		background: rgba(0, 0, 0, 0.02);
+		border: 1px solid rgba(0, 0, 0, 0.06);
 		text-decoration: none;
 	}
 
 	nav a.active {
-		background: rgba(255, 255, 255, 0.1);
-		border: 1px solid rgba(255, 255, 255, 0.2);
+		background: rgba(0, 0, 0, 0.02);
+		border: 1px solid rgba(0, 0, 0, 0.06);
 	}
 
 	nav a.muted {
-		opacity: 0.75;
+		opacity: 0.5;
 	}
 
 	.internal-links {
@@ -94,31 +92,11 @@ import TypewriterEffect from './TypewriterEffect.astro';
 
 	nav a.text-xl {
 		font-size: 1rem !important;
-		font-weight: 600 !important;
+		font-weight: 500 !important;
 	}
 
 	nav a.font-bold {
-		font-weight: 700 !important;
-	}
-
-	@media (prefers-color-scheme: light) {
-		header {
-			background-color: rgba(255, 255, 255, 0.85);
-			background-image: 
-				linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-				linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-		}
-
-		nav a {
-			color: rgba(0, 0, 0, 0.8);
-		}
-
-		nav a:hover,
-		nav a.active {
-			background: rgba(0, 0, 0, 0.05);
-			border: 1px solid rgba(0, 0, 0, 0.1);
-		}
+		font-weight: 600 !important;
 	}
 </style>
 
@@ -148,8 +126,11 @@ import TypewriterEffect from './TypewriterEffect.astro';
 		}
 
 		navLinks.forEach(link => {
-			if (link.getAttribute('href') === currentPath || 
-			    link.getAttribute('href') === `/${currentPath.split('/')[1]}`) {
+			const currentPathSegment = currentPath.split('/')[1];
+			const href = link.getAttribute('href');
+			const isCurrentPage = href === currentPath || (currentPathSegment && href === '/' + currentPathSegment);
+			
+			if (isCurrentPage) {
 				link.classList.add('text-xl', 'font-bold');
 				link.classList.remove('muted');
 			} else {
