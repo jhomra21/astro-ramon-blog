@@ -6,7 +6,7 @@ import TypewriterEffect from './TypewriterEffect.astro';
 
 <header>
 	<div class="progress-bar" id="scroll-progress"></div>
-	<nav>
+	<nav class="max-w-[1120px] mx-auto px-4">
 		<h2>
 			<a href="/">
 				<TypewriterEffect text={SITE_TITLE} />
@@ -23,7 +23,7 @@ import TypewriterEffect from './TypewriterEffect.astro';
 <style>
 	header {
 		margin: 0;
-		padding: 0.75em;
+		padding: 0.75em 0;
 		background-color: rgba(18, 18, 18, 0.85);
 		background-image: 
 			linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
@@ -58,8 +58,6 @@ import TypewriterEffect from './TypewriterEffect.astro';
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		max-width: 960px;
-		margin: 0 auto;
 		font-family: 'JetBrains Mono', monospace;
 	}
 

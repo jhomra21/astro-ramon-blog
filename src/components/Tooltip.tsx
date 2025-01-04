@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import LucideIcon from "@/components/LucideIcon";
+import { cn } from "@/lib/utils";
 
 interface TooltipProps {
   triggerText?: string;
@@ -30,7 +31,10 @@ export default function TooltipDefault({
         <TooltipTrigger asChild>
           <Button 
             variant={variant} 
-            className={className} 
+            className={cn(
+              "transition-all duration-200",
+              className
+            )}
             data-tech={dataTech}
           >
             {icon && <LucideIcon name={icon as any} className="w-4 h-4" />}

@@ -7,99 +7,93 @@ import { Image } from 'astro:assets';
 type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
-const isAboutPage = title === "About Me";
 ---
 
 <TransitionLayout title={title} description={description}>
-	<article class="w-full max-w-[1120px] mx-auto ">
-		{!isAboutPage && (
-			<div class="mb-8">
-				{heroImage && (
-					<div class="mb-8">
-						<Image
-							src={heroImage}
-							alt=""
-							width={1020}
-							height={510}
-							class="w-full h-auto"
-						/>
-					</div>
-				)}
-				<div class="prose prose-zinc dark:prose-invert max-w-none">
-					<h1 class="text-4xl font-bold mb-4">{title}</h1>
-					<div class="flex gap-2 text-zinc-600 dark:text-zinc-400 mb-8">
-						<FormattedDate date={pubDate} />
-						{
-							updatedDate && (
-								<div>
-									Last updated on <FormattedDate date={updatedDate} />
-								</div>
-							)
-						}
-					</div>
-					<slot />
+	<article class="w-full max-w-[1120px] mx-auto px-4 py-16">
+		<div class="border-l-2 border-zinc-700 dark:border-zinc-300 bg-white dark:bg-zinc-800/50 p-6 backdrop-blur-sm">
+			{heroImage && (
+				<div class="mb-8">
+					<Image
+						src={heroImage}
+						alt=""
+						width={1020}
+						height={510}
+						class="w-full h-auto"
+					/>
 				</div>
-			</div>
-		)}
-
-		{isAboutPage && (
-			<div class="space-y-12">
-				<div class="border-l-2 border-zinc-700 dark:border-zinc-300 bg-white dark:bg-zinc-800 p-6 shadow-sm">
-					<div class="flex items-center gap-2 mb-4">
-						<span class="text-4xl">👨‍💻</span>
-						<h1 class="text-4xl text-zinc-900 dark:text-zinc-100 font-mono tracking-tight">{title}</h1>
-					</div>
-					<div class="font-mono tracking-tight">
-						<slot />
-					</div>
-					<div class="flex gap-2 text-sm text-zinc-600 dark:text-zinc-400 mt-8 font-mono">
-						<FormattedDate date={pubDate} />
-						{
-							updatedDate && (
-								<div>
-									Last updated on <FormattedDate date={updatedDate} />
-								</div>
-							)
-						}
-					</div>
+			)}
+			<div class="prose prose-zinc dark:prose-invert max-w-none font-mono">
+				<h1 class="text-4xl font-bold mb-4 tracking-tight">{title}</h1>
+				<div class="flex gap-2 text-zinc-600 dark:text-zinc-400 mb-8 font-mono text-sm tracking-tight">
+					<FormattedDate date={pubDate} />
+					{
+						updatedDate && (
+							<div>
+								Last updated on <FormattedDate date={updatedDate} />
+							</div>
+						)
+					}
 				</div>
+				<slot />
 			</div>
-		)}
+		</div>
 	</article>
 </TransitionLayout>
 
 <style>
-	/* Global styles for the About page */
-	.font-mono :global(h2) {
-		@apply text-2xl font-semibold mb-4 mt-8 text-zinc-900 dark:text-zinc-100 tracking-tight;
-	}
-	.font-mono :global(p) {
-		@apply mb-4 text-zinc-700 dark:text-zinc-300 tracking-tight;
-	}
-	.font-mono :global(ul) {
-		@apply mb-4 list-none pl-0 space-y-2;
-	}
-	.font-mono :global(li) {
-		@apply text-zinc-700 dark:text-zinc-300 tracking-tight;
-	}
-	.font-mono :global(a) {
-		@apply text-zinc-900 dark:text-zinc-100 border-b border-transparent hover:border-current transition-all duration-200 tracking-tight;
-	}
-
 	/* Blog post styles */
+	.prose :global(h1),
+	.prose :global(h2),
+	.prose :global(h3),
+	.prose :global(h4),
+	.prose :global(h5),
+	.prose :global(h6) {
+		@apply font-mono tracking-tight text-zinc-900 dark:text-zinc-100 font-bold;
+	}
+	
 	.prose :global(h2) {
-		@apply text-2xl font-semibold mb-4 mt-8 text-zinc-900 dark:text-zinc-100;
+		@apply text-2xl mb-4 mt-8;
 	}
+	
 	.prose :global(p) {
-		@apply mb-4 text-zinc-700 dark:text-zinc-300;
+		@apply mb-4 text-zinc-700 dark:text-zinc-300 tracking-tight leading-relaxed;
 	}
+	
 	.prose :global(ul) {
-		@apply mb-4 list-none pl-0;
+		@apply mb-4 list-none pl-4 space-y-2;
 	}
+	
 	.prose :global(li) {
-		@apply mb-2 text-zinc-700 dark:text-zinc-300;
+		@apply text-zinc-700 dark:text-zinc-300 tracking-tight relative;
 	}
+	
+	.prose :global(li::before) {
+		content: "—";
+		@apply absolute -left-4 text-zinc-400;
+	}
+	
 	.prose :global(a) {
-		@apply text-blue-600 dark:text-blue-400 hover:underline;
+		@apply text-zinc-900 dark:text-zinc-100 border-b border-zinc-400 hover:border-current transition-all duration-200;
+	}
+	
+	.prose :global(code) {
+		@apply font-mono bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-sm tracking-tight;
+	}
+	
+	.prose :global(pre) {
+		@apply bg-zinc-100 dark:bg-zinc-800 p-4 rounded-lg overflow-x-auto;
+	}
+	
+	.prose :global(pre code) {
+		@apply bg-transparent p-0;
+	}
+	
+	.prose :global(blockquote) {
+		@apply border-l-2 border-zinc-300 dark:border-zinc-600 pl-4 italic;
+	}
+	
+	.prose :global(img) {
+		@apply rounded-lg shadow-lg my-8;
 	}
 </style>
