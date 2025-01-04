@@ -25,21 +25,6 @@ This site is built using a modern tech stack to ensure high performance, scalabi
 - **Content Management**: Uses Markdown and MDX for easy content creation and management.
 - **Performance**: Optimized for speed and efficiency, ensuring a seamless user experience.
 
-## 📂 Project Structure
-
-The project is organized into the following directories:
-
-```text
-├── public/                # Static assets like images
-├── src/
-│   ├── components/        # UI components
-│   ├── content/           # Markdown and MDX content
-│   ├── layouts/           # Layout components
-│   └── pages/             # Page components
-├── astro.config.mjs       # Astro configuration
-├── package.json           # Project metadata and dependencies
-└── tsconfig.json          # TypeScript configuration
-```
 
 ## 🧞 Commands
 

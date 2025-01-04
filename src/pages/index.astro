@@ -26,41 +26,32 @@ import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer"
 				I focus on creating exceptional user experiences while ensuring scalable and maintainable solutions.
 			</p>
 
-			<div class="flex items-center gap-4 mb-6">
-				<a href="/about" class="bg-zinc-100 dark:bg-zinc-700 px-4 py-2 inline-flex items-center gap-2 hover:text-primary border border-zinc-200 dark:border-zinc-600 hover:border-l-emerald-500 hover:border-l-4">
-					Learn More About Me
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-				</a>
+			<div class="flex items-center gap-4 mb-2">
+				<Tooltip 
+					triggerText="Learn More About Me"
+					tooltipContent="Link to article about me"
+					variant="ghost"
+					client:load
+				/>
 			</div>
-
-			<p class="flex items-center gap-2 font-mono tracking-tight text-zinc-700 dark:text-zinc-300">
-				This site was built with <a href="https://astro.build/" class="link-hover">
-					<Tooltip
-						triggerText="Astro"
-						tooltipContent="Link to Astro's site"
-						client:load
-					/>
-				</a>
-				🚀
-			</p>
 		</div>
 
 		<!-- Projects Section -->
 		<div class="space-y-8">
-			<h2 class="section-title">Featured Projects</h2>
+			<h2 class="section-title">Projects</h2>
 
 			<!-- Latest Project Preview -->
 			<div class="project-card latest-project bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
 				<div class="relative z-10">
 					<div class="flex items-center justify-between flex-wrap gap-2 mb-4">
 						<div class="flex items-center gap-2">
-							<span class="badge bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800">Latest Project</span>
-							<span class="badge bg-zinc-100 dark:bg-zinc-800">2024</span>
+							<span class="badge bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">Latest Project</span>
+							<span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">2024</span>
 						</div>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800 flex items-center gap-1.5">
+						<span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1.5">
 							<span class="relative flex h-2 w-2">
-								<span class="animate-ping absolute inline-flex h-full w-full bg-green-400 opacity-75"></span>
-								<span class="relative inline-flex h-2 w-2 bg-green-500"></span>
+								<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+								<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
 							</span>
 							LIVE
 						</span>
@@ -72,12 +63,54 @@ import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer"
 						A modern web application built with SolidJS, Hono, Fal.ai and Together AI
 					</p>
 					<div class="flex flex-wrap gap-2">
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="solid">Solid.js</span>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="hono">Hono.js</span>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="falai">Fal.ai</span>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="together">Together AI</span>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="cloudflare">Cloudflare</span>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="supabase">Supabase</span>
+						<Tooltip 
+							triggerText="Solid.js"
+							tooltipContent="Frontend framework"
+							variant="outline"
+							className="badge"
+							data-tech="solid"
+							client:load
+						/>
+						<Tooltip 
+							triggerText="Hono.js"
+							tooltipContent="Backend/server"
+								variant="outline"
+								className="badge"
+								data-tech="hono"
+								client:load
+						/>
+						<Tooltip 
+							triggerText="Fal.ai"
+							tooltipContent="GPU inference provider"
+							variant="outline"
+							className="badge"
+							data-tech="falai"
+							client:load
+						/>
+						<Tooltip 
+							triggerText="Together AI"
+							tooltipContent="GPU inference provider"
+							variant="outline"
+							className="badge"
+							data-tech="together"
+							client:load
+						/>
+						<Tooltip 
+							triggerText="Cloudflare"
+							tooltipContent="Hosting, web services"
+							variant="outline"
+							className="badge"
+							data-tech="cloudflare"
+							client:load
+						/>
+						<Tooltip 
+							triggerText="Supabase"
+							tooltipContent="Database backend postgres"
+							variant="outline"
+							className="badge"
+							data-tech="supabase"
+							client:load
+						/>
 					</div>
 					<div class="flex flex-wrap items-center gap-4 mt-4">
 						<a href="https://fastaiphotos.com/" target="_blank" class="link-hover inline-flex items-center gap-2">
@@ -97,13 +130,13 @@ import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer"
 				<div class="relative z-10">
 					<div class="flex items-center justify-between flex-wrap gap-2 mb-4">
 						<div class="flex items-center gap-2">
-							<span class="badge bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800">Featured Project</span>
-							<span class="badge bg-zinc-100 dark:bg-zinc-800">2024</span>
+							<span class="badge bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">Featured Project</span>
+							<span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">2024</span>
 						</div>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800 flex items-center gap-1.5">
+						<span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1.5">
 							<span class="relative flex h-2 w-2">
-								<span class="animate-ping absolute inline-flex h-full w-full bg-green-400 opacity-75"></span>
-								<span class="relative inline-flex h-2 w-2 bg-green-500"></span>
+								<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+								<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
 							</span>
 							LIVE
 						</span>
@@ -112,15 +145,49 @@ import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer"
 						<h2 class="text-2xl font-bold mb-2 tracking-tight">3D Globe ISS Tracker</h2>
 					</a>
 					<p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight">
-						Real-time ISS tracking with an interactive 3D globe visualization, built with modern web technologies
+						Real-time ISS tracking with an interactive 3D globe visualization
 					</p>
 					<div class="flex flex-wrap gap-2">
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="solid">Solid.js</span>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="three">Three.js</span>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="d3">D3.js</span>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="webgl">WebGL</span>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800">Real-time</span>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800" data-tech="cloudflare">Cloudflare</span>
+						<Tooltip 
+							triggerText="Three.js"
+							tooltipContent="3D objects rendering"
+							variant="outline"
+							className="badge"
+							data-tech="three"
+							client:load
+						/>
+						<Tooltip 
+							triggerText="D3.js"
+							tooltipContent="3D objects positions"
+							variant="outline"
+							className="badge"
+							data-tech="d3"
+							client:load
+						/>
+						<Tooltip 
+							triggerText="WebGL"
+							tooltipContent="Web browser graphics"
+							variant="outline"
+							className="badge"
+							data-tech="webgl"
+							client:load
+						/>
+						<Tooltip 
+							triggerText="Real-time"
+							tooltipContent="Real time updates"
+							variant="outline"
+							className="badge"
+							data-tech="realtime"
+							client:load
+						/>
+						<Tooltip 
+							triggerText="Cloudflare"
+							tooltipContent="Hosting, web services"
+							variant="outline"
+							className="badge"
+							data-tech="cloudflare"
+							client:load
+						/>
 					</div>
 					<div class="flex flex-wrap items-center gap-4 mt-4">
 						<a href="https://3d-globe-iss-tracker.pages.dev/" target="_blank" class="link-hover inline-flex items-center gap-2">
@@ -184,65 +251,119 @@ import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer"
 		padding: 0.25rem 0.75rem;
 		font-family: 'JetBrains Mono', monospace;
 		transition: all 0.2s ease;
-		border: 1px solid #e5e7eb;
+	}
+	/* Project type badges */
+	.badge:not([data-tech]) {
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.025em;
+	}
+	/* Tech badges */
+	.badge[data-tech] {
+		background: rgba(255, 255, 255, 0.05);
+		color: rgba(255, 255, 255, 0.8);
+		border-width: 1px;
+		border-style: solid;
 	}
 	/* Solid.js brand hover */
+	.badge[data-tech="solid"] {
+		border-color: rgba(44, 79, 124, 0.5);
+		color: rgba(44, 79, 124, 0.9);
+	}
 	.badge[data-tech="solid"]:hover {
 		background: #2C4F7C;
 		color: white;
 		border-color: #2C4F7C;
 	}
 	/* Hono brand hover */
+	.badge[data-tech="hono"] {
+		border-color: rgba(226, 106, 61, 0.5);
+		color: rgba(226, 106, 61, 0.9);
+	}
 	.badge[data-tech="hono"]:hover {
 		background: #E26A3D;
 		color: white;
 		border-color: #E26A3D;
 	}
 	/* Three.js brand hover */
+	.badge[data-tech="three"] {
+		border-color: rgba(0, 0, 0, 0.5);
+		color: rgba(255, 255, 255, 0.9);
+	}
 	.badge[data-tech="three"]:hover {
 		background: #000000;
 		color: white;
 		border-color: #000000;
 	}
 	/* D3.js brand hover */
+	.badge[data-tech="d3"] {
+		border-color: rgba(249, 160, 60, 0.5);
+		color: rgba(249, 160, 60, 0.9);
+	}
 	.badge[data-tech="d3"]:hover {
 		background: #F9A03C;
 		color: white;
 		border-color: #F9A03C;
 	}
 	/* WebGL brand hover */
+	.badge[data-tech="webgl"] {
+		border-color: rgba(153, 0, 0, 0.5);
+		color: rgba(153, 0, 0, 0.9);
+	}
 	.badge[data-tech="webgl"]:hover {
 		background: #990000;
 		color: white;
 		border-color: #990000;
 	}
 	/* Cloudflare brand hover */
+	.badge[data-tech="cloudflare"] {
+		border-color: rgba(246, 130, 31, 0.5);
+		color: rgba(246, 130, 31, 0.9);
+	}
 	.badge[data-tech="cloudflare"]:hover {
 		background: #F6821F;
 		color: white;
 		border-color: #F6821F;
 	}
 	/* Supabase brand hover */
+	.badge[data-tech="supabase"] {
+		border-color: rgba(62, 207, 142, 0.5);
+		color: rgba(62, 207, 142, 0.9);
+	}
 	.badge[data-tech="supabase"]:hover {
 		background: #3ECF8E;
 		color: white;
 		border-color: #3ECF8E;
 	}
 	/* Fal.ai brand hover */
+	.badge[data-tech="falai"] {
+		border-color: rgba(124, 58, 237, 0.5);
+		color: rgba(124, 58, 237, 0.9);
+	}
 	.badge[data-tech="falai"]:hover {
 		background: #7C3AED;
 		color: white;
 		border-color: #7C3AED;
 	}
 	/* Together AI brand hover */
+	.badge[data-tech="together"] {
+		border-color: rgba(79, 70, 229, 0.5);
+		color: rgba(79, 70, 229, 0.9);
+	}
 	.badge[data-tech="together"]:hover {
 		background: #4F46E5;
 		color: white;
 		border-color: #4F46E5;
 	}
-	.badge:hover {
-		background: #2563eb;
+	/* Real-time brand hover */
+	.badge[data-tech="realtime"] {
+		border-color: rgba(16, 185, 129, 0.5);
+		color: rgba(16, 185, 129, 0.9);
+	}
+	.badge[data-tech="realtime"]:hover {
+		background: #10B981;
 		color: white;
+		border-color: #10B981;
 	}
 	.link-hover {
 		transition: all 0.2s ease;
