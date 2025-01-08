@@ -2,8 +2,8 @@
 import TransitionLayout from "../layouts/TransitionLayout.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Tooltip from "@/components/Tooltip";
-import TechBadge from "@/components/TechBadge";
 import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer";
+import ProjectsSection from "@/components/ProjectsSection.astro";
 ---
 
 <TransitionLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -41,133 +41,7 @@ import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer"
 
 		<!-- Projects Section -->
 		<div class="space-y-8">
-			<h2 class="section-title">Projects</h2>
-
-			<!-- Latest Project Preview -->
-			<div class="project-card latest-project bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
-				<div class="relative z-10">
-					<div class="flex items-center justify-between flex-wrap gap-2 mb-4">
-						<div class="flex items-center gap-2">
-							<span class="badge bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">Latest Project</span>
-							<span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">2024</span>
-						</div>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1.5">
-							<span class="relative flex h-2 w-2">
-								<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-								<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-							</span>
-							LIVE
-						</span>
-					</div>
-					<a href="https://vidtogifconverter.pages.dev/" class="link-hover">
-						<h2 class="text-2xl font-bold mb-2 tracking-tight">Video to GIF Converter</h2>
-					</a>
-					<p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight">
-						A modern web application that converts video files to optimized GIF format directly in the browser
-					</p>
-					<div class="flex flex-wrap gap-2">
-						<TechBadge tech="React" tooltip="Frontend framework" />
-						<TechBadge tech="TypeScript" tooltip="Type-safe JavaScript" />
-						<TechBadge tech="FFMPEG" tooltip="Video processing" />
-						<TechBadge tech="Cloudflare" tooltip="Hosting, web services" />
-					</div>
-					<div class="flex flex-wrap items-center gap-4 mt-4">
-						<a href="https://vidtogifconverter.pages.dev/" target="_blank" class="link-hover inline-flex items-center gap-2">
-							Live Site
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-						</a>
-						<a href="/blog/vid-to-gif-converter" class="link-hover inline-flex items-center gap-2">
-							Read More
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-						</a>
-					</div>
-				</div>
-			</div>
-
-			<!-- FastAIPhotos Project -->
-			<div class="project-card featured-project bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
-				<div class="relative z-10">
-					<div class="flex items-center justify-between flex-wrap gap-2 mb-4">
-						<div class="flex items-center gap-2">
-							<span class="badge bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">Featured Project</span>
-							<span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">2024</span>
-						</div>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1.5">
-							<span class="relative flex h-2 w-2">
-								<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-								<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-							</span>
-							LIVE
-						</span>
-					</div>
-					<a href="https://fastaiphotos.com/" class="link-hover">
-						<h2 class="text-2xl font-bold mb-2 tracking-tight">FastAIPhotos.com</h2>
-					</a>
-					<p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight">
-						A modern web application built with SolidJS, Hono, Fal.ai and Together AI
-					</p>
-					<div class="flex flex-wrap gap-2">
-						<TechBadge tech="Solid.js" tooltip="Frontend framework" />
-						<TechBadge tech="Hono.js" tooltip="Backend/server" />
-						<TechBadge tech="Fal.ai" tooltip="GPU inference provider" />
-						<TechBadge tech="Together AI" tooltip="GPU inference provider" />
-						<TechBadge tech="Cloudflare" tooltip="Hosting, web services" />
-						<TechBadge tech="Supabase" tooltip="Database backend postgres" />
-					</div>
-					<div class="flex flex-wrap items-center gap-4 mt-4">
-						<a href="https://fastaiphotos.com/" target="_blank" class="link-hover inline-flex items-center gap-2">
-							Live Site
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-						</a>
-						<a href="/blog/fastaiphotos" class="link-hover inline-flex items-center gap-2">
-							Read More
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-						</a>
-					</div>
-				</div>
-			</div>
-
-			<!-- ISS Tracker Project -->
-			<div class="project-card featured-project bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
-				<div class="relative z-10">
-					<div class="flex items-center justify-between flex-wrap gap-2 mb-4">
-						<div class="flex items-center gap-2">
-							<span class="badge bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">Featured Project</span>
-							<span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">2024</span>
-						</div>
-						<span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1.5">
-							<span class="relative flex h-2 w-2">
-								<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-								<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-							</span>
-							LIVE
-						</span>
-					</div>
-					<a href="https://3d-globe-iss-tracker.pages.dev/" class="link-hover">
-						<h2 class="text-2xl font-bold mb-2 tracking-tight">3D Globe ISS Tracker</h2>
-					</a>
-					<p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight">
-						Real-time ISS tracking with an interactive 3D globe visualization
-					</p>
-					<div class="flex flex-wrap gap-2">
-						<TechBadge tech="Three.js" tooltip="3D objects rendering" />
-						<TechBadge tech="D3.js" tooltip="3D objects positions" />
-						<TechBadge tech="WebGL" tooltip="Web browser graphics" />
-						<TechBadge tech="Real-time" tooltip="Real time updates" />
-						<TechBadge tech="Cloudflare" tooltip="Hosting, web services" />
-					</div>
-					<div class="flex flex-wrap items-center gap-4 mt-4">
-						<a href="https://3d-globe-iss-tracker.pages.dev/" target="_blank" class="link-hover inline-flex items-center gap-2">
-								Live Demo
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-						</a>
-						<a href="/blog/3d-globe-iss" class="link-hover inline-flex items-center gap-2">
-							Read More
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-						</a>
-					</div>
-				</div>
-			</div>
+			<ProjectsSection maxProjects={5}/>
 		</div>
 
 		<!-- Quick Links -->

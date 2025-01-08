@@ -16,10 +16,12 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				<div class="mb-8">
 					<Image
 						src={heroImage}
-						alt=""
+						alt={title}
 						width={1020}
 						height={510}
 						class="w-full h-auto"
+						quality={'high'}
+						format="webp"
 					/>
 				</div>
 			)}
