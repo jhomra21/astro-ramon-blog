@@ -22,84 +22,108 @@ const projects = (await getCollection('blog', ({ data }) => {
         return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
     })
     .slice(0, maxProjects);
+
+const totalProjects = (await getCollection('blog', ({ data }) => data.isProject || false)).length;
+const showSeeAll = maxProjects < totalProjects;
 ---
 
 <div class="space-y-8">
-    <h2 class="section-title">Projects</h2>
+    <div class="flex justify-between items-center">
+        <h2 class="section-title">Projects</h2>
+        {showSeeAll && (
+            <a href="/projects" class="link-hover text-sm font-mono">
+                See all projects
+                <span class="font-sans ml-1">→</span>
+            </a>
+        )}
+    </div>
 
     {projects.length === 0 ? (
         <p class="text-zinc-700 dark:text-zinc-300">No projects found.</p>
     ) : (
-        projects.map((project) => (
-            <div class="project-card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-                <div class="grid grid-cols-1 md:grid-cols-[280px,1fr] h-full">
-                    {project.data.heroImage && (
-                        <div class="relative h-48 md:h-full overflow-hidden">
-                            <Image
-                                src={project.data.heroImage}
-                                alt={`Preview of ${project.data.title}`}
-                                width={560}
-                                height={315}
-                                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                                loading="lazy"
-                                format="webp"
-                                quality="high"
-                            />
-                            <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-                        </div>
-                    )}
-                    <div class="relative z-10 p-6 flex flex-col h-full">
-                        <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
-                            <div class="flex items-center gap-2">
-                                <span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">
-                                    {project.data.pubDate.getFullYear()}
-                                </span>
+        <div class="space-y-8">
+            {projects.map((project) => (
+                <div class="project-card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 overflow-hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-[280px,1fr] h-full">
+                        {project.data.heroImage && (
+                            <div class="relative overflow-hidden">
+                                <a href={`/blog/${project.slug}`} class="block">
+                                    <Image
+                                        src={project.data.heroImage}
+                                        alt={`Preview of ${project.data.title}`}
+                                        width={1920}
+                                        height={1080}
+                                        class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+                                        loading="lazy"
+                                        format="webp"
+                                        quality="high"
+                                    />
+                                    <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                                </a>
                             </div>
-                            {project.data.projectStatus === 'live' && (
-                                <span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1.5">
-                                    <span class="relative flex h-2 w-2">
-                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        )}
+                        <div class="relative z-10 p-6 flex flex-col h-full">
+                            <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">
+                                        {project.data.pubDate.getFullYear()}
                                     </span>
-                                    LIVE
-                                </span>
-                            )}
-                        </div>
-                        <div class="flex-grow">
-                            <a href={project.data.projectUrl} class="link-hover">
-                                <h2 class="text-2xl font-bold mb-2 tracking-tight">{project.data.title}</h2>
-                            </a>
-                            <p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight">
-                                {project.data.description}
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                {project.data.techStack?.map((tech) => (
-                                    <TechBadge tech={tech.name} tooltip={tech.description} />
-                                ))}
+                                </div>
+                                {project.data.projectStatus === 'live' && (
+                                    <span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1.5">
+                                        <span class="relative flex h-2 w-2">
+                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                        </span>
+                                        LIVE
+                                    </span>
+                                )}
                             </div>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-4 mt-4">
-                            {project.data.projectUrl && (
-                                <a href={project.data.projectUrl} target="_blank" class="link-hover inline-flex items-center gap-2">
-                                    Live Site
+                            <div class="flex-grow">
+                                <a href={project.data.projectUrl} class="link-hover">
+                                    <h2 class="text-2xl font-bold mb-2 tracking-tight">{project.data.title}</h2>
+                                </a>
+                                <p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight">
+                                    {project.data.description}
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    {project.data.techStack?.map((tech) => (
+                                        <TechBadge tech={tech.name} tooltip={tech.description} />
+                                    ))}
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-4 mt-4">
+                                {project.data.projectUrl && (
+                                    <a href={project.data.projectUrl} target="_blank" class="link-hover inline-flex items-center gap-2">
+                                        Live Site
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                            <polyline points="15 3 21 3 21 9"/>
+                                            <line x1="10" y1="14" x2="21" y2="3"/>
+                                        </svg>
+                                    </a>
+                                )}
+                                <a href={`/blog/${project.slug}`} class="link-hover inline-flex items-center gap-2">
+                                    Read More
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                        <polyline points="15 3 21 3 21 9"/>
-                                        <line x1="10" y1="14" x2="21" y2="3"/>
+                                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
                                     </svg>
                                 </a>
-                            )}
-                            <a href={`/blog/${project.slug}`} class="link-hover inline-flex items-center gap-2">
-                                Read More
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-                                </svg>
-                            </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        ))
+            ))}
+            
+            {showSeeAll && (
+                <div class="flex justify-center pt-4">
+                    <a href="/projects" class="link-hover inline-flex items-center gap-2 text-sm font-mono">
+                        See all projects
+                        <span class="font-sans">→</span>
+                    </a>
+                </div>
+            )}
+        </div>
     )}
 </div>
 

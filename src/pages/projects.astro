@@ -1,0 +1,11 @@
+---
+import TransitionLayout from "../layouts/TransitionLayout.astro";
+import ProjectsSection from '../components/ProjectsSection.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+---
+
+<TransitionLayout title={`Projects | ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
+	<main class="container mx-auto max-w-6xl px-8 py-12">
+		<ProjectsSection maxProjects={999} />
+	</main>
+</TransitionLayout>

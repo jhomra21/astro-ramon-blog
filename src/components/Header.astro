@@ -5,19 +5,18 @@ import WeatherWidget from './WeatherWidget';
 import TypewriterEffect from './TypewriterEffect.astro';
 ---
 
-<header class="sticky top-0 z-50 w-full border-b border-neutral-100 bg-white/80 backdrop-blur-sm">
-	<nav class="mx-auto flex h-14 max-w-[1120px] items-center justify-between px-4">
+<header class="sticky top-0 z-50 w-full border-b border-neutral-200 bg-white/80 backdrop-blur-sm">
+	<nav class="mx-auto flex h-14 items-center justify-between px-4 sm:max-w-[1120px]">
 		<a href="/" class="font-mono text-sm text-neutral-700 hover:text-neutral-900">
 			<TypewriterEffect text={SITE_TITLE} />
 		</a>
 		<div class="flex items-center gap-x-4">
 			<WeatherWidget client:load />
 			<div class="h-4 w-px bg-neutral-200" />
-			<div class="flex items-center gap-x-1 font-mono text-sm">
+			<div class="hidden sm:flex items-center gap-x-1 font-mono text-sm">
 				<HeaderLink href="/">home</HeaderLink>
 				<HeaderLink href="/about">about</HeaderLink>
-				<HeaderLink href="https://3d-globe-iss-tracker.pages.dev" target="_blank" class="hidden sm:block">iss tracker</HeaderLink>
-				<HeaderLink href="https://vidtogifconverter.pages.dev" target="_blank" class="hidden sm:block">video to gif</HeaderLink>
+				<HeaderLink href="/projects">projects</HeaderLink>
 			</div>
 			<button 
 				id="mobile-menu-button" 
@@ -40,8 +39,9 @@ import TypewriterEffect from './TypewriterEffect.astro';
 		aria-hidden="true"
 	>
 		<div class="space-y-1 px-4 py-3">
-			<HeaderLink href="https://3d-globe-iss-tracker.pages.dev" target="_blank" class="block py-2">iss tracker</HeaderLink>
-			<HeaderLink href="https://vidtogifconverter.pages.dev" target="_blank" class="block py-2">video to gif</HeaderLink>
+			<HeaderLink href="/" class="block py-2">home</HeaderLink>
+			<HeaderLink href="/about" class="block py-2">about</HeaderLink>
+			<HeaderLink href="/projects" class="block py-2">projects</HeaderLink>
 		</div>
 	</div>
 </header>
