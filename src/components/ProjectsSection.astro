@@ -46,19 +46,22 @@ const showSeeAll = maxProjects < totalProjects;
                 <div class="project-card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 overflow-hidden">
                     <div class="grid grid-cols-1 md:grid-cols-[280px,1fr] h-full">
                         {project.data.heroImage && (
-                            <div class="relative overflow-hidden">
-                                <a href={`/blog/${project.slug}`} class="block">
-                                    <Image
-                                        src={project.data.heroImage}
-                                        alt={`Preview of ${project.data.title}`}
-                                        width={1920}
-                                        height={1080}
-                                        class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-                                        loading="lazy"
-                                        format="webp"
-                                        quality="high"
-                                    />
-                                    <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="relative overflow-hidden flex items-center justify-center h-full">
+                                <a href={`/blog/${project.slug}`} class="block relative w-full h-full">
+                                    <div class="relative w-full h-full flex items-center justify-center">
+                                        <div class="placeholder absolute inset-0 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-md animate-pulse" />
+                                        <Image
+                                            src={project.data.heroImage}
+                                            alt={`Preview of ${project.data.title}`}
+                                            width={1920}
+                                            height={1080}
+                                            class="project-image opacity-0 w-full h-full object-contain object-center hover:scale-105 transition-all duration-300 relative z-10"
+                                            loading="lazy"
+                                            format="webp"
+                                            quality="high"
+                                        />
+                                    </div>
+                                    <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 z-20"></div>
                                 </a>
                             </div>
                         )}
@@ -79,36 +82,36 @@ const showSeeAll = maxProjects < totalProjects;
                                     </span>
                                 )}
                             </div>
-                            <div class="flex-grow">
+                            <div class="flex-grow flex flex-col min-h-0">
                                 <a href={project.data.projectUrl} class="link-hover">
-                                    <h2 class="text-2xl font-bold mb-2 tracking-tight">{project.data.title}</h2>
+                                    <h2 class="text-2xl font-bold mb-2 tracking-tight line-clamp-2" title={project.data.title}>{project.data.title}</h2>
                                 </a>
-                                <p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight">
+                                <p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight line-clamp-3" title={project.data.description}>
                                     {project.data.description}
                                 </p>
-                                <div class="flex flex-wrap gap-2">
+                                <div class="flex flex-wrap gap-2 mb-4">
                                     {project.data.techStack?.map((tech) => (
                                         <TechBadge tech={tech.name} tooltip={tech.description} />
                                     ))}
                                 </div>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-4 mt-4">
-                                {project.data.projectUrl && (
-                                    <a href={project.data.projectUrl} target="_blank" class="link-hover inline-flex items-center gap-2">
-                                        Live Site
+                                <div class="mt-auto pt-4 flex flex-wrap items-center gap-4 border-t border-zinc-100 dark:border-zinc-700">
+                                    {project.data.projectUrl && (
+                                        <a href={project.data.projectUrl} target="_blank" class="link-hover inline-flex items-center gap-2">
+                                            Live Site
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                                <polyline points="15 3 21 3 21 9"/>
+                                                <line x1="10" y1="14" x2="21" y2="3"/>
+                                            </svg>
+                                        </a>
+                                    )}
+                                    <a href={`/blog/${project.slug}`} class="link-hover inline-flex items-center gap-2">
+                                        Show more
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                            <polyline points="15 3 21 3 21 9"/>
-                                            <line x1="10" y1="14" x2="21" y2="3"/>
+                                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
                                         </svg>
                                     </a>
-                                )}
-                                <a href={`/blog/${project.slug}`} class="link-hover inline-flex items-center gap-2">
-                                    Read More
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-                                    </svg>
-                                </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -147,4 +150,43 @@ const showSeeAll = maxProjects < totalProjects;
     .section-title {
         @apply text-2xl font-bold tracking-tight;
     }
-</style> 
+
+    .project-image {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    .project-image.loaded {
+        opacity: 1;
+    }
+
+    .placeholder {
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .placeholder.hidden {
+        opacity: 0;
+    }
+</style>
+
+<script>
+    // Handle image loading
+    const images = document.querySelectorAll('.project-image');
+    images.forEach(img => {
+        if (img instanceof HTMLImageElement) {
+            if (img.complete) {
+                handleImageLoad(img);
+            } else {
+                img.addEventListener('load', () => handleImageLoad(img));
+            }
+        }
+    });
+
+    function handleImageLoad(img: HTMLImageElement) {
+        img.classList.add('loaded');
+        const placeholder = img.parentElement?.querySelector('.placeholder');
+        if (placeholder) {
+            placeholder.classList.add('hidden');
+        }
+    }
+</script> 

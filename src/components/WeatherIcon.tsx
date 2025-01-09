@@ -14,7 +14,7 @@ const WeatherIcon = ({ icon, description }: WeatherIconProps) => {
         width={40}
         height={40}
         className="w-8 h-8 object-cover contrast-125 saturate-150 brightness-95"
-        loading="lazy"
+        loading="eager"
         style={{
           filter: 'drop-shadow(0 0 1px rgba(0,0,0,0.1))',
           transform: 'scale(1.2)',
