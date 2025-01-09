@@ -2,6 +2,7 @@
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
 import { Image } from 'astro:assets';
+import footerImage from '../assets/images/NASA-astronaut-Matthew-Dominick-amazing-photo-Milky-Way-Soyuz-spacecraft-ISS-Nikon-Z9-camera-3.jpeg';
 ---
 
 <footer class="relative border-t border-white/10 mt-auto">
@@ -9,7 +10,7 @@ import { Image } from 'astro:assets';
 	<div class="absolute inset-0 z-0">
 		<Image 
 			loading="lazy"
-			src="/NASA-astronaut-Matthew-Dominick-amazing-photo-Milky-Way-Soyuz-spacecraft-ISS-Nikon-Z9-camera-3.jpeg"
+			src={footerImage}
 			alt="NASA Milky Way view from ISS"
 			class="w-full h-full object-cover"
 			width={1920}
