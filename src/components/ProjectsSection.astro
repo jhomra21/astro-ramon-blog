@@ -7,7 +7,7 @@ interface Props {
     maxProjects?: number;
 }
 
-const { maxProjects = 5 } = Astro.props;
+const { maxProjects = 100 } = Astro.props;
 
 // Get all projects with more detailed logging
 const projects = (await getCollection('blog', ({ data }) => {
