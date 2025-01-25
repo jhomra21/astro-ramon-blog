@@ -1,44 +1,14 @@
 ---
 import TransitionLayout from "../layouts/TransitionLayout.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import Tooltip from "@/components/Tooltip";
-import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer";
 import ProjectsSection from "@/components/ProjectsSection.astro";
+import HeroSection from "@/components/HeroSection.astro";
+import QuickLinks from "@/components/QuickLinks.astro";
 ---
 
 <TransitionLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-	<div class="max-w-[1120px] mx-auto px-4 py-16 space-y-16">
-		<!-- Hero section -->
-		<div class="border-l-2 border-zinc-700 dark:border-zinc-300 bg-white dark:bg-zinc-800 p-6 shadow-sm">
-			<div class="flex items-center gap-2 mb-4">
-				<span class="text-4xl">👨‍🚀</span>
-				<TextScrambleShimmer 
-					text="Hello, Visitor!"
-					className="text-4xl text-zinc-900 dark:text-zinc-100 font-mono tracking-tight"
-					scrambleDuration={1.6}
-					shimmerDuration={5}
-					client:load 
-				/>
-			</div>
-
-			<p class="font-mono tracking-tight mb-2">Welcome, my name is Juan Martinez.</p>
-			<p class="font-mono tracking-tight text-zinc-700 dark:text-zinc-300 mb-4">
-				I'm a software developer specializing in modern web development and robust infrastructure. 
-				<br/>
-				I focus on creating/designing clean and efficient user experiences.
-			</p>
-
-			<div class="flex items-center gap-4 mb-2">
-				<a href="/about" class="link-hover">
-				<Tooltip 
-					triggerText="Learn More About Me"
-					tooltipContent="Link to article about me"
-					variant="ghost"
-					client:load
-				/>
-			</a>
-			</div>
-		</div>
+	<div class="max-w-[1120px] mx-auto px-4 pt-6 pb-16 space-y-14">
+		<HeroSection />
 
 		<!-- Projects Section -->
 		<div class="space-y-8">
@@ -46,25 +16,7 @@ import ProjectsSection from "@/components/ProjectsSection.astro";
 		</div>
 
 		<!-- Quick Links -->
-		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-			<div class="project-card about-card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
-				<h3 class="text-lg font-semibold mb-2 tracking-tight">About Me</h3>
-				<p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight">Learn more about my background, skills, and experience.</p>
-				<a href="/about" class="link-hover inline-flex items-center gap-2">
-					View Profile
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-				</a>
-			</div>
-
-			<div class="project-card github-card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
-				<h3 class="text-lg font-semibold mb-2 tracking-tight">GitHub</h3>
-				<p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight">Check out my GitHub.</p>
-				<a href="https://github.com/jhomra21" target="_blank" class="link-hover inline-flex items-center gap-2">
-					View Profile
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-				</a>
-			</div>
-		</div>
+		<QuickLinks />
 	</div>
 </TransitionLayout>
 

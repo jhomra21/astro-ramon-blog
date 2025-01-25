@@ -1,0 +1,250 @@
+---
+import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer";
+
+const ANIMATION_CONFIG = {
+	scrambleDuration: 1.6,
+	scaleInDuration: 0.4,
+	drawDuration: 1.2,
+	baseDelay: 0.8,
+	stagger: 0.05
+};
+---
+
+<div class="relative grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-8 min-h-[60vh] hero-container">
+	<!-- Main content -->
+	<div class="relative flex flex-col justify-center space-y-8 p-8">
+		<div class="space-y-4">
+			<div class="flex items-center gap-4 animate-fade-in">
+				<div class="relative">
+					<span class="text-5xl animate-pulse">👨‍🚀</span>
+					<div class="absolute -bottom-2 -right-2 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-zinc-900"></div>
+				</div>
+				<TextScrambleShimmer 
+					text="Hello, Visitor!"
+					className="text-5xl md:text-6xl font-sans font-bold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-zinc-100 dark:to-zinc-400 bg-clip-text text-transparent"
+					scrambleDuration={ANIMATION_CONFIG.scrambleDuration}
+					shimmerDuration={5}
+					client:load 
+				/>
+			</div>
+
+			<div class="space-y-4 relative">
+				<p class="text-xl md:text-2xl font-mono tracking-tight">
+					My name is <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">Juan Martinez</span>.
+				</p>
+				<p class="text-lg text-zinc-700 dark:text-zinc-300 font-mono max-w-2xl leading-relaxed">
+					I'm a software developer specializing in modern web development and robust infrastructure. 
+					<br class="hidden md:block"/>
+					I focus on creating/designing clean and efficient user experiences.
+				</p>
+			</div>
+
+			<div class="pt-4">
+				<a 
+					href="/about"
+					class="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium transition-all
+						bg-zinc-900 dark:bg-zinc-100 
+						text-white dark:text-zinc-900
+						hover:bg-zinc-800 dark:hover:bg-zinc-200
+						focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:focus:ring-zinc-400
+						focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
+				>
+					<span class="font-mono tracking-tight">Learn More About Me</span>
+					<svg 
+						xmlns="http://www.w3.org/2000/svg" 
+						class="w-4 h-4 transition-transform group-hover:translate-x-1" 
+						viewBox="0 0 24 24" 
+						fill="none" 
+						stroke="currentColor" 
+						stroke-width="2" 
+						stroke-linecap="round" 
+						stroke-linejoin="round"
+						aria-hidden="true"
+					>
+						<line x1="5" y1="12" x2="19" y2="12"></line>
+						<polyline points="12 5 19 12 12 19"></polyline>
+					</svg>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- Decorative side panel -->
+	<div class="relative hidden md:flex items-center justify-center overflow-hidden" aria-hidden="true">
+		<div class="absolute inset-0 bg-gradient-to-br from-zinc-100/40 to-zinc-200/40 dark:from-zinc-800/40 dark:to-zinc-900/40"></div>
+		<!-- Swiss-inspired geometric pattern -->
+		<div class="relative w-full h-full p-8">
+			<div class="grid grid-cols-4 grid-rows-4 gap-4 h-full">
+				{Array(16).fill(0).map((_, i) => (
+					<div 
+						class={`
+							relative group overflow-hidden animate-scale-in
+							${i % 3 === 0 ? 'col-span-2 row-span-2' : ''}
+							${i % 5 === 0 ? 'bg-zinc-900/10 dark:bg-zinc-50/10' : 'border-draw dark:border-draw-dark'}
+						`}
+						style={`animation-delay: ${i * ANIMATION_CONFIG.stagger}s;`}
+					>
+						<div class="
+							absolute inset-0 opacity-0 group-hover:opacity-100
+							bg-gradient-to-br from-blue-500/10 to-cyan-500/10
+							dark:from-blue-400/10 dark:to-cyan-400/10
+							transition-all duration-500
+							scale-95 group-hover:scale-100
+						"></div>
+						{i % 5 !== 0 && (
+							<>
+								<div class="border-line-top" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + (i * ANIMATION_CONFIG.stagger)}s`}></div>
+								<div class="border-line-right" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + (i * ANIMATION_CONFIG.stagger) + 0.1}s`}></div>
+								<div class="border-line-bottom" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + (i * ANIMATION_CONFIG.stagger) + 0.2}s`}></div>
+								<div class="border-line-left" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + (i * ANIMATION_CONFIG.stagger) + 0.3}s`}></div>
+							</>
+						)}
+					</div>
+				))}
+			</div>
+			<!-- Corner decorations -->
+			<div class="absolute inset-0 pointer-events-none">
+				<div class="absolute top-0 left-0 w-24 h-24">
+					<div class="border-line-top w-full" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay}s`}></div>
+					<div class="border-line-left h-full" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + 0.1}s`}></div>
+				</div>
+				<div class="absolute bottom-0 right-0 w-24 h-24">
+					<div class="border-line-bottom w-full" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + ANIMATION_CONFIG.drawDuration}s`}></div>
+					<div class="border-line-right h-full" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + ANIMATION_CONFIG.drawDuration + 0.1}s`}></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style define:vars={{
+	"animation-scale-duration": `${ANIMATION_CONFIG.scaleInDuration}s`,
+	"animation-draw-duration": `${ANIMATION_CONFIG.drawDuration}s`
+}}>
+	.hero-container {
+		position: relative;
+		isolation: isolate;
+	}
+
+	.hero-container::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to right, 
+			transparent 0%,
+			transparent 90%,
+			rgba(255,255,255,0.1) 100%
+		);
+		z-index: -1;
+	}
+
+	@keyframes fade-in {
+		from { opacity: 0; transform: translateY(10px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	.animate-fade-in {
+		animation: fade-in 0.5s ease-out forwards;
+	}
+
+	@keyframes scale-in {
+		from { 
+			opacity: 0;
+			transform: scale(0.8);
+		}
+		to { 
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+	.animate-scale-in {
+		animation: scale-in var(--animation-scale-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		opacity: 0;
+	}
+
+	.border-draw,
+	.border-draw-dark {
+		position: relative;
+	}
+
+	.border-line-top,
+	.border-line-right,
+	.border-line-bottom,
+	.border-line-left {
+		position: absolute;
+		background-color: rgba(0, 0, 0, 0.2);
+		opacity: 0;
+	}
+
+	:global(.dark) .border-line-top,
+	:global(.dark) .border-line-right,
+	:global(.dark) .border-line-bottom,
+	:global(.dark) .border-line-left {
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+
+	.border-line-top,
+	.border-line-bottom {
+		height: 1px;
+		width: 100%;
+		transform: scaleX(0);
+	}
+
+	.border-line-right,
+	.border-line-left {
+		width: 1px;
+		height: 100%;
+		transform: scaleY(0);
+	}
+
+	.border-line-top {
+		top: 0;
+		left: 0;
+		transform-origin: left;
+		animation: draw-line-x var(--animation-draw-duration) ease-out forwards var(--draw-delay);
+	}
+
+	.border-line-right {
+		top: 0;
+		right: 0;
+		transform-origin: top;
+		animation: draw-line-y var(--animation-draw-duration) ease-out forwards var(--draw-delay);
+	}
+
+	.border-line-bottom {
+		bottom: 0;
+		right: 0;
+		transform-origin: right;
+		animation: draw-line-x var(--animation-draw-duration) ease-out forwards var(--draw-delay);
+	}
+
+	.border-line-left {
+		bottom: 0;
+		left: 0;
+		transform-origin: bottom;
+		animation: draw-line-y var(--animation-draw-duration) ease-out forwards var(--draw-delay);
+	}
+
+	@keyframes draw-line-x {
+		0% {
+			transform: scaleX(0);
+			opacity: 0;
+		}
+		100% {
+			transform: scaleX(1);
+			opacity: 1;
+		}
+	}
+
+	@keyframes draw-line-y {
+		0% {
+			transform: scaleY(0);
+			opacity: 0;
+		}
+		100% {
+			transform: scaleY(1);
+			opacity: 1;
+		}
+	}
+</style> 

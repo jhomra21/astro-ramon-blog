@@ -1,0 +1,80 @@
+---
+interface Link {
+	title: string;
+	description: string;
+	href: string;
+	linkText: string;
+	icon: string;
+	cardType: 'about' | 'github';
+	isExternal?: boolean;
+}
+
+const links: Link[] = [
+	{
+		title: "About Me",
+		description: "Learn more about my background, skills, and experience.",
+		href: "/about",
+		linkText: "View Profile",
+		icon: '<line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline>',
+		cardType: 'about'
+	},
+	{
+		title: "GitHub",
+		description: "Check out my GitHub.",
+		href: "https://github.com/jhomra21",
+		linkText: "View Profile",
+		icon: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+		cardType: 'github',
+		isExternal: true
+	}
+];
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+	{links.map(({ title, description, href, linkText, icon, cardType, isExternal }) => (
+		<div class={`project-card ${cardType}-card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm`}>
+			<h3 class="text-lg font-semibold mb-2 tracking-tight">{title}</h3>
+			<p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight">{description}</p>
+			<a 
+				href={href} 
+				class="link-hover inline-flex items-center gap-2"
+				{...isExternal ? { target: "_blank" } : {}}
+			>
+				{linkText}
+				<svg 
+					xmlns="http://www.w3.org/2000/svg" 
+					width="24" 
+					height="24" 
+					viewBox="0 0 24 24" 
+					fill="none" 
+					stroke="currentColor" 
+					stroke-width="2" 
+					stroke-linecap="round" 
+					stroke-linejoin="round" 
+					class="w-4 h-4"
+					set:html={icon}
+				/>
+			</a>
+		</div>
+	))}
+</div>
+
+<style>
+	.project-card {
+		transition: all 0.2s ease;
+		border-left: 4px solid transparent;
+	}
+	.project-card:hover {
+		border-left-color: #2563eb;
+	}
+	.about-card:hover {
+		border-left-color: #10b981;
+	}
+	.github-card:hover {
+		border-left-color: #6b7280;
+	}
+
+	.link-hover {
+		@apply text-zinc-900 dark:text-zinc-100 border-b border-transparent hover:border-current transition-all duration-200;
+	}
+</style> 
