@@ -1,6 +1,8 @@
 ---
 import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer";
+import { Image } from 'astro:assets';
 
+const juanImage = import('@/assets/images/juan-falling.JPG' as any);
 const ANIMATION_CONFIG = {
 	scrambleDuration: 1.6,
 	scaleInDuration: 0.4,
@@ -12,30 +14,36 @@ const ANIMATION_CONFIG = {
 
 <div class="relative grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-8 min-h-[60vh] hero-container">
 	<!-- Main content -->
-	<div class="relative flex flex-col justify-center space-y-8 p-8">
+	<div class="relative flex flex-col justify-center space-y-8 -mt-32">
 		<div class="space-y-4">
-			<div class="flex items-center gap-4 animate-fade-in">
+			<div class="flex items-center gap-6 animate-fade-in">
 				<div class="relative">
-					<span class="text-5xl animate-pulse">👨‍🚀</span>
+					<div class="w-20 h-20 overflow-hidden rounded-full border-2 border-zinc-200 dark:border-zinc-700 shadow-md">
+						<Image width={400} height={400} src={juanImage} alt="Juan Martinez" class="w-full h-full object-cover" />
+					</div>
 					<div class="absolute -bottom-2 -right-2 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-zinc-900"></div>
 				</div>
-				<TextScrambleShimmer 
-					text="Hello, Visitor!"
-					className="text-5xl md:text-6xl font-sans font-bold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-zinc-100 dark:to-zinc-400 bg-clip-text text-transparent"
-					scrambleDuration={ANIMATION_CONFIG.scrambleDuration}
-					shimmerDuration={5}
-					client:load 
-				/>
+				<div class="flex flex-col">
+					<TextScrambleShimmer 
+						text="Juan Martinez"
+						className="text-3xl md:text-4xl font-sans font-bold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-zinc-100 dark:to-zinc-400 bg-clip-text text-transparent"
+						scrambleDuration={ANIMATION_CONFIG.scrambleDuration}
+						shimmerDuration={5}
+						client:load 
+					/>
+					<div class="flex gap-4 mt-2 text-sm text-zinc-600 dark:text-zinc-400 font-mono">
+						<a href="https://twitter.com/jhomra21" class="hover:text-blue-500 transition-colors">twitter</a>
+						<span>//</span>
+						<a href="https://github.com/jhomra21" class="hover:text-purple-500 transition-colors">github</a>
+						<span>//</span>
+						<a href="mailto:jhonra121@gmail.com" class="hover:text-green-500 transition-colors">email</a>
+					</div>
+				</div>
 			</div>
 
 			<div class="space-y-4 relative">
-				<p class="text-xl md:text-2xl font-mono tracking-tight">
-					My name is <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">Juan Martinez</span>.
-				</p>
-				<p class="text-lg text-zinc-700 dark:text-zinc-300 font-mono max-w-2xl leading-relaxed">
-					I'm a software developer specializing in modern web development and robust infrastructure. 
-					<br class="hidden md:block"/>
-					I focus on creating/designing clean and efficient user experiences.
+				<p class="text-lg text-zinc-700 dark:text-zinc-300 font-mono max-w-4xl leading-relaxed">
+					I'm a software developer specializing in modern web development.
 				</p>
 			</div>
 
@@ -202,49 +210,41 @@ const ANIMATION_CONFIG = {
 		top: 0;
 		left: 0;
 		transform-origin: left;
-		animation: draw-line-x var(--animation-draw-duration) ease-out forwards var(--draw-delay);
+		animation: draw-line-x var(--animation-draw-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		animation-delay: var(--draw-delay);
 	}
 
 	.border-line-right {
 		top: 0;
 		right: 0;
 		transform-origin: top;
-		animation: draw-line-y var(--animation-draw-duration) ease-out forwards var(--draw-delay);
+		animation: draw-line-y var(--animation-draw-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		animation-delay: var(--draw-delay);
 	}
 
 	.border-line-bottom {
 		bottom: 0;
 		right: 0;
 		transform-origin: right;
-		animation: draw-line-x var(--animation-draw-duration) ease-out forwards var(--draw-delay);
+		animation: draw-line-x var(--animation-draw-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		animation-delay: var(--draw-delay);
 	}
 
 	.border-line-left {
 		bottom: 0;
 		left: 0;
 		transform-origin: bottom;
-		animation: draw-line-y var(--animation-draw-duration) ease-out forwards var(--draw-delay);
+		animation: draw-line-y var(--animation-draw-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		animation-delay: var(--draw-delay);
 	}
 
 	@keyframes draw-line-x {
-		0% {
-			transform: scaleX(0);
-			opacity: 0;
-		}
-		100% {
-			transform: scaleX(1);
-			opacity: 1;
-		}
+		from { transform: scaleX(0); opacity: 0; }
+		to { transform: scaleX(1); opacity: 1; }
 	}
 
 	@keyframes draw-line-y {
-		0% {
-			transform: scaleY(0);
-			opacity: 0;
-		}
-		100% {
-			transform: scaleY(1);
-			opacity: 1;
-		}
+		from { transform: scaleY(0); opacity: 0; }
+		to { transform: scaleY(1); opacity: 1; }
 	}
-</style> 
+</style>
