@@ -7,31 +7,37 @@ const ANIMATION_CONFIG = {
 	scrambleDuration: 1.6,
 	scaleInDuration: 0.4,
 	drawDuration: 1.2,
-	baseDelay: 0.8,
-	stagger: 0.05
+	baseDelay: 0.2,
+	stagger: 0.1
 };
 ---
 
-<div class="relative grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-8 min-h-[60vh] hero-container">
-	<!-- Main content -->
-	<div class="relative flex flex-col justify-center space-y-8">
-		<div class="space-y-6">
-			<div class="flex flex-col md:flex-row items-start md:items-center gap-8 animate-fade-in">
+<div class="relative min-h-[40vh] hero-container">
+	<div class="w-full py-8 md:py-12">
+		<div class="grid grid-cols-1 md:grid-cols-[auto,1fr] gap-8 md:gap-12 items-center">
+			<!-- Profile Image Column -->
+			<div class="flex justify-start animate-fade-in" style="--fade-delay: 0s;">
 				<div class="relative">
-					<div class="w-28 h-28 md:w-32 md:h-32 overflow-hidden rounded-full border-2 border-zinc-200 dark:border-zinc-700 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105">
+					<div class="w-36 h-36 md:w-48 md:h-48 overflow-hidden rounded-full border-4 border-zinc-200 dark:border-zinc-700 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]">
 						<Image src={juanImage} alt="Juan Martinez" class="w-full h-full object-cover" />
 					</div>
 					<div class="absolute -bottom-2 -right-2 w-5 h-5 bg-green-500 rounded-full border-2 border-white dark:border-zinc-900 animate-pulse"></div>
 				</div>
-				<div class="flex flex-col">
+			</div>
+			
+			<!-- Content Column -->
+			<div class="flex flex-col space-y-6">
+				<!-- Name and Social Links -->
+				<div class="space-y-3 animate-fade-in" style="--fade-delay: 0.1s;">
 					<TextScrambleShimmer 
 						text="Juan Martinez"
-						className="text-4xl md:text-5xl font-sans font-bold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-zinc-100 dark:to-zinc-400 bg-clip-text text-transparent"
+						className="text-3xl md:text-5xl font-sans font-bold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-zinc-100 dark:to-zinc-400 bg-clip-text text-transparent"
 						scrambleDuration={ANIMATION_CONFIG.scrambleDuration}
 						shimmerDuration={5}
 						client:load 
 					/>
-					<div class="flex flex-wrap gap-x-4 gap-y-2 mt-3 text-sm text-zinc-600 dark:text-zinc-400 font-mono items-center">
+					
+					<div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-zinc-600 dark:text-zinc-400 font-mono items-center">
 						<a href="https://twitter.com/jhomra21" class="flex items-center gap-1.5 hover:text-blue-500 transition-colors">
 							<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
 								<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
@@ -55,87 +61,42 @@ const ANIMATION_CONFIG = {
 						</a>
 					</div>
 				</div>
-			</div>
 
-			<div class="space-y-4 relative pl-0 md:pl-2 max-w-2xl">
-				<p class="text-lg text-zinc-700 dark:text-zinc-300 font-mono leading-relaxed border-l-2 border-zinc-200 dark:border-zinc-700 pl-4">
-					I'm a software developer specializing in modern web development.
-				</p>
-			</div>
-
-			<div class="pt-2">
-				<a 
-					href="/about"
-					class="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium transition-all
-						bg-zinc-900 dark:bg-zinc-100 
-						text-white dark:text-zinc-900
-						hover:bg-zinc-800 dark:hover:bg-zinc-200
-						focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:focus:ring-zinc-400
-						focus:ring-offset-2 dark:focus:ring-offset-zinc-900
-						shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-				>
-					<span class="font-mono tracking-tight">Learn More About Me</span>
-					<svg 
-						xmlns="http://www.w3.org/2000/svg" 
-						class="w-4 h-4 transition-transform group-hover:translate-x-1" 
-						viewBox="0 0 24 24" 
-						fill="none" 
-						stroke="currentColor" 
-						stroke-width="2" 
-						stroke-linecap="round" 
-						stroke-linejoin="round"
-						aria-hidden="true"
-					>
-						<line x1="5" y1="12" x2="19" y2="12"></line>
-						<polyline points="12 5 19 12 12 19"></polyline>
-					</svg>
-				</a>
-			</div>
-		</div>
-	</div>
-
-	<!-- Decorative side panel -->
-	<div class="relative hidden md:flex items-center justify-center overflow-hidden" aria-hidden="true">
-		<div class="absolute inset-0 bg-gradient-to-br from-zinc-100/40 to-zinc-200/40 dark:from-zinc-800/40 dark:to-zinc-900/40"></div>
-		<!-- Swiss-inspired geometric pattern -->
-		<div class="relative w-full h-full p-8">
-			<div class="grid grid-cols-4 grid-rows-4 gap-4 h-full">
-				{Array(16).fill(0).map((_, i) => (
-					<div 
-						class={`
-							relative group overflow-hidden animate-scale-in
-							${i % 3 === 0 ? 'col-span-2 row-span-2' : ''}
-							${i % 5 === 0 ? 'bg-zinc-900/10 dark:bg-zinc-50/10' : 'border-draw dark:border-draw-dark'}
-						`}
-						style={`animation-delay: ${i * ANIMATION_CONFIG.stagger}s;`}
-					>
-						<div class="
-							absolute inset-0 opacity-0 group-hover:opacity-100
-							bg-gradient-to-br from-blue-500/10 to-cyan-500/10
-							dark:from-blue-400/10 dark:to-cyan-400/10
-							transition-all duration-500
-							scale-95 group-hover:scale-100
-						"></div>
-						{i % 5 !== 0 && (
-							<>
-								<div class="border-line-top" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + (i * ANIMATION_CONFIG.stagger)}s`}></div>
-								<div class="border-line-right" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + (i * ANIMATION_CONFIG.stagger) + 0.1}s`}></div>
-								<div class="border-line-bottom" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + (i * ANIMATION_CONFIG.stagger) + 0.2}s`}></div>
-								<div class="border-line-left" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + (i * ANIMATION_CONFIG.stagger) + 0.3}s`}></div>
-							</>
-						)}
-					</div>
-				))}
-			</div>
-			<!-- Corner decorations -->
-			<div class="absolute inset-0 pointer-events-none">
-				<div class="absolute top-0 left-0 w-24 h-24">
-					<div class="border-line-top w-full" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay}s`}></div>
-					<div class="border-line-left h-full" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + 0.1}s`}></div>
+				<!-- Bio -->
+				<div class="relative max-w-2xl animate-fade-in" style="--fade-delay: 0.2s;">
+					<p class="text-lg text-zinc-700 dark:text-zinc-300 font-mono leading-relaxed border-l-2 border-zinc-200 dark:border-zinc-700 pl-4">
+						I'm a software developer specializing in modern web development.
+					</p>
 				</div>
-				<div class="absolute bottom-0 right-0 w-24 h-24">
-					<div class="border-line-bottom w-full" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + ANIMATION_CONFIG.drawDuration}s`}></div>
-					<div class="border-line-right h-full" style={`--draw-delay: ${ANIMATION_CONFIG.baseDelay + ANIMATION_CONFIG.drawDuration + 0.1}s`}></div>
+
+				<!-- CTA Button -->
+				<div class="pt-2 animate-fade-in" style="--fade-delay: 0.3s;">
+					<a 
+						href="/about"
+						class="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium transition-all
+							bg-zinc-900 dark:bg-zinc-100 
+							text-white dark:text-zinc-900
+							hover:bg-zinc-800 dark:hover:bg-zinc-200
+							focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:focus:ring-zinc-400
+							focus:ring-offset-2 dark:focus:ring-offset-zinc-900
+							shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+					>
+						<span class="font-mono tracking-tight">Learn More About Me</span>
+						<svg 
+							xmlns="http://www.w3.org/2000/svg" 
+							class="w-4 h-4 transition-transform group-hover:translate-x-1" 
+							viewBox="0 0 24 24" 
+							fill="none" 
+							stroke="currentColor" 
+							stroke-width="2" 
+							stroke-linecap="round" 
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<line x1="5" y1="12" x2="19" y2="12"></line>
+							<polyline points="12 5 19 12 12 19"></polyline>
+						</svg>
+					</a>
 				</div>
 			</div>
 		</div>
@@ -170,6 +131,8 @@ const ANIMATION_CONFIG = {
 
 	.animate-fade-in {
 		animation: fade-in 0.5s ease-out forwards;
+		animation-delay: var(--fade-delay, 0s);
+		opacity: 0;
 	}
 
 	@keyframes scale-in {
@@ -185,6 +148,7 @@ const ANIMATION_CONFIG = {
 
 	.animate-scale-in {
 		animation: scale-in var(--animation-scale-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		animation-delay: var(--scale-delay, 0s);
 		opacity: 0;
 	}
 
