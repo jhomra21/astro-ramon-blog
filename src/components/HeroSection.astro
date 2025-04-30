@@ -1,6 +1,7 @@
 ---
 import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer";
 import { Image } from 'astro:assets';
+import { InfoDialog } from '@/components/react/InfoDialog';
 
 const juanImage = import('@/assets/images/juan-falling.JPG' as any);
 const ANIMATION_CONFIG = {
@@ -71,32 +72,46 @@ const ANIMATION_CONFIG = {
 
 				<!-- CTA Button -->
 				<div class="pt-2 animate-fade-in" style="--fade-delay: 0.3s;">
-					<a 
-						href="/about"
-						class="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium transition-all
-							bg-zinc-900 dark:bg-zinc-100 
-							text-white dark:text-zinc-900
-							hover:bg-zinc-800 dark:hover:bg-zinc-200
-							focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:focus:ring-zinc-400
-							focus:ring-offset-2 dark:focus:ring-offset-zinc-900
-							shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-					>
-						<span class="font-mono tracking-tight">Learn More About Me</span>
-						<svg 
-							xmlns="http://www.w3.org/2000/svg" 
-							class="w-4 h-4 transition-transform group-hover:translate-x-1" 
-							viewBox="0 0 24 24" 
-							fill="none" 
-							stroke="currentColor" 
-							stroke-width="2" 
-							stroke-linecap="round" 
-							stroke-linejoin="round"
-							aria-hidden="true"
+					<div class="flex flex-wrap gap-4 items-center">
+						<a 
+							href="/about"
+							class="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium transition-all
+								bg-zinc-900 dark:bg-zinc-100 
+								text-white dark:text-zinc-900
+								hover:bg-zinc-800 dark:hover:bg-zinc-200
+								focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:focus:ring-zinc-400
+								focus:ring-offset-2 dark:focus:ring-offset-zinc-900
+								shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
 						>
-							<line x1="5" y1="12" x2="19" y2="12"></line>
-							<polyline points="12 5 19 12 12 19"></polyline>
-						</svg>
-					</a>
+							<span class="font-mono tracking-tight">Learn More About Me</span>
+							<svg 
+								xmlns="http://www.w3.org/2000/svg" 
+								class="w-4 h-4 transition-transform group-hover:translate-x-1" 
+								viewBox="0 0 24 24" 
+								fill="none" 
+								stroke="currentColor" 
+								stroke-width="2" 
+								stroke-linecap="round" 
+								stroke-linejoin="round"
+								aria-hidden="true"
+							>
+								<line x1="5" y1="12" x2="19" y2="12"></line>
+								<polyline points="12 5 19 12 12 19"></polyline>
+							</svg>
+						</a>
+						<InfoDialog
+							dialogClassName="inline-flex items-center gap-2 px-6 py-3"
+							client:load
+							title="MCP Server Info"
+							contentLines={[
+								"mcp url: https://first-mcp-cf.jhonra121.workers.dev/sse",
+								"tools: read_resume"
+							]}
+							triggerText="Resume MCP"
+							triggerClassName="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium transition-all bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:focus:ring-zinc-400 focus:ring-offset-2 dark:focus:ring-offset-zinc-900 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+						>
+						</InfoDialog>
+					</div>
 				</div>
 			</div>
 		</div>
