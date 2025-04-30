@@ -70,6 +70,9 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
   // const [lineCoords, setLineCoords] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
   // --- End New State ---
 
+  // Add ref to track pendingToolRequestId to avoid closure issues in SSE listener
+  const pendingToolRequestIdRef = useRef<number | null>(null);
+
   // Cleanup copy timeout and SSE connection
   useEffect(() => {
     return () => {
@@ -103,19 +106,19 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
   const disconnectFromMcp = () => {
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
-      console.log("MCP SSE Connection Closed");
       eventSourceRef.current = null;
     }
     setConnectionStatus('idle');
     setSessionPostPath(null);
     setDiscoveredTools([]);
-    setIsToolListVisible(false); // <-- Reset visibility
-    if (visibilityTimeoutRef.current) clearTimeout(visibilityTimeoutRef.current); // <-- Clear pending timeout
-    setSelectedTool(null); // <-- Reset
-    setToolStatus('idle'); // <-- Reset
-    setToolResponse(null); // <-- Reset
-    setPendingToolRequestId(null); // <-- Reset
-    // setLineCoords(null); // <-- Reset later
+    setIsToolListVisible(false); 
+    if (visibilityTimeoutRef.current) clearTimeout(visibilityTimeoutRef.current); 
+    setSelectedTool(null); 
+    setToolStatus('idle'); 
+    setToolResponse(null); 
+    setPendingToolRequestId(null);
+    pendingToolRequestIdRef.current = null; // Clear ref too
+    // setLineCoords(null); 
   };
 
   const connectToMcp = () => {
@@ -132,7 +135,6 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
       disconnectFromMcp(); 
     }
 
-    console.log(`Connecting to MCP SSE: ${mcpSseUrl}`);
     // Reset state before connecting
     setDiscoveredTools([]); 
     setSessionPostPath(null);
@@ -141,15 +143,13 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
     setToolStatus('idle'); 
     setToolResponse(null); 
     setPendingToolRequestId(null);
+    pendingToolRequestIdRef.current = null;
     if (visibilityTimeoutRef.current) clearTimeout(visibilityTimeoutRef.current);
     setConnectionStatus('connecting');
 
     const es = new EventSource(mcpSseUrl);
     eventSourceRef.current = es;
 
-    es.onopen = () => {
-      console.log("MCP SSE Connection Opened");
-    };
 
     es.onerror = (error) => {
       console.error("MCP SSE Error:", error);
@@ -161,12 +161,10 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
     
     // Handle the 'endpoint' event to get the session-specific POST path
     es.addEventListener('endpoint', (event: MessageEvent) => {
-        console.log("Received endpoint event:", event.data);
         if (event.data && typeof event.data === 'string') {
             const path = event.data;
             setSessionPostPath(path); 
             setConnectionStatus('connected'); 
-            console.log("Connection established... Requesting tools...");
             requestToolsList(path); 
         } else {
             console.warn("Received endpoint event with unexpected data format.");
@@ -177,63 +175,86 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
 
     // Handle generic 'message' events (for server info, tool list response, etc.)
     es.addEventListener('message', (event: MessageEvent) => {
-        console.log("Received message event:", event.data);
+        let data;
         try {
-            const data = JSON.parse(event.data);
-            if (data?.jsonrpc !== "2.0") return; // Ignore non-JSONRPC messages
-
-            // Check if it's the response to our tools/list request (id > 0, NOT matching pendingToolRequestId)
-            if (data.id > 0 && data.id !== pendingToolRequestId && data.result?.tools) {
-                const tools: McpTool[] = data.result.tools;
-                console.log("Discovered tools:", tools);
-                setDiscoveredTools(tools);
-                if (visibilityTimeoutRef.current) clearTimeout(visibilityTimeoutRef.current);
-                visibilityTimeoutRef.current = setTimeout(() => {
-                    setIsToolListVisible(true);
-                }, 10); 
-            } 
-            // Check if it's the response to our pending tool execution request
-            else if (data.id === pendingToolRequestId) {
-                 console.log("Received response for tool request ID:", data.id);
-                 if (data.result?.content) {
-                     setToolResponse(data.result.content);
-                     setToolStatus('success');
-                     console.log("Tool response content:", data.result.content);
-                 } else if (data.error) {
-                     console.error("Tool execution error:", data.error);
-                     setToolResponse(data.error); // Store error object
-                     setToolStatus('error');
-                 } else {
-                    // Unexpected response structure for tool execution
-                    console.warn("Unexpected response for tool request:", data);
-                    setToolResponse({ message: "Unexpected response structure." });
-                    setToolStatus('error');
-                 }
-                 setPendingToolRequestId(null); // Clear pending ID
-             } 
-            // Check for initial capabilities announcement (id 0)
-            else if (data.id === 0 && data.result?.capabilities?.tools) {
-                 const initialTools: McpTool[] = data.result.capabilities.tools;
-                 if (initialTools.length > 0) {
-                     console.log("Received initial tools announcement:", initialTools);
-                     setDiscoveredTools(prev => {
-                         const newTools = [...prev];
-                         initialTools.forEach(t => {
-                             if (!newTools.some(et => et.name === t.name)) newTools.push(t);
-                         });
-                         return newTools;
-                     });
-                     if (visibilityTimeoutRef.current) clearTimeout(visibilityTimeoutRef.current);
-                     visibilityTimeoutRef.current = setTimeout(() => setIsToolListVisible(true), 10);
-                 }
-             } 
-            else {
-                console.log("Received other message:", data);
+            data = JSON.parse(event.data);
+            if (data?.jsonrpc !== "2.0") {
+                return; // Ignore non-JSONRPC
             }
         } catch (e) {
             console.error("Failed to parse MCP message data:", e);
+            return; // Can't parse, exit
         }
-    });
+
+        const messageId = data.id;
+        
+        const isToolListResponse = messageId > 0 && messageId !== pendingToolRequestIdRef.current && data.result?.tools;
+        const isToolExecutionResponse = messageId === pendingToolRequestIdRef.current; // Use ref instead of state
+        const isInitialCapabilities = messageId === 0 && data.result?.capabilities?.tools;
+
+        // Handle Tool List Response
+        if (isToolListResponse) {
+            const tools: McpTool[] = data.result.tools;
+            setDiscoveredTools(tools);
+            if (visibilityTimeoutRef.current) clearTimeout(visibilityTimeoutRef.current);
+            visibilityTimeoutRef.current = setTimeout(() => {
+                setIsToolListVisible(true);
+            }, 10);
+            return; // Handled, exit
+        }
+
+        // Handle Tool Execution Response
+        if (isToolExecutionResponse) {
+            if (data.result?.content) {
+                // Handle content array format with text display
+                let displayContent = data.result.content;
+                
+                // If it's an array of content items, extract text for display
+                if (Array.isArray(displayContent)) {
+                    const textContent = displayContent
+                        .filter(item => item.type === "text" && item.text)
+                        .map(item => item.text)
+                        .join(" ");
+                    
+                    if (textContent) {
+                        displayContent = textContent; // Use extracted text if available
+                    }
+                }
+                
+                setToolResponse(displayContent);
+                setToolStatus('success');
+            } else if (data.error) {
+                console.error("Tool execution error:", data.error);
+                setToolResponse(data.error); // Store error object
+                setToolStatus('error'); // Sets status to 'error'
+            } else {
+                console.warn("Unexpected response structure for tool request:", data);
+                setToolResponse({ message: "Unexpected response structure." });
+                setToolStatus('error');
+            }
+            setPendingToolRequestId(null); // Clear pending ID state
+            pendingToolRequestIdRef.current = null; // Also clear ref
+            return; // Handled, exit
+        }
+
+        // Handle Initial Capabilities Announcement
+        if (isInitialCapabilities) {
+            const initialTools: McpTool[] = data.result.capabilities.tools;
+            if (initialTools.length > 0) {
+                setDiscoveredTools(prev => {
+                    const newTools = [...prev];
+                    initialTools.forEach(t => {
+                        if (!newTools.some(et => et.name === t.name)) newTools.push(t);
+                    });
+                    return newTools;
+                });
+                if (visibilityTimeoutRef.current) clearTimeout(visibilityTimeoutRef.current);
+                visibilityTimeoutRef.current = setTimeout(() => setIsToolListVisible(true), 10);
+            }
+             return; // Handled, exit
+        }
+
+    }); // End of listener
 
     // --- End SSE Event Handlers ---
   };
@@ -246,8 +267,6 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
   
     const postUrl = `${baseUrl}${path}`; // Combine origin + path
     const requestId = generateMessageId();
-
-    console.log(`Requesting tools list via POST to: ${postUrl}`);
 
     try {
       const response = await fetch(postUrl, {
@@ -266,7 +285,6 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
       if (!response.ok && response.status !== 202) {
            throw new Error(`HTTP error! status: ${response.status}`);
       }
-       console.log(`Tools request sent successfully (Status ${response.status}).`);
       // Response comes back over SSE.
 
     } catch (error) {
@@ -297,10 +315,10 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
     setToolStatus('loading');
     setToolResponse(null);
     const requestId = generateMessageId();
-    setPendingToolRequestId(requestId); // Track this request
-
+    setPendingToolRequestId(requestId); // Track this request in state
+    pendingToolRequestIdRef.current = requestId; // ALSO track in ref for SSE listener access
+    
     const postUrl = `${baseUrl}${sessionPostPath}`;
-    console.log(`Executing tool '${tool.name}' via POST to: ${postUrl} (Req ID: ${requestId})`);
 
     try {
       const response = await fetch(postUrl, {
@@ -309,13 +327,13 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
         body: JSON.stringify({
           jsonrpc: "2.0",
           id: requestId,
-          method: "request.dispatch", // Standard MCP method
+          method: "tools/call",
           params: {
-             tool_name: tool.name,
-             // Assuming method name is same as tool name for these simple tools
-             // And assuming no parameters are needed (empty object)
-             method_name: tool.name, 
-             params: {} 
+             name: tool.name,
+             arguments: {},
+             _meta: {
+               progressToken: requestId
+             }
           }
         }),
       });
@@ -324,7 +342,6 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
       if (!response.ok && response.status !== 202) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      console.log(`Tool execution request for '${tool.name}' sent successfully (Status ${response.status}).`);
 
     } catch (error) {
       console.error(`Failed to send execute request for tool '${tool.name}':`, error);
@@ -333,7 +350,7 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
       setPendingToolRequestId(null); // Clear pending ID on send error
     }
   };
-  // --- End executeTool ---
+
 
   return (
     <Dialog onOpenChange={handleOpenChange}>
@@ -345,9 +362,19 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
         {triggerText} {/* Text goes here */} 
         {/* Icon would need to be handled here too if re-added */}
       </DialogTrigger>
-      <DialogContent className={cn("sm:max-w-lg bg-white dark:bg-zinc-900 transition-[max-width] duration-300 ease-in-out", selectedTool && "sm:max-w-3xl", dialogClassName)}>
+      <DialogContent className={cn(
+        "sm:max-w-lg bg-white dark:bg-zinc-900 transition-all duration-300 ease-in-out",
+        "overflow-hidden will-change-[height,width,max-height,max-width]", // Add these properties
+        selectedTool && "sm:max-w-3xl", 
+        dialogClassName
+      )}
+      style={{
+        // Add a min-height to prevent jarring collapse when switching states
+        minHeight: discoveredTools.length > 0 ? "360px" : "200px",
+      }}>
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{title} [WIP]</DialogTitle>
+          <DialogTitle className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{title}</DialogTitle>
+          <p className="italic text-xs text-zinc-600 dark:text-zinc-400">Connect to my custom MCP server to use these tools. Hosted on Cloudflare.</p>
           <DialogDescription asChild className="mt-4 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
             {/* Use a div wrapper for DialogDescription content when using asChild */}
             <div>
@@ -387,14 +414,17 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
         {/* Dynamic Tools Section - Render when tools array has items, visibility controlled by state */} 
         {discoveredTools.length > 0 && (
             <div 
-               className={cn(
-                    // Remove entrance animation from the container
-                    "flex flex-col flex-1 min-h-0 mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700", // Removed animate-in fade-in duration-300
+                className={cn(
+                    "flex flex-col flex-1 min-h-0 mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700 transition-all duration-300 ease-in-out",
+                    isToolListVisible ? "opacity-100 max-h-[500px]" : "opacity-0 max-h-0 overflow-hidden"
                 )}
                 aria-live="polite"
             >
                 {/* Conditional Grid Layout */}
-                <div className={cn("flex-1 min-h-0", selectedTool ? "grid grid-cols-2 gap-6" : "flex flex-col")}> 
+                <div className={cn(
+                    "flex-1 min-h-0 transition-all duration-300 ease-in-out", 
+                    selectedTool ? "grid grid-cols-2 gap-6 h-[300px]" : "flex flex-col h-auto"
+                )}>
                     {/* Tools List Column/Section */}
                     <div className={cn("flex flex-col min-h-0", selectedTool ? "col-span-1" : "flex-1")}> 
                         <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3 flex-shrink-0">Available Tools</h3>
@@ -403,14 +433,17 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
                                 {discoveredTools.map((tool, index) => (
                                 <li 
                                     key={tool.name}
-                                    onClick={() => executeTool(tool)} // <-- Add onClick
+                                    onClick={() => {
+                                        setSelectedTool(tool); // Set the selected tool state
+                                        executeTool(tool);    // Execute the tool
+                                    }}
                                     className={cn(
-                                        "text-xs font-mono text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 rounded px-2.5 py-1.5 border border-transparent dark:hover:border-zinc-700 hover:border-zinc-200 cursor-pointer", // Added cursor-pointer
-                                        "transition-opacity duration-300 ease-in-out", 
-                                        isToolListVisible ? "opacity-100" : "opacity-0",
-                                        selectedTool?.name === tool.name ? 'ring-2 ring-blue-500 dark:ring-blue-400 ring-offset-2 dark:ring-offset-zinc-900 bg-blue-50 dark:bg-blue-900/30' : '' // Highlight selected
+                                        "text-xs font-mono text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 rounded px-2.5 py-1.5 border border-transparent dark:hover:border-zinc-700 hover:border-zinc-200 cursor-pointer",
+                                        "transform transition-all duration-300 ease-in-out", 
+                                        isToolListVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+                                        selectedTool?.name === tool.name ? 'ring-2 ring-blue-500 dark:ring-blue-400 ring-offset-2 dark:ring-offset-zinc-900 bg-blue-50 dark:bg-blue-900/30' : '' 
                                     )}
-                                    style={{ transitionDelay: `${index * 75}ms` }} 
+                                    style={{ transitionDelay: `${index * 50}ms` }} 
                                 >
                                     {tool.name}
                                 </li>
@@ -422,22 +455,27 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
                     {/* Response Panel Column (Conditional) */}
                     {selectedTool && (
                          <div 
-                            // ref={responsePanelRef} // Add ref later for line
-                            className="col-span-1 flex flex-col min-h-0 border-l border-zinc-200 dark:border-zinc-700 pl-6 animate-in fade-in duration-300"
+                            className="col-span-1 flex flex-col min-h-0 border-l border-zinc-200 dark:border-zinc-700 pl-6 animate-in fade-in slide-in-from-left duration-300"
                          >
                              <h4 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3 flex-shrink-0 border-b border-zinc-200 dark:border-zinc-700 pb-2">
-                                Response: <code className="ml-1 font-normal text-blue-600 dark:text-blue-400">{selectedTool.name}</code>
+                                Tool: <code className="ml-1 font-normal text-blue-600 dark:text-blue-400">{selectedTool.name}</code>
                              </h4>
-                             <div className="flex-1 min-h-0 overflow-y-auto pr-3">
+                             <div className="flex-1 min-h-0 overflow-y-auto pr-3 transition-all duration-300 ease-in-out">
                                 {toolStatus === 'loading' && (
-                                    <p className="text-xs text-zinc-500 dark:text-zinc-500 italic flex items-center gap-1.5"><Loader2 className="w-3 h-3 animate-spin"/> Executing...</p>
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-500 italic flex items-center gap-1.5 animate-in fade-in duration-300">
+                                        <Loader2 className="w-3 h-3 animate-spin"/> Executing...
+                                    </p>
                                 )}
                                 {toolStatus === 'error' && (
-                                    <p className="text-xs text-red-500 dark:text-red-400"><span className="font-semibold">Error:</span> {toolResponse?.message || 'Unknown error'}</p>
+                                    <p className="text-xs text-red-500 dark:text-red-400 animate-in fade-in duration-300">
+                                        <span className="font-semibold">Error:</span> {toolResponse?.message || 'Unknown error'}
+                                    </p>
                                 )}
                                 {toolStatus === 'success' && (
-                                    <pre className="text-xs whitespace-pre-wrap break-words">
-                                        {toolResponse ? JSON.stringify(toolResponse, null, 2) : 'No content received.'}
+                                    <pre className="text-xs whitespace-pre-wrap break-words animate-in fade-in duration-300">
+                                        {typeof toolResponse === 'string' 
+                                            ? toolResponse 
+                                            : JSON.stringify(toolResponse, null, 2)}
                                     </pre>
                                 )}
                              </div>
@@ -447,60 +485,75 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
             </div>
         )}
 
-        {/* Footer - Apply smooth transitions to status text */}
-        <DialogFooter className="flex-shrink-0 mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700 sm:justify-between items-center gap-2">
-          {/* Status Container - Revert text content inside spans */}
-          <div className="relative text-xs text-zinc-500 dark:text-zinc-400 flex items-center order-1 sm:order-none min-h-[20px] w-40"> {/* Adjusted width slightly */}
-            {/* Wrapper for absolute positioning of status messages */}
-            <div className="absolute inset-0 flex items-center">
-              {/* Idle State */}
-              <span className={cn("absolute inset-0 flex items-center gap-1.5 transition-opacity duration-300 ease-in-out", connectionStatus === 'idle' ? "opacity-100" : "opacity-0 pointer-events-none")}>
-                <XCircle className="w-3 h-3 text-gray-400"/> Status: Idle
-              </span>
-              {/* Connecting State */}
-              <span className={cn("absolute inset-0 flex items-center gap-1.5 transition-opacity duration-300 ease-in-out", connectionStatus === 'connecting' ? "opacity-100" : "opacity-0 pointer-events-none")}>
-                <Loader2 className="w-3 h-3 animate-spin text-blue-500"/> Status: Connecting...
-              </span>
-              {/* Loading Tools State */}
-              <span className={cn("absolute inset-0 flex items-center gap-1.5 transition-opacity duration-300 ease-in-out", connectionStatus === 'connected' && !isToolListVisible ? "opacity-100" : "opacity-0 pointer-events-none")}>
-                <Loader2 className="w-3 h-3 animate-spin text-blue-500"/> Status: Loading tools...
-              </span>
-              {/* Connected State */}
-              <span className={cn("absolute inset-0 flex items-center gap-1.5 transition-opacity duration-300 ease-in-out", connectionStatus === 'connected' && isToolListVisible ? "opacity-100" : "opacity-0 pointer-events-none")}>
-                 <Server className="w-3 h-3 text-green-500"/> Status: Connected
-              </span>
-              {/* Error State */}
-              <span className={cn("absolute inset-0 flex items-center gap-1.5 transition-opacity duration-300 ease-in-out", connectionStatus === 'error' ? "opacity-100" : "opacity-0 pointer-events-none")}>
-                 <XCircle className="w-3 h-3 text-red-500"/> Status: Error
-              </span>
+        {/* Footer - Simplified, layout handled by inner wrapper */}
+        <DialogFooter className="flex-shrink-0 mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700"> 
+          {/* Wrapper div to control layout */} 
+          <div className="flex flex-col items-center gap-4 w-full">
+            
+            {/* Connect/Disconnect Section (Order 1 implicitly) */}
+            <div className="flex flex-col items-center text-center gap-1 w-full"> {/* Removed order-2 */} 
+              {/* Conditional <p> - Center text */}
+              {(connectionStatus === 'idle' || connectionStatus === 'error') && (
+                <p className="italic text-xs text-zinc-600 dark:text-zinc-400 w-full text-center mb-1">Or Connect directly here:</p> 
+              )}
+              {/* Button div - Center button */} 
+              <div className="flex justify-center w-full"> 
+                {connectionStatus === 'idle' || connectionStatus === 'error' ? (
+                  <Button 
+                    variant="outline"
+                    size="sm"
+                    onClick={connectToMcp}
+                    disabled={!mcpSseUrl}
+                    className="gap-1.5"
+                  >
+                    <Plug className="w-3 h-3"/>
+                    Connect
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="destructive"
+                    size="sm"
+                    onClick={disconnectFromMcp}
+                    className="gap-1.5"
+                  >
+                     <Plug className="w-3 h-3"/> 
+                    Disconnect
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Connect/Disconnect Buttons */}
-          <div className="flex gap-2 order-2 sm:order-none">
-            {connectionStatus === 'idle' || connectionStatus === 'error' ? (
-              <Button 
-                variant="outline"
-                size="sm"
-                onClick={connectToMcp}
-                disabled={!mcpSseUrl}
-                className="gap-1.5"
-              >
-                <Plug className="w-3 h-3"/>
-                Connect
-              </Button>
-            ) : (
-              <Button 
-                variant="destructive"
-                size="sm"
-                onClick={disconnectFromMcp}
-                className="gap-1.5"
-              >
-                 <Plug className="w-3 h-3"/> 
-                Disconnect
-              </Button>
-            )}
-          </div>
+            {/* Status Container (Order 2 implicitly) - Center text, full width */}
+            <div className="text-xs text-zinc-500 dark:text-zinc-400 w-full min-h-[20px] flex items-center justify-center"> {/* Removed order-3 */} 
+              
+              {/* Conditionally Render ONE Status Span */}
+              {connectionStatus === 'idle' && (
+                <span className="flex items-center gap-1.5"> 
+                  <XCircle className="w-3 h-3 text-gray-400"/> Status: Idle
+                </span>
+              )}
+              {connectionStatus === 'connecting' && (
+                <span className="flex items-center gap-1.5">
+                  <Loader2 className="w-3 h-3 animate-spin text-blue-500"/> Status: Connecting...
+                </span>
+              )}
+              {connectionStatus === 'connected' && !isToolListVisible && ( // Loading tools state
+                <span className="flex items-center gap-1.5">
+                   <Loader2 className="w-3 h-3 animate-spin text-blue-500"/> Status: Loading tools...
+                </span>
+              )}
+               {connectionStatus === 'connected' && isToolListVisible && ( // Connected state
+                <span className="flex items-center gap-1.5">
+                   <Server className="w-3 h-3 text-green-500"/> Status: Connected
+                </span>
+              )}
+              {connectionStatus === 'error' && (
+                <span className="flex items-center gap-1.5">
+                   <XCircle className="w-3 h-3 text-red-500"/> Status: Error
+                </span>
+              )}
+            </div>
+          </div> 
         </DialogFooter>
       </DialogContent>
     </Dialog>
