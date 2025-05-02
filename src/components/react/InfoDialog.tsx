@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog"
 // import { Button } from "@/components/ui/button" // No longer needed here
 import { cn } from "@/lib/utils" // For combining class names
-import { Copy, Check, Loader2, XCircle, Server, Plug } from "lucide-react" // Remove ListTree, RefreshCw
+import { Copy, Check, Loader2, XCircle, Server, Plug, FileText, BookText, File } from "lucide-react" // Added FileText, BookText, and File icons
 import { Button } from "@/components/ui/button" // Need Button component
 import { ScrollArea } from "@/components/ui/scroll-area" // Import ScrollArea
 
@@ -359,12 +359,16 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
         className={cn(triggerClassName)} // Apply classes here
         asChild={false} // Ensure it renders a button
       >
-        {triggerText} {/* Text goes here */} 
-        {/* Icon would need to be handled here too if re-added */}
+        <span className="flex items-center gap-2">
+          {triggerText} {/* Text goes here */}
+          {/* Single icon that animates on hover, positioned on the right */}
+          <FileText className="w-4 h-4 transition-all duration-300 ease-in-out group-hover:text-blue-500 group-hover:rotate-3 group-hover:scale-110" />
+        </span>
       </DialogTrigger>
       <DialogContent className={cn(
-        "sm:max-w-lg bg-white dark:bg-zinc-900 transition-all duration-300 ease-in-out",
-        "overflow-hidden will-change-[height,width,max-height,max-width]", // Add these properties
+        "sm:max-w-lg max-w-sm bg-white dark:bg-zinc-900 transition-all duration-300 ease-in-out",
+        "overflow-hidden text-wrap will-change-[height,width,max-height,max-width]", // Add these properties
+        "border-t-2 border-t-blue-500 dark:border-t-blue-400", // Add accent border at top
         selectedTool && "sm:max-w-3xl", 
         dialogClassName
       )}
@@ -372,23 +376,25 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
         // Add a min-height to prevent jarring collapse when switching states
         minHeight: discoveredTools.length > 0 ? "360px" : "200px",
       }}>
-        <DialogHeader>
-          <DialogTitle className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{title}</DialogTitle>
-          <p className="italic text-xs text-zinc-600 dark:text-zinc-400">Connect to my custom MCP server to use these tools. Hosted on Cloudflare.</p>
-          <DialogDescription asChild className="mt-4 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <DialogHeader className="pb-4 border-b border-zinc-100 dark:border-zinc-800">
+          <DialogTitle className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 flex items-center">
+            <span className="relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-blue-500 dark:after:bg-blue-400 after:transform after:translate-y-1">{title}</span>
+          </DialogTitle>
+          <p className="italic text-xs text-left text-zinc-600 dark:text-zinc-400 pt-4">Connect to my Resume MCP Server! Hosted on Cloudflare.</p>
+          <DialogDescription asChild className="mt-6 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
             {/* Use a div wrapper for DialogDescription content when using asChild */}
             <div>
-              <div className="flex items-start gap-3 py-1.5">
-                 <span className="w-16 shrink-0 text-right text-xs font-medium text-zinc-500 dark:text-zinc-500 uppercase tracking-wider">
+              <div className="flex flex-col sm:flex-row items-start gap-2 sm:gap-3 py-1.5">
+                 <span className="w-full sm:w-16 shrink-0 text-left sm:text-right text-xs font-medium text-zinc-500 dark:text-zinc-500 uppercase tracking-wider">
                    MCP URL:
                  </span>
-                 <code className={`flex items-center justify-between flex-1 whitespace-pre-wrap break-words rounded bg-zinc-100 dark:bg-zinc-800 px-2 py-1 text-xs font-mono text-zinc-800 dark:text-zinc-200 ml-[calc(4rem+0.75rem)]`}>
-                   <span className="mr-2">{mcpSseUrl || 'URL not found'}</span> 
+                 <code className={`flex items-center justify-between flex-1 whitespace-pre-wrap break-words rounded bg-zinc-100 dark:bg-zinc-800 px-3 py-2 text-xs font-mono text-zinc-800 dark:text-zinc-200 sm:ml-[calc(4rem+0.75rem)] relative border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700 transition-colors w-full`}>
+                   <span className="mr-2 break-all">{mcpSseUrl || 'URL not found'}</span> 
                    {mcpSseUrl && ( // Only show copy button if URL is valid
                      <button
                        onClick={() => handleCopyUrl(mcpSseUrl)} 
                        aria-label="Copy URL"
-                       className="p-1 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-500 dark:text-zinc-400 transition-colors duration-150"
+                       className="p-1.5 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-500 dark:text-zinc-400 transition-colors duration-150 flex-shrink-0"
                      >
                        {/* Container for smooth icon transition - Use flex center */}
                        <span className="relative flex items-center justify-center w-3 h-3">
@@ -486,15 +492,15 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
         )}
 
         {/* Footer - Simplified, layout handled by inner wrapper */}
-        <DialogFooter className="flex-shrink-0 mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700"> 
+        <DialogFooter className="flex-shrink-0 mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-700"> 
           {/* Wrapper div to control layout */} 
-          <div className="flex flex-col items-center gap-4 w-full">
+          <div className="flex flex-col items-center gap-4 sm:gap-5 w-full">
             
             {/* Connect/Disconnect Section (Order 1 implicitly) */}
-            <div className="flex flex-col items-center text-center gap-1 w-full"> {/* Removed order-2 */} 
+            <div className="flex flex-col items-center text-center gap-1.5 w-full"> 
               {/* Conditional <p> - Center text */}
               {(connectionStatus === 'idle' || connectionStatus === 'error') && (
-                <p className="italic text-xs text-zinc-600 dark:text-zinc-400 w-full text-center mb-1">Or Connect directly here:</p> 
+                <p className="italic text-xs text-zinc-600 dark:text-zinc-400 w-full text-center mb-2">Or Connect directly here:</p> 
               )}
               {/* Button div - Center button */} 
               <div className="flex justify-center w-full"> 
@@ -504,9 +510,9 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
                     size="sm"
                     onClick={connectToMcp}
                     disabled={!mcpSseUrl}
-                    className="gap-1.5"
+                    className="gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-zinc-300 dark:border-zinc-700 transition-all duration-200 text-xs sm:text-sm"
                   >
-                    <Plug className="w-3 h-3"/>
+                    <Plug className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-all group-hover:text-blue-500"/>
                     Connect
                   </Button>
                 ) : (
@@ -514,9 +520,9 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
                     variant="destructive"
                     size="sm"
                     onClick={disconnectFromMcp}
-                    className="gap-1.5"
+                    className="gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm"
                   >
-                     <Plug className="w-3 h-3"/> 
+                     <Plug className="w-3 h-3 sm:w-3.5 sm:h-3.5"/> 
                     Disconnect
                   </Button>
                 )}
@@ -524,31 +530,31 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
             </div>
 
             {/* Status Container (Order 2 implicitly) - Center text, full width */}
-            <div className="text-xs text-zinc-500 dark:text-zinc-400 w-full min-h-[20px] flex items-center justify-center"> {/* Removed order-3 */} 
+            <div className="text-xs text-zinc-500 dark:text-zinc-400 w-full min-h-[20px] flex items-center justify-center pb-1"> 
               
               {/* Conditionally Render ONE Status Span */}
               {connectionStatus === 'idle' && (
-                <span className="flex items-center gap-1.5"> 
+                <span className="flex items-center gap-1.5 bg-zinc-100 dark:bg-zinc-800 px-2 sm:px-3 py-1 rounded-full text-xs"> 
                   <XCircle className="w-3 h-3 text-gray-400"/> Status: Idle
                 </span>
               )}
               {connectionStatus === 'connecting' && (
-                <span className="flex items-center gap-1.5">
+                <span className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-2 sm:px-3 py-1 rounded-full text-xs"> 
                   <Loader2 className="w-3 h-3 animate-spin text-blue-500"/> Status: Connecting...
                 </span>
               )}
               {connectionStatus === 'connected' && !isToolListVisible && ( // Loading tools state
-                <span className="flex items-center gap-1.5">
+                <span className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-2 sm:px-3 py-1 rounded-full text-xs"> 
                    <Loader2 className="w-3 h-3 animate-spin text-blue-500"/> Status: Loading tools...
                 </span>
               )}
                {connectionStatus === 'connected' && isToolListVisible && ( // Connected state
-                <span className="flex items-center gap-1.5">
+                <span className="flex items-center gap-1.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 px-2 sm:px-3 py-1 rounded-full text-xs"> 
                    <Server className="w-3 h-3 text-green-500"/> Status: Connected
                 </span>
               )}
               {connectionStatus === 'error' && (
-                <span className="flex items-center gap-1.5">
+                <span className="flex items-center gap-1.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-2 sm:px-3 py-1 rounded-full text-xs"> 
                    <XCircle className="w-3 h-3 text-red-500"/> Status: Error
                 </span>
               )}
