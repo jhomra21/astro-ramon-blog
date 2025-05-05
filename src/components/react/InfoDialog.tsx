@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog"
 // import { Button } from "@/components/ui/button" // No longer needed here
 import { cn } from "@/lib/utils" // For combining class names
-import { Copy, Check, Loader2, XCircle, Server, Plug, FileText, BookText, File } from "lucide-react" // Added FileText, BookText, and File icons
+import { Copy, Check, Loader2, XCircle, Server, Plug, FileText } from "lucide-react" // Added FileText, BookText, and File icons
 import { Button } from "@/components/ui/button" // Need Button component
 import { ScrollArea } from "@/components/ui/scroll-area" // Import ScrollArea
 
@@ -63,7 +63,7 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
   const [selectedTool, setSelectedTool] = useState<McpTool | null>(null);
   const [toolStatus, setToolStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [toolResponse, setToolResponse] = useState<any | null>(null); 
-  const [pendingToolRequestId, setPendingToolRequestId] = useState<number | null>(null);
+  const [ ,setPendingToolRequestId] = useState<number | null>(null);
   // Refs/State for line drawing (will add later)
   // const toolListRef = useRef<HTMLUListElement>(null);
   // const responsePanelRef = useRef<HTMLDivElement>(null);
@@ -206,31 +206,51 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
         // Handle Tool Execution Response
         if (isToolExecutionResponse) {
             if (data.result?.content) {
-                // Handle content array format with text display
-                let displayContent = data.result.content;
-                
-                // If it's an array of content items, extract text for display
-                if (Array.isArray(displayContent)) {
-                    const textContent = displayContent
-                        .filter(item => item.type === "text" && item.text)
-                        .map(item => item.text)
-                        .join(" ");
+                // --- Start Modification ---
+                const content = data.result.content;
+                let responseToShow: any = null; // Variable to hold what we'll set in state
+
+                if (Array.isArray(content)) {
+                    // Find the first image object in the array
+                    const imageItem = content.find(item => typeof item === 'object' && item !== null && item.type === 'image' && typeof item.data === 'string');
                     
-                    if (textContent) {
-                        displayContent = textContent; // Use extracted text if available
+                    if (imageItem) {
+                        responseToShow = imageItem; // Prioritize the image object
+                    } else {
+                        // Fallback: Join text content if no image found
+                        const textContent = content
+                            .filter(item => typeof item === 'object' && item !== null && item.type === "text" && item.text) // Ensure item is object before accessing type/text
+                            .map(item => item.text)
+                            .join(" ");
+                        // If text found, use it. Otherwise, keep original content (might be array of other things).
+                        responseToShow = textContent || content; 
                     }
+                } else if (typeof content === 'object' && content !== null && content.type === 'image' && typeof content.data === 'string') {
+                     // Handle case where content is the image object directly
+                    responseToShow = content;
+                } else {
+                    // Fallback for non-array, non-image content (e.g., simple string, other object type)
+                    responseToShow = content; 
                 }
                 
-                setToolResponse(displayContent);
+                setToolResponse(responseToShow); // Set the extracted image object or fallback
+                // --- End Modification ---
                 setToolStatus('success');
             } else if (data.error) {
                 console.error("Tool execution error:", data.error);
                 setToolResponse(data.error); // Store error object
                 setToolStatus('error'); // Sets status to 'error'
             } else {
-                console.warn("Unexpected response structure for tool request:", data);
-                setToolResponse({ message: "Unexpected response structure." });
-                setToolStatus('error');
+                // Handle cases where result exists but content is missing/null/unexpected
+                // This could happen for tools that don't return content on success
+                if (data.result && !data.result.content) {
+                    setToolResponse("Tool executed successfully, but returned no content.");
+                    setToolStatus('success');
+                } else {
+                    console.warn("Unexpected response structure for tool request:", data);
+                    setToolResponse({ message: "Unexpected response structure." });
+                    setToolStatus('error');
+                }
             }
             setPendingToolRequestId(null); // Clear pending ID state
             pendingToolRequestIdRef.current = null; // Also clear ref
@@ -307,7 +327,7 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
     if (!sessionPostPath || !baseUrl || connectionStatus !== 'connected') {
       console.error("Cannot execute tool: Not connected or session path missing.");
       setToolStatus('error');
-      setToolResponse({ message: "Connection error." });
+      setToolResponse(null);
       return;
     }
 
@@ -366,10 +386,10 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
         </span>
       </DialogTrigger>
       <DialogContent className={cn(
-        "sm:max-w-lg max-w-sm bg-white dark:bg-zinc-900 transition-all duration-300 ease-in-out",
+        "sm:max-w-lg bg-white dark:bg-zinc-900 transition-all duration-300 ease-in-out",
         "overflow-hidden text-wrap will-change-[height,width,max-height,max-width]", // Add these properties
         "border-t-2 border-t-blue-500 dark:border-t-blue-400", // Add accent border at top
-        selectedTool && "sm:max-w-3xl", 
+        selectedTool && "sm:max-w-5xl", 
         dialogClassName
       )}
       style={{
@@ -478,11 +498,21 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
                                     </p>
                                 )}
                                 {toolStatus === 'success' && (
-                                    <pre className="text-xs whitespace-pre-wrap break-words animate-in fade-in duration-300">
-                                        {typeof toolResponse === 'string' 
-                                            ? toolResponse 
-                                            : JSON.stringify(toolResponse, null, 2)}
-                                    </pre>
+                                    <>
+                                        {typeof toolResponse === 'object' && toolResponse !== null && toolResponse.type === 'image' && typeof toolResponse.data === 'string' ? (
+                                            <img 
+                                                src={`data:image/jpeg;base64,${toolResponse.data}`}
+                                                alt={`Generated image from ${selectedTool?.name || 'tool'}`} 
+                                                className="max-w-full h-auto rounded border border-zinc-200 dark:border-zinc-700 animate-in fade-in duration-300" 
+                                            />
+                                        ) : (
+                                            <pre className="text-xs whitespace-pre-wrap break-words animate-in fade-in duration-300">
+                                                {typeof toolResponse === 'string' 
+                                                    ? toolResponse 
+                                                    : JSON.stringify(toolResponse, null, 2)}
+                                            </pre>
+                                        )}
+                                    </>
                                 )}
                              </div>
                          </div>
