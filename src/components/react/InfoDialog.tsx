@@ -400,7 +400,7 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
           <DialogTitle className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 flex items-center">
             <span className="relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-blue-500 dark:after:bg-blue-400 after:transform after:translate-y-1">{title}</span>
           </DialogTitle>
-          <p className="italic text-xs text-left text-zinc-600 dark:text-zinc-400 pt-4">Connect to my Resume MCP Server! Hosted on Cloudflare.</p>
+          <p className="italic text-xs text-left text-zinc-600 dark:text-zinc-400 pt-4">Connect to my personal MCP Server! Hosted on Cloudflare.</p>
           <DialogDescription asChild className="mt-6 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
             {/* Use a div wrapper for DialogDescription content when using asChild */}
             <div>
