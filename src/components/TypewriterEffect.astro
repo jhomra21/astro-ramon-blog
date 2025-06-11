@@ -5,7 +5,7 @@ interface Props {
     className?: string;
 }
 
-const { text, delay = 100, className = '' } = Astro.props;
+const { text, delay = 105, className = '' } = Astro.props;
 ---
 
 <typewriter-effect 
@@ -64,7 +64,7 @@ const { text, delay = 100, className = '' } = Astro.props;
             }
 
             // Pause at the end
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 5000));
 
             // Fade out
             this.textElement.style.transition = 'opacity 0.3s ease';
@@ -78,7 +78,7 @@ const { text, delay = 100, className = '' } = Astro.props;
             this.textElement.style.opacity = '1';
             
             // Small pause before restarting
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 300));
             this.type();
         }
     }

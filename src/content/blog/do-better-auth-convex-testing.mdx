@@ -1,0 +1,51 @@
+---
+title: 'Durable Objects Realtime Database per User'
+description: 'A project showcasing the use of Cloudflare Durable Objects with a per-user SQLite database, and real-time capabilities using WebSocket Hibernation.'
+pubDate: '2025-06-01'
+heroImage: '/src/assets/images/cf-do-realtime-landing-page.png'
+isProject: true
+projectUrl: 'https://convex-better-auth-testing.pages.dev/'
+githubUrl: 'https://github.com/jhomra21/DO-better-auth-convex-testing'
+projectStatus: 'live'
+projectType: 'featured'
+techStack: [
+    { name: 'Solid.js', description: 'Frontend framework' },
+    { name: 'Hono.js', description: 'Backend/server' },
+    { name: 'Cloudflare', description: 'Hosting, web services, Durable Objects, D1' },
+    { name: 'Bun', description: 'JS runtime' },
+    { name: 'Drizzle ORM', description: 'TypeScript ORM' },
+    { name: 'TanStack Query', description: 'Server state management' }
+]
+---
+
+This project demonstrates an advanced authentication and data management pattern using a suite of Cloudflare's powerful edge computing services. It provides a template for building multi-tenant applications with robust data isolation and real-time features.
+
+## Hybrid Database Architecture
+
+The core of this project is its hybrid database architecture that leverages different storage solutions for optimal performance and security:
+
+-   **Cloudflare D1**: A centralized SQL database used for managing user accounts, authentication, and OAuth data.
+-   **KV Storage**: Utilized for ultra-fast session validation at the edge, enabling session lookups in under 1ms.
+-   **Durable Objects**: The key to data isolation. Each user is assigned their own Durable Object, which contains a dedicated SQLite database for their application data (e.g., notes). This ensures that one user's data is completely segregated from another's.
+
+This architecture results in a system that is both highly performant, with rapid authentication checks, and secure, with strong data isolation between users.
+
+## Real-Time Features
+
+The application showcases real-time data synchronization using WebSocket Hibernation, allowing for efficient and scalable WebSocket management. Key features include:
+
+-   **Reliable Message Delivery**: An acknowledgment-based system with retries ensures that data updates are delivered reliably.
+-   **Intelligent Batching**: To prevent message flooding and maintain a responsive UI, updates are intelligently batched.
+-   **Connection Resiliency**: The client can persist its identity across page refreshes and automatically reconnect if the network connection is interrupted.
+
+## Tech Stack
+
+The project is built on a modern, edge-native tech stack:
+
+-   **Frontend**: A reactive UI built with **SolidJS**, with routing managed by **TanStack Router** and server state handled by **TanStack Query**.
+-   **Backend**: A lightweight API built with **Hono.js** running on **Cloudflare Workers**.
+-   **Database**: **Drizzle ORM** is used to interact with the SQLite databases inside the Durable Objects.
+
+This project serves as an excellent reference for building complex, real-time, and multi-tenant applications on the Cloudflare ecosystem.
+
+For more information and to explore the code, visit the [project repository on GitHub](https://github.com/jhomra21/DO-better-auth-convex-testing). 
