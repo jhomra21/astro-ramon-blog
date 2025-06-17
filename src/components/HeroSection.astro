@@ -17,7 +17,7 @@ const ANIMATION_CONFIG = {
 	<div class="w-full pb-8 md:py-4">
 		<div class="grid grid-cols-1 md:grid-cols-[auto,1fr] gap-8 md:gap-12 items-center">
 			<!-- Profile Image Column -->
-			<div class="flex justify-start animate-fade-in" style="--fade-delay: 0s;">
+			<div class="flex justify-start">
 				<div class="relative">
 					<div class="w-36 h-36 md:w-48 md:h-48 overflow-hidden rounded-full border-4 border-zinc-200 dark:border-zinc-700 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]">
 						<Image src={juanImage} alt="Juan Martinez" class="w-full h-full object-cover" />
@@ -29,7 +29,7 @@ const ANIMATION_CONFIG = {
 			<!-- Content Column -->
 			<div class="flex flex-col space-y-6">
 				<!-- Name and Social Links -->
-				<div class="space-y-3 animate-fade-in" style="--fade-delay: 0.1s;">
+				<div class="space-y-3">
 					<TextScrambleShimmer 
 						text="Juan Martinez"
 						className="text-3xl md:text-5xl font-sans font-bold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-zinc-100 dark:to-zinc-400 bg-clip-text text-transparent"
@@ -64,14 +64,14 @@ const ANIMATION_CONFIG = {
 				</div>
 
 				<!-- Bio -->
-				<div class="relative max-w-2xl animate-fade-in" style="--fade-delay: 0.2s;">
+				<div class="relative max-w-2xl">
 					<p class="text-lg text-zinc-700 dark:text-zinc-300 font-mono leading-relaxed border-l-2 border-zinc-200 dark:border-zinc-700 pl-4">
 						I'm a software developer specializing in modern web development.
 					</p>
 				</div>
 
 				<!-- CTA Button -->
-				<div class="pt-2 animate-fade-in" style="--fade-delay: 0.3s;">
+				<div class="pt-2">
 					<div class="flex flex-wrap gap-4 items-center">
 						<a 
 							href="/about"
@@ -136,17 +136,6 @@ const ANIMATION_CONFIG = {
 			rgba(255,255,255,0.1) 100%
 		);
 		z-index: -1;
-	}
-
-	@keyframes fade-in {
-		from { opacity: 0; transform: translateY(10px); }
-		to { opacity: 1; transform: translateY(0); }
-	}
-
-	.animate-fade-in {
-		animation: fade-in 0.5s ease-out forwards;
-		animation-delay: var(--fade-delay, 0s);
-		opacity: 0;
 	}
 
 	@keyframes scale-in {

@@ -70,6 +70,25 @@ const { title, description = 'Personal website and blog' } = Astro.props;
                 mask-position: var(--to) 50%;
             }
         }
+
+        @keyframes fade-in-blur {
+            from {
+                scale: 0.985;
+                opacity: -10;
+                filter: blur(8px);
+                -webkit-filter: blur(8px);
+            }
+            to {
+                scale: 1;
+                opacity: 1;
+                filter: blur(0px);
+                -webkit-filter: blur(0px);
+            }
+        }
+
+        .animate-in {
+            animation: fade-in-blur 0.7s ease-out forwards;
+        }
     }
 
     /* Default transition for users who prefer reduced motion */
