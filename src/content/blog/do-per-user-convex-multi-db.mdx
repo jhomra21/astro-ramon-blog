@@ -1,0 +1,51 @@
+---
+title: 'Dual-Database Architecture with Convex and Cloudflare Durable Objects'
+description: 'A project demonstrating a dual-database strategy using Convex as the source of truth and Cloudflare Durable Objects as a per-user edge cache for low-latency reads.'
+pubDate: '2025-06-17'
+heroImage: '/src/assets/images/cf-do-convex-main-db-landing-page.png'
+isProject: true
+projectUrl: ''
+githubUrl: 'https://github.com/jhomra21/DO-per-user-Convex-main-multi-db-demo'
+projectStatus: 'live'
+projectType: 'featured'
+techStack: [
+    { name: 'Solid.js', description: 'Frontend framework' },
+    { name: 'Hono.js', description: 'Backend API framework' },
+    { name: 'Convex', description: 'Source of truth database' },
+    { name: 'Cloudflare Durable Objects', description: 'Per-user edge cache' },
+    { name: 'Cloudflare D1', description: 'Authentication & user data' },
+    { name: 'TanStack Query', description: 'Server state management' },
+    { name: 'Better Auth', description: 'Authentication system' }
+]
+---
+
+This project demonstrates a powerful dual-database strategy to provide both strong data consistency and low-latency reads at the edge, leveraging Convex and Cloudflare Durable Objects.
+
+## Dual Database Architecture: Convex & Durable Objects
+
+The core of this project is a hybrid data architecture that combines a central database with per-user edge caches to deliver a fast and responsive user experience.
+
+-   **Convex: The Source of Truth**: All data writes are handled by Convex mutations. This provides a single, permanent, and transactionally-consistent store for all data, serving as the ultimate source of truth.
+
+-   **Durable Objects: The Edge Cache**: A unique Durable Object (DO) instance is created for each user. This DO acts as a specialized, high-performance read replica or cache that holds only that specific user's data. Because the DO is stored physically close to the user on Cloudflare's edge network, read latency is extremely low.
+
+### The Data Flow
+
+This separation of concerns for reads and writes creates a highly scalable and performant system.
+
+1.  **Write**: A user action triggers a client call to a Convex mutation, securely saving the data to the central database.
+2.  **Sync**: After the write succeeds, the client sends a `sync` request to that user's specific Durable Object.
+3.  **DO Pulls Data**: The DO receives the signal, queries Convex for the user's latest data, and caches it in its own fast internal storage.
+4.  **Read**: When the client needs to display data, it fetches from an API endpoint that is routed directly to the user's personal DO, which returns the cached data with minimal latency.
+
+This pattern allows write operations to be centralized and consistent in Convex, while distributing the read load across millions of individual Durable Objects.
+
+## Tech Stack
+
+The project is built with a modern, edge-native tech stack:
+
+-   **Backend**: A **Hono.js** API runs on Cloudflare Workers, with **Convex** serving as the primary database and **Cloudflare D1** used for authentication data via **Better Auth**.
+-   **Frontend**: A reactive UI built with **SolidJS**, with routing managed by **TanStack Router** and server state handled by **TanStack Query**.
+-   **Infrastructure**: The application is deployed on **Cloudflare Workers**, using **Durable Objects** for edge caching.
+
+For a deeper dive into the implementation, check out the [project on GitHub](https://github.com/jhomra21/DO-per-user-Convex-main-multi-db-demo). 
