@@ -1,0 +1,105 @@
+---
+title: 'Gen AI Canvas with Convex, Cloudflare Workers & SolidJS'
+description: 'A modern single-page application showcasing the integration of Convex real-time database, Cloudflare Workers edge computing, SolidJS reactive framework, TanStack Query, BetterAuth, and Cloudflare D1/KV storage.'
+pubDate: '2025-07-17'
+heroImage: '/src/assets/images/convex-cloudflare-workers-solid-tanstack-spa-betterauth-D1-KV.png'
+isProject: true
+projectUrl: 'https://convex-cloudflare-workers-solid-tanstack-spa-betterauth-d1-kv.pages.dev/'
+githubUrl: 'https://github.com/jhomra21/convex-cloudflare-workers-solid-tanstack-spa-betterauth-D1-KV'
+projectStatus: 'live'
+projectType: 'featured'
+techStack: [
+    { name: 'SolidJS', description: 'Reactive frontend framework with fine-grained reactivity' },
+    { name: 'Convex', description: 'Real-time backend-as-a-service with TypeScript' },
+    { name: 'Cloudflare Workers', description: 'Edge computing platform for serverless functions' },
+    { name: 'TanStack Query', description: 'Powerful data synchronization for web applications' },
+    { name: 'BetterAuth', description: 'Modern authentication library with TypeScript support' },
+    { name: 'Cloudflare D1', description: 'Serverless SQL database at the edge' },
+    { name: 'Cloudflare KV', description: 'Global key-value storage for edge applications' },
+    { name: 'TypeScript', description: 'Type-safe JavaScript development' }
+]
+tags: ['SolidJS', 'Convex', 'Cloudflare', 'TypeScript', 'Real-time', 'Edge Computing']
+---
+
+This project demonstrates a cutting-edge full-stack architecture that combines the best of modern web technologies to create a highly performant, real-time single-page application. It showcases how to integrate multiple powerful services into a cohesive, type-safe development experience.
+
+## Architecture Overview
+
+The application leverages a hybrid architecture that maximizes performance and developer experience:
+
+### Frontend Layer
+- **SolidJS**: Provides fine-grained reactivity with minimal overhead, delivering exceptional performance
+- **TanStack Query**: Manages server state with intelligent caching, background updates, and optimistic updates
+- **TypeScript**: Ensures type safety across the entire application stack
+
+### Backend Services
+- **Convex**: Serves as the primary real-time database with automatic TypeScript generation and live queries
+- **Cloudflare Workers**: Handles edge computing tasks and API endpoints with global distribution
+- **BetterAuth**: Provides secure, modern authentication with multiple provider support
+
+### Data Storage
+- **Cloudflare D1**: SQL database for structured data with edge replication
+- **Cloudflare KV**: Key-value storage for session management and caching
+
+## Key Features
+
+### Real-Time Data Synchronization
+The integration between Convex and SolidJS creates a seamless real-time experience:
+- Live queries automatically update the UI when data changes
+- Optimistic updates provide instant feedback
+- Conflict resolution handles concurrent modifications gracefully
+
+### Edge-First Authentication
+BetterAuth combined with Cloudflare's edge infrastructure delivers:
+- Sub-100ms authentication checks globally
+- Secure session management with KV storage
+- Multiple OAuth providers support
+- Type-safe authentication flows
+
+### Hybrid Data Strategy
+The application demonstrates intelligent data placement:
+- **Hot data**: Stored in Convex for real-time access
+- **Session data**: Cached in Cloudflare KV for ultra-fast lookups
+- **Structured data**: Managed in D1 for complex queries
+- **Static assets**: Served from Cloudflare's global CDN
+
+## Technical Highlights
+
+### Type Safety Across the Stack
+Every layer of the application maintains strict TypeScript typing:
+- Convex automatically generates types from schema definitions
+- API routes are fully typed with proper request/response interfaces
+- Frontend components benefit from end-to-end type safety
+
+### Performance Optimizations
+- **Code splitting**: Automatic route-based code splitting with SolidJS
+- **Edge caching**: Strategic use of Cloudflare's caching layers
+- **Minimal bundle size**: SolidJS's fine-grained reactivity reduces JavaScript overhead
+- **Optimistic updates**: TanStack Query provides instant UI feedback
+
+### Developer Experience
+- **Hot reloading**: Instant development feedback with Vite
+- **Type checking**: Comprehensive TypeScript coverage prevents runtime errors
+- **Schema validation**: Convex schemas ensure data integrity
+- **Modern tooling**: ESLint, Prettier, and other modern development tools
+
+## Use Cases
+
+This architecture pattern is ideal for applications requiring:
+- Real-time collaboration features
+- Global user base with low-latency requirements
+- Complex authentication and authorization needs
+- Scalable data management across multiple storage types
+- Type-safe development workflows
+
+## Getting Started
+
+The project includes comprehensive setup instructions and demonstrates best practices for:
+- Configuring Convex with TypeScript schemas
+- Setting up BetterAuth with multiple providers
+- Deploying to Cloudflare Pages with Workers integration
+- Managing environment variables across services
+
+This project serves as a comprehensive reference for building modern, scalable web applications using the latest edge computing and real-time technologies.
+
+Explore the [live demo]({projectUrl}) or dive into the [source code]({githubUrl}) to see how these technologies work together to create exceptional user experiences.
