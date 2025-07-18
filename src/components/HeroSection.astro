@@ -1,115 +1,212 @@
 ---
 import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer";
-import { Image } from 'astro:assets';
-import { InfoDialog } from '@/components/react/InfoDialog';
+import { Image } from "astro:assets";
+import { InfoDialog } from "@/components/react/InfoDialog";
 
-const juanImage = import('@/assets/images/juan-falling.JPG' as any);
+const juanImage = import("@/assets/images/juan-falling.JPG" as any);
 const ANIMATION_CONFIG = {
 	scrambleDuration: 1.6,
 	scaleInDuration: 0.4,
 	drawDuration: 1.2,
 	baseDelay: 0.2,
-	stagger: 0.1
+	stagger: 0.1,
 };
 ---
 
-<div class="relative min-h-[25vh] hero-container">
-	<div class="w-full pb-8 md:py-4">
-		<div class="grid grid-cols-1 md:grid-cols-[auto,1fr] gap-8 md:gap-12 items-center">
+<div class="relative min-h-[40vh] hero-container">
+	<div class="w-full py-12 md:py-16">
+		<div
+			class="grid grid-cols-1 lg:grid-cols-[auto,1fr] gap-12 lg:gap-16 items-start"
+		>
 			<!-- Profile Image Column -->
-			<div class="flex justify-start">
-				<div class="relative">
-					<div class="w-36 h-36 md:w-48 md:h-48 overflow-hidden rounded-full border-4 border-zinc-200 dark:border-zinc-700 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]">
-						<Image src={juanImage} alt="Juan Martinez" class="w-full h-full object-cover" />
+			<div class="flex justify-center lg:justify-start">
+				<div class="relative group">
+					<div
+						class="w-40 h-40 md:w-52 md:h-52 overflow-hidden rounded-full border-2 border-zinc-200/50 dark:border-zinc-700/50 shadow-2xl transition-all duration-500 group-hover:shadow-3xl group-hover:scale-[1.02] group-hover:border-zinc-300 dark:group-hover:border-zinc-600"
+					>
+						<Image
+							src={juanImage}
+							alt="Juan Martinez"
+							class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+						/>
 					</div>
-					<div class="absolute -bottom-2 -right-2 w-5 h-5 bg-green-500 rounded-full border-2 border-white dark:border-zinc-900 animate-pulse"></div>
+					<div
+						class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-white dark:border-zinc-900 animate-pulse shadow-lg"
+					>
+					</div>
+					<!-- Subtle glow effect -->
+					<div
+						class="absolute inset-0 rounded-full bg-gradient-to-tr from-zinc-200/20 to-transparent dark:from-zinc-700/20 pointer-events-none"
+					>
+					</div>
 				</div>
 			</div>
-			
+
 			<!-- Content Column -->
-			<div class="flex flex-col space-y-6">
-				<!-- Name and Social Links -->
-				<div class="space-y-3">
-					<TextScrambleShimmer 
+			<div class="flex flex-col space-y-8 text-center lg:text-left">
+				<!-- Name and Title -->
+				<div class="space-y-4">
+					<TextScrambleShimmer
 						text="Juan Martinez"
-						className="text-3xl md:text-5xl font-sans font-bold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-zinc-100 dark:to-zinc-400 bg-clip-text text-transparent"
+						className="text-4xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 bg-clip-text text-transparent"
 						scrambleDuration={ANIMATION_CONFIG.scrambleDuration}
 						shimmerDuration={5}
-						client:load 
+						client:load
 					/>
-					
-					<div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-zinc-600 dark:text-zinc-400 font-mono items-center">
-						<a href="https://twitter.com/jhomra21" class="flex items-center gap-1.5 hover:text-blue-500 transition-colors">
-							<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-								<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-							</svg>
-							<span class="whitespace-nowrap">twitter</span>
-						</a>
-						<span class="text-zinc-400 dark:text-zinc-600">//</span>
-						<a href="https://github.com/jhomra21" class="flex items-center gap-1.5 hover:text-purple-500 transition-colors">
-							<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-								<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
-							</svg>
-							<span class="whitespace-nowrap">github</span>
-						</a>
-						<span class="text-zinc-400 dark:text-zinc-600">//</span>
-						<a href="mailto:jhonra121@gmail.com" class="flex items-center gap-1.5 hover:text-green-500 transition-colors">
-							<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-								<rect x="2" y="4" width="20" height="16" rx="2"></rect>
-								<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-							</svg>
-							<span class="whitespace-nowrap">email</span>
-						</a>
+
+					<div class="space-y-2">
+						<h2
+							class="text-xl md:text-2xl font-mono text-zinc-600 dark:text-zinc-400 tracking-wide"
+						>
+							Software Developer
+						</h2>
+						<div
+							class="w-16 h-0.5 bg-gradient-to-r from-zinc-400 to-transparent dark:from-zinc-600 mx-auto lg:mx-0"
+						>
+						</div>
 					</div>
 				</div>
 
 				<!-- Bio -->
-				<div class="relative max-w-2xl">
-					<p class="text-lg text-zinc-700 dark:text-zinc-300 font-mono leading-relaxed">
-						I'm a software developer specializing in modern web development.
+				<div class="relative max-w-4xl">
+					<p
+						class="text-lg md:text-xl text-zinc-700 dark:text-zinc-300 font-mono leading-relaxed"
+					>
+						Specializing in 
+						<span
+							class="text-zinc-900 dark:text-zinc-100 font-semibold"
+							>modern web development</span
+						> and
+						<span
+							class="text-zinc-900 dark:text-zinc-100 font-semibold"
+							>full-stack solutions</span
+						>
 					</p>
 				</div>
 
-				<!-- CTA Button -->
-				<div class="pt-2">
-					<div class="flex flex-wrap gap-4 items-center">
-						<a 
+				<!-- Social Links -->
+				<div
+					class="flex flex-wrap justify-center lg:justify-start gap-x-6 gap-y-3 text-sm text-zinc-600 dark:text-zinc-400 font-mono"
+				>
+					<a
+						href="https://twitter.com/jhomra21"
+						class="group flex items-center gap-2 hover:text-blue-500 transition-all duration-2005"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="w-4 h-4 transition-transform group-hover:rotate-12"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+						>
+							<path
+								d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+							></path>
+						</svg>
+						<span
+							class="whitespace-nowrap border-b border-transparent group-hover:border-current"
+							>twitter</span
+						>
+					</a>
+					<span class="text-zinc-400 dark:text-zinc-600 select-none"
+						>/</span
+					>
+					<a
+						href="https://github.com/jhomra21"
+						class="group flex items-center gap-2 hover:text-purple-500 transition-all duration-200"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="w-4 h-4 transition-transform group-hover:-rotate-12"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+						>
+							<path
+								d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+							></path>
+						</svg>
+						<span
+							class="whitespace-nowrap border-b border-transparent group-hover:border-current"
+							>github</span
+						>
+					</a>
+					<span class="text-zinc-400 dark:text-zinc-600 select-none"
+						>/</span
+					>
+					<a
+						href="mailto:jhonra121@gmail.com"
+						class="group flex items-center gap-2 hover:text-green-500 transition-all duration-200"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="w-4 h-4 transition-transform group-hover:rotate-12"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<rect x="2" y="4" width="20" height="16" rx="2"
+							></rect>
+							<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+							></path>
+						</svg>
+						<span
+							class="whitespace-nowrap border-b border-transparent group-hover:border-current"
+							>email</span
+						>
+					</a>
+				</div>
+
+				<!-- CTA Buttons -->
+				<div class="pt-4">
+					<div
+						class="flex flex-wrap justify-center lg:justify-start gap-4 items-center"
+					>
+						<a
 							href="/about"
-							class="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium transition-all
-								bg-zinc-900 dark:bg-zinc-100 
+							class="group relative inline-flex items-center gap-2 px-8 py-4 text-sm font-medium transition-all duration-300
+								bg-zinc-900 dark:bg-zinc-100
 								text-white dark:text-zinc-900
 								hover:bg-zinc-800 dark:hover:bg-zinc-200
 								focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:focus:ring-zinc-400
 								focus:ring-offset-2 dark:focus:ring-offset-zinc-900
-								shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+								shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-[1.02]
+								rounded-sm overflow-hidden"
 						>
-							<span class="font-mono tracking-tight">Learn More About Me</span>
-							<svg 
-								xmlns="http://www.w3.org/2000/svg" 
-								class="w-4 h-4 transition-transform group-hover:translate-x-1" 
-								viewBox="0 0 24 24" 
-								fill="none" 
-								stroke="currentColor" 
-								stroke-width="2" 
-								stroke-linecap="round" 
+							<span class="font-mono tracking-tight relative z-10"
+								>Learn More About Me</span
+							>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="w-4 h-4 transition-transform group-hover:translate-x-1 relative z-10"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
 								stroke-linejoin="round"
 								aria-hidden="true"
 							>
 								<line x1="5" y1="12" x2="19" y2="12"></line>
 								<polyline points="12 5 19 12 12 19"></polyline>
 							</svg>
+							<!-- Subtle shine effect -->
+							<div
+								class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"
+							>
+							</div>
 						</a>
 						<InfoDialog
-							dialogClassName="inline-flex items-center gap-2 px-6 py-3"
+							dialogClassName="inline-flex items-center gap-2 px-8 py-4"
 							client:load
 							title="MCP Server"
 							contentLines={[
 								"mcp url: https://first-mcp-cf.jhonra121.workers.dev/sse",
 							]}
 							triggerText="MCP Server"
-							triggerClassName="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium transition-all bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:focus:ring-zinc-400 focus:ring-offset-2 dark:focus:ring-offset-zinc-900 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-						>
-						</InfoDialog>
+							triggerClassName="group relative inline-flex items-center gap-2 px-8 py-4 text-sm font-medium transition-all duration-300 border-2 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 hover:border-zinc-400 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 focus:outline-none focus:ring-2 focus:ring-zinc-500 dark:focus:ring-zinc-400 focus:ring-offset-2 dark:focus:ring-offset-zinc-900 shadow-md hover:shadow-lg transform hover:-translate-y-1 hover:scale-[1.02] rounded-sm overflow-hidden"
+						/>
 					</div>
 				</div>
 			</div>
@@ -117,40 +214,55 @@ const ANIMATION_CONFIG = {
 	</div>
 </div>
 
-<style define:vars={{
-	"animation-scale-duration": `${ANIMATION_CONFIG.scaleInDuration}s`,
-	"animation-draw-duration": `${ANIMATION_CONFIG.drawDuration}s`
-}}>
+<style
+	define:vars={{
+		"animation-scale-duration": `${ANIMATION_CONFIG.scaleInDuration}s`,
+		"animation-draw-duration": `${ANIMATION_CONFIG.drawDuration}s`,
+	}}
+>
 	.hero-container {
 		position: relative;
 		isolation: isolate;
 	}
 
-	.hero-container::after {
-		content: '';
+	.hero-container::before {
+		content: "";
 		position: absolute;
 		inset: 0;
-		background: linear-gradient(to right, 
-			transparent 0%,
-			transparent 90%,
-			rgba(255,255,255,0.1) 100%
-		);
 		z-index: -1;
 	}
 
+
+	.hero-container::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+	}
+
+	:global(.dark) .hero-container::after {
+		background: linear-gradient(
+			135deg,
+			transparent 0%,
+			rgba(255, 255, 255, 0.01) 50%,
+			transparent 100%
+		);
+	}
+
 	@keyframes scale-in {
-		from { 
+		from {
 			opacity: 0;
 			transform: scale(0.8);
 		}
-		to { 
+		to {
 			opacity: 1;
 			transform: scale(1);
 		}
 	}
 
 	.animate-scale-in {
-		animation: scale-in var(--animation-scale-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		animation: scale-in var(--animation-scale-duration)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
 		animation-delay: var(--scale-delay, 0s);
 		opacity: 0;
 	}
@@ -194,7 +306,8 @@ const ANIMATION_CONFIG = {
 		top: 0;
 		left: 0;
 		transform-origin: left;
-		animation: draw-line-x var(--animation-draw-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		animation: draw-line-x var(--animation-draw-duration)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
 		animation-delay: var(--draw-delay);
 	}
 
@@ -202,7 +315,8 @@ const ANIMATION_CONFIG = {
 		top: 0;
 		right: 0;
 		transform-origin: top;
-		animation: draw-line-y var(--animation-draw-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		animation: draw-line-y var(--animation-draw-duration)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
 		animation-delay: var(--draw-delay);
 	}
 
@@ -210,7 +324,8 @@ const ANIMATION_CONFIG = {
 		bottom: 0;
 		right: 0;
 		transform-origin: right;
-		animation: draw-line-x var(--animation-draw-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		animation: draw-line-x var(--animation-draw-duration)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
 		animation-delay: var(--draw-delay);
 	}
 
@@ -218,17 +333,30 @@ const ANIMATION_CONFIG = {
 		bottom: 0;
 		left: 0;
 		transform-origin: bottom;
-		animation: draw-line-y var(--animation-draw-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+		animation: draw-line-y var(--animation-draw-duration)
+			cubic-bezier(0.4, 0, 0.2, 1) forwards;
 		animation-delay: var(--draw-delay);
 	}
 
 	@keyframes draw-line-x {
-		from { transform: scaleX(0); opacity: 0; }
-		to { transform: scaleX(1); opacity: 1; }
+		from {
+			transform: scaleX(0);
+			opacity: 0;
+		}
+		to {
+			transform: scaleX(1);
+			opacity: 1;
+		}
 	}
 
 	@keyframes draw-line-y {
-		from { transform: scaleY(0); opacity: 0; }
-		to { transform: scaleY(1); opacity: 1; }
+		from {
+			transform: scaleY(0);
+			opacity: 0;
+		}
+		to {
+			transform: scaleY(1);
+			opacity: 1;
+		}
 	}
 </style>
