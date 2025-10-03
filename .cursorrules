@@ -1,0 +1,82 @@
+# Rules
+- Always analyze codebase first and familiarize yourself with project structure.
+
+## Tools
+We will only use Bun (never npm) for this project.
+We will only use Astro for this project. (https://docs.astro.build/en/getting-started/)
+We will use Tailwind and Css for this project.
+
+Refer to their documentation for information on how to use them and best practices.
+Always check your solution with the documentation and best practices.
+
+Do not make up factual information. Do not hallucinate.
+
+## Design
+Design inspiration: 
+    - https://x.com/jshguo
+    - https://x.com/jshguo_jp
+    - https://v2space.net/
+    - vercel.com
+    - https://www.figma.com/community/file/1254288908878849059
+    - Swiss design
+
+
+## Extra rules
+Additional rules:
+- Follow the user’s requirements carefully & to the letter.
+- First think step-by-step - describe your plan for what to build in pseudocode, written out in great detail.
+- Confirm, then write code!
+- Always write correct, best practice, DRY principle (Dont Repeat Yourself), bug free, fully functional and working code also it should be aligned to listed rules down below at Code Implementation Guidelines .
+- Focus on easy and readability code, over being performant.
+- Fully implement all requested functionality.
+- Leave NO todo’s, placeholders or missing pieces.
+- Ensure code is complete! Verify thoroughly finalised.
+- Include all required imports, and ensure proper naming of key components.
+- Be concise Minimize any other prose.
+- If you think there might not be a correct answer, you say so.
+- If you do not know the answer, say so, instead of guessing.
+- Always use tanstack query for data fetching.
+
+### Code Implementation Guidelines
+Follow these rules when you write code:
+- Use early returns whenever possible to make the code more readable.
+- Use Tailwind classes for styling HTML elements; CSS as backup option always.
+- Use “class:” instead of the tertiary operator in class tags whenever possible.
+- Use descriptive variable and function/const names. Also, event functions should be named with a “handle” prefix, like “handleClick” for onClick and “handleKeyDown” for onKeyDown.
+- Implement accessibility features on elements. For example, a tag should have a tabindex=“0”, aria-label, on:click, and on:keydown, and similar attributes.
+- Use consts instead of functions, for example, “const toggle = () =>”. Also, define a type if possible.
+  
+  Code Style and Structure
+  - Write concise, technical TypeScript code with accurate examples.
+  - Use functional and declarative programming patterns; avoid classes.
+  - Prefer iteration and modularization over code duplication.
+  - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+  - Structure files: exported component, subcomponents, helpers, static content, types.
+  
+  TypeScript Usage
+  - Use TypeScript for all code; prefer interfaces over types.
+  - Avoid enums; use maps instead.
+  - Use functional components with TypeScript interfaces.
+  
+  UI and Styling
+  - Use Shadcn UI, Radix, and Tailwind for components and styling.
+  - Implement responsive design with Tailwind CSS; use a mobile-first approach.
+  
+  Performance Optimization
+  - Minimize 'use client', 'useEffect', and 'setState'; 
+  - Wrap client components in Suspense with fallback.
+  - Use dynamic loading for non-critical components.
+  - Optimize images: use WebP format, include size data, implement lazy loading.
+  
+  Key Conventions
+  - Optimize Web Vitals (LCP, CLS, FID).
+  
+  Follow React and Tanstack Query docs for Data Fetching, Rendering, and Routing.
+
+Astro docs: https://docs.astro.build/en/getting-started/  
+React docs: https://react.dev/versions
+Bun docs: https://bun.sh/docs
+Tanstack Query docs: https://tanstack.com/query/latest/docs/framework/react/overview
+
+## Tips
+- Never rush to conclusions

@@ -27,7 +27,6 @@ bun.lockb
 # jetbrains setting folder
 .idea/
 
-.cursorrules
 
 # Local development files
 .vscode/
@@ -48,7 +47,4 @@ Thumbs.db
 # Astro specific
 .astro-i18n/
 
-.cursorrules
 .env
-
-.kiro
