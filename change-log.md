@@ -13,6 +13,7 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 
 ### Work completed
 
+- Replaced Bun's binary lockfile with a Bun 1.2.16-compatible text `bun.lock` so Cloudflare Pages can run `bun install --frozen-lockfile`.
 - Added `AGENTS.md` as the consolidated agent guidance file.
 - Removed legacy `.cursorrules` and `.kiro/` guidance files after migrating their relevant instructions.
 - Upgraded Astro and related integrations to Astro 6-compatible versions.
@@ -29,6 +30,7 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 
 ### Review and validation
 
+- Reproduced Cloudflare's install path with `bunx bun@1.2.16 install --frozen-lockfile`; install passed.
 - Ran code review and validated the RSS finding against generated `dist/rss.xml`.
 - Ran simplify review; accepted scoped cleanup in `ProjectsSection.astro`.
 - Initial defensive-code review found no high-confidence redundant guards; the final follow-up review removed impossible `pubDate` fallbacks in the blog index.
