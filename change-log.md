@@ -14,6 +14,7 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 
 ### Work completed
 
+- Added MACROS as a featured project entry with a local app screenshot, GitHub link, product site link, and architecture summary.
 - Replaced Bun's binary lockfile with a Bun 1.3.11-compatible text `bun.lock` so Cloudflare Pages can run `bun install --frozen-lockfile`.
 - Added a frozen Bun install step to the build script because Cloudflare Pages executed the build command without installing dependencies first.
 - Added `AGENTS.md` as the consolidated agent guidance file.

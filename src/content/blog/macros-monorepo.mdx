@@ -1,0 +1,51 @@
+---
+title: 'MACROS: Local-First Calorie and Macro Tracker'
+description: 'A native iPhone calorie and macro tracker with SwiftUI, SwiftData, widgets, barcode and nutrition-label scanning, optional sharing, and supporting Cloudflare/Convex services.'
+pubDate: '2026-05-08'
+heroImage: '/src/assets/images/macros-app-home.png'
+isProject: true
+projectUrl: 'https://macros-web.jhonra121.workers.dev/'
+githubUrl: 'https://github.com/jhomra21/MACROS-Monorepo'
+projectStatus: 'live'
+projectType: 'featured'
+techStack: [
+    { name: 'SwiftUI', description: 'Native iPhone UI framework' },
+    { name: 'SwiftData', description: 'Local-first persistence for food and log data' },
+    { name: 'WidgetKit', description: 'Home Screen and Lock Screen macro widgets' },
+    { name: 'StoreKit', description: 'Full Unlock purchase and restore flow' },
+    { name: 'Convex', description: 'Optional invite-based sharing backend' },
+    { name: 'Cloudflare Workers', description: 'Auth, invite redirects, and food-search API workers' },
+    { name: 'Astro', description: 'Product, privacy, waitlist, and support site' },
+    { name: 'Bun', description: 'Tooling for web, worker, and backend packages' }
+]
+tags: ['SwiftUI', 'SwiftData', 'WidgetKit', 'StoreKit', 'Convex', 'Cloudflare', 'Nutrition', 'iOS']
+---
+
+MACROS is a local-first calorie and macro tracker for iPhone. The core app works without an account: food items, daily goals, log entries, and progress history live on-device by default, with optional network features layered on top for packaged-food search and invite-based sharing.
+
+## What It Does
+
+- **Dashboard**: daily calorie and macro progress, logged foods, quick edits, and shareable summaries.
+- **Food logging**: common foods, saved foods, searched foods, custom foods, suggestions, and manual entries with serving and grams math.
+- **Scanning**: barcode scanning and nutrition-label scanning with camera/photo fallback paths and editable review before logging.
+- **History and insights**: calendar browsing, weekly progress, nutrition graphs, macro trends, consistency, and goal progress.
+- **Widgets**: Home Screen and Lock Screen widgets for daily macro progress.
+- **Premium unlock**: StoreKit-backed Full Unlock for premium graphs and customization.
+
+## Architecture
+
+The repository is a monorepo with a native Apple app plus a small backend and web surface:
+
+- `cal-macro-tracker/` contains the SwiftUI iPhone app and WidgetKit extension.
+- `convex-backend/` powers optional invite-based sharing.
+- `worker/auth/` handles sharing identity, Convex auth tokens, and invite-link redirects.
+- `worker/usda-proxy/` keeps packaged-food provider lookups outside the app.
+- `web/` hosts the Astro product site, privacy/support pages, waitlist, and support flow.
+
+The app stays local-first by design. Normal tracking does not require an account, and network-backed features degrade gracefully when unavailable.
+
+## Why I Built It This Way
+
+Nutrition tracking apps often make the simplest path dependent on accounts and remote services. MACROS keeps daily tracking fast and private on-device, while still allowing richer features such as barcode lookup, shared dashboards, widgets, and premium analytics when users opt in.
+
+See the [MACROS monorepo](https://github.com/jhomra21/MACROS-Monorepo) for the source code.
