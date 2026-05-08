@@ -7,13 +7,14 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 ### Codebase state
 
 - Personal website, blog, and portfolio built as a static Astro site for Cloudflare Pages.
+- Cloudflare Pages is configured to build with Bun 1.3.11.
 - Uses Astro, React islands, TypeScript, MDX content collections, Tailwind CSS, shadcn/Radix UI primitives, Framer Motion, TanStack Query, RSS, sitemap generation, and Sharp image optimization.
 - Blog and project entries live in `src/content/blog/*.mdx`; project entries are blog content with `isProject: true`.
 - Main routes include home, about, projects, blog listing, dynamic blog posts, and RSS feed.
 
 ### Work completed
 
-- Replaced Bun's binary lockfile with a Bun 1.2.16-compatible text `bun.lock` so Cloudflare Pages can run `bun install --frozen-lockfile`.
+- Replaced Bun's binary lockfile with a Bun 1.3.11-compatible text `bun.lock` so Cloudflare Pages can run `bun install --frozen-lockfile`.
 - Added `AGENTS.md` as the consolidated agent guidance file.
 - Removed legacy `.cursorrules` and `.kiro/` guidance files after migrating their relevant instructions.
 - Upgraded Astro and related integrations to Astro 6-compatible versions.
@@ -30,7 +31,7 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 
 ### Review and validation
 
-- Reproduced Cloudflare's install path with `bunx bun@1.2.16 install --frozen-lockfile`; install passed.
+- Reproduced Cloudflare's install path with `bun install --frozen-lockfile`; install passed on Bun 1.3.11.
 - Ran code review and validated the RSS finding against generated `dist/rss.xml`.
 - Ran simplify review; accepted scoped cleanup in `ProjectsSection.astro`.
 - Initial defensive-code review found no high-confidence redundant guards; the final follow-up review removed impossible `pubDate` fallbacks in the blog index.
