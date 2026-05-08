@@ -23,6 +23,7 @@ bun install
 bun run dev
 bun run start
 bun run build
+bun run build:site
 bun run preview
 bun run astro ...
 ```
@@ -33,7 +34,7 @@ Validation:
 bun run build
 ```
 
-`bun run build` runs `astro check && astro build`. There are no separate lint, test, or format scripts currently defined.
+`bun run build` runs `bun install --frozen-lockfile --silent` before `bun run build:site` for Cloudflare Pages compatibility. `bun run build:site` runs `astro check && astro build`. There are no separate lint, test, or format scripts currently defined.
 
 ## Repository Structure
 

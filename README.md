@@ -52,12 +52,13 @@ Use Bun for all project commands:
 | `bun install`             | Installs dependencies using Bun                  |
 | `bun run dev`             | Starts local dev server at `localhost:4321`      |
 | `bun run start`           | Alias for `bun run dev`                          |
-| `bun run build`           | Builds the production site to `./dist/`          |
+| `bun run build`           | Installs with the frozen lockfile, then builds the production site to `./dist/` |
+| `bun run build:site`      | Runs Astro check/build without installing dependencies |
 | `bun run preview`         | Previews the build locally before deploying      |
 | `bun run astro ...`       | Runs Astro CLI commands                          |
 | `bun run astro -- --help` | Displays help for the Astro CLI                  |
 
-`bun run build` runs both `astro check` and `astro build`.
+Cloudflare Pages uses `bun run build`. The script keeps a frozen install in the build command because the current Pages project runs the user build command directly. `bun run build:site` runs only `astro check && astro build`.
 
 ## Project Notes
 

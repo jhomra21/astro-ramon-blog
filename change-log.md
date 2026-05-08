@@ -15,6 +15,7 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 ### Work completed
 
 - Added MACROS as a featured project entry with a local app screenshot, GitHub link, product site link, and architecture summary.
+- Simplified build configuration by moving Astro-only work into `build:site`, making the Cloudflare install step quieter, and removing redundant Astro/Vite image defaults.
 - Replaced Bun's binary lockfile with a Bun 1.3.11-compatible text `bun.lock` so Cloudflare Pages can run `bun install --frozen-lockfile`.
 - Added a frozen Bun install step to the build script because Cloudflare Pages executed the build command without installing dependencies first.
 - Added `AGENTS.md` as the consolidated agent guidance file.
@@ -34,6 +35,7 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 ### Review and validation
 
 - Reproduced Cloudflare's install path with `bun install --frozen-lockfile`; install passed on Bun 1.3.11.
+- Checked current Astro and Cloudflare Pages docs before simplifying the build configuration.
 - Verified the build script now installs dependencies before running Astro check/build.
 - Ran code review and validated the RSS finding against generated `dist/rss.xml`.
 - Ran simplify review; accepted scoped cleanup in `ProjectsSection.astro`.
