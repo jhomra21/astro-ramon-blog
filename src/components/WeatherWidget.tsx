@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { PUBLIC_OPENWEATHER_API_KEY } from 'astro:env/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import WeatherIcon from './WeatherIcon';
 
-// Default query client options
 const defaultQueryClientOptions = {
   defaultOptions: {
     queries: {
@@ -17,7 +17,6 @@ const defaultQueryClientOptions = {
   },
 };
 
-// Create a function to get or create the client
 function getQueryClient() {
   if (typeof window === 'undefined') return new QueryClient(defaultQueryClientOptions);
   // @ts-ignore - we know window exists here
@@ -33,46 +32,17 @@ interface WeatherData {
   city: string;
 }
 
-interface LocationData {
-  latitude: number;
-  longitude: number;
-  city: string;
-}
-
-// Default coordinates (New York City - Central Park for more accurate weather)
 const DEFAULT_COORDS = {
   latitude: 40.7829,
   longitude: -73.9654,
   city: 'New York'
 };
 
-const fetchLocationByIP = async (): Promise<LocationData> => {
-  try {
-    // Get location directly from ipwho.is
-    const locationResponse = await fetch('https://ipwho.is/');
-    const locationData = await locationResponse.json();
-    
-    if (!locationData.success) {
-      throw new Error('Failed to get location data');
-    }
-
-    return {
-      latitude: locationData.latitude,
-      longitude: locationData.longitude,
-      city: locationData.city
-    };
-  } catch (err) {
-    console.error('IP Location error:', err);
-    return DEFAULT_COORDS;
-  }
-};
-
-const fetchWeatherData = async (latitude: number, longitude: number): Promise<WeatherData> => {
-  const WEATHER_API_KEY = import.meta.env.PUBLIC_OPENWEATHER_API_KEY;
+const fetchWeatherData = async (): Promise<WeatherData> => {
   const url = 'https://api.openweathermap.org/data/2.5/weather?' +
-    'lat=' + latitude +
-    '&lon=' + longitude +
-    '&appid=' + WEATHER_API_KEY +
+    'lat=' + DEFAULT_COORDS.latitude +
+    '&lon=' + DEFAULT_COORDS.longitude +
+    '&appid=' + PUBLIC_OPENWEATHER_API_KEY +
     '&units=metric';
 
   const weatherResponse = await fetch(url);
@@ -93,26 +63,20 @@ const fetchWeatherData = async (latitude: number, longitude: number): Promise<We
 };
 
 const WeatherWidgetContent = () => {
-  const locationQuery = useQuery({
-    queryKey: ['location'],
-    queryFn: fetchLocationByIP,
-    staleTime: 24 * 60 * 60 * 1000, // Location data stays fresh for 24 hours
-    gcTime: Infinity,
-  });
-
   const weatherQuery = useQuery({
-    queryKey: ['weather', locationQuery.data?.latitude, locationQuery.data?.longitude],
-    queryFn: () => fetchWeatherData(
-      locationQuery.data?.latitude || DEFAULT_COORDS.latitude,
-      locationQuery.data?.longitude || DEFAULT_COORDS.longitude
-    ),
-    enabled: !!locationQuery.data || locationQuery.isError,
+    queryKey: ['weather', DEFAULT_COORDS.latitude, DEFAULT_COORDS.longitude],
+    queryFn: fetchWeatherData,
+    enabled: Boolean(PUBLIC_OPENWEATHER_API_KEY),
     staleTime: 5 * 60 * 1000, // Weather data stays fresh for 5 minutes
     gcTime: Infinity,
     retry: false,
   });
 
-  if (weatherQuery.isLoading || locationQuery.isLoading) {
+  if (!PUBLIC_OPENWEATHER_API_KEY || weatherQuery.isError) {
+    return null;
+  }
+
+  if (weatherQuery.isLoading) {
     return (
       <div className="flex items-center gap-2">
         <Skeleton className="h-5 w-24" />
@@ -142,7 +106,6 @@ const WeatherWidgetContent = () => {
 };
 
 const WeatherWidget = () => {
-  // Use ref to ensure consistent reference and initialize with a client
   const queryClientRef = useRef<QueryClient>(getQueryClient());
 
   return (

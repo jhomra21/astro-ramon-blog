@@ -1,5 +1,5 @@
 ---
-import { getEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import BlogPost from '../layouts/BlogPost.astro';
 
 let about;
@@ -14,8 +14,7 @@ try {
 	throw error;
 }
 
-// Render the content
-const { Content } = await about.render();
+const { Content } = await render(about);
 ---
 
 <BlogPost {...about.data}>

@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
@@ -9,6 +9,15 @@ import react from '@astrojs/react';
 export default defineConfig({
     site: 'https://juanrmb.pages.dev',
     output: 'static', // Optimized for Cloudflare Pages static deployment
+    env: {
+        schema: {
+            PUBLIC_OPENWEATHER_API_KEY: envField.string({
+                context: 'client',
+                access: 'public',
+                optional: true,
+            }),
+        },
+    },
     integrations: [
         mdx({
             syntaxHighlight: 'shiki',
@@ -28,15 +37,6 @@ export default defineConfig({
             // Optimize chunks for better performance
             cssCodeSplit: true,
             chunkSizeWarningLimit: 1000,
-            rollupOptions: {
-                output: {
-                    manualChunks: {
-                        'react-vendor': ['react', 'react-dom'],
-                        'ui-vendor': ['@radix-ui/react-label', '@radix-ui/react-popover', '@radix-ui/react-select'],
-                        'utils-vendor': ['date-fns', 'clsx', 'tailwind-merge']
-                    }
-                }
-            }
         },
         css: {
             // CSS optimization

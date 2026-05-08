@@ -9,21 +9,15 @@ interface Props {
 
 const { maxProjects = 100 } = Astro.props;
 
-// Get all projects with more detailed logging
-const projects = (await getCollection('blog', ({ data }) => {
-    // More permissive check for isProject
-    return data.isProject || false;
-}))
+const allProjects = (await getCollection('blog', ({ data }) => data.isProject || false))
     .sort((a, b) => {
-        // First sort by projectType - put 'featured' first
         if (a.data.projectType === 'featured' && b.data.projectType !== 'featured') return -1;
         if (a.data.projectType !== 'featured' && b.data.projectType === 'featured') return 1;
-        // Then sort by date
         return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
-    })
-    .slice(0, maxProjects);
+    });
 
-const totalProjects = (await getCollection('blog', ({ data }) => data.isProject || false)).length;
+const projects = allProjects.slice(0, maxProjects);
+const totalProjects = allProjects.length;
 const showSeeAll = maxProjects < totalProjects;
 ---
 
@@ -42,12 +36,15 @@ const showSeeAll = maxProjects < totalProjects;
         <p class="text-zinc-700 dark:text-zinc-300">No projects found.</p>
     ) : (
         <div class="space-y-8">
-            {projects.map((project) => (
-                <div class="project-card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 overflow-hidden">
+            {projects.map((project) => {
+                const projectHref = `/blog/${project.id}`;
+
+                return (
+                    <div class="project-card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 overflow-hidden">
                     <div class="grid grid-cols-1 md:grid-cols-[280px,1fr] h-full">
                         {project.data.heroImage && (
                             <div class="relative overflow-hidden flex items-center justify-center h-full">
-                                <a href={`/blog/${project.slug}`} class="block relative w-full h-full">
+                                <a href={projectHref} class="block relative w-full h-full">
                                     <div class="relative w-full h-full flex items-center justify-center">
                                         <div class="placeholder absolute inset-0 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-md animate-pulse" />
                                         <Image
@@ -83,7 +80,7 @@ const showSeeAll = maxProjects < totalProjects;
                                 )}
                             </div>
                             <div class="flex-grow flex flex-col min-h-0">
-                                <a href={`/blog/${project.slug}`} class="link-hover">
+                                <a href={projectHref} class="link-hover">
                                     <h2 class="text-2xl font-bold mb-2 tracking-tight line-clamp-2" title={project.data.title}>{project.data.title}</h2>
                                 </a>
                                 <p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight line-clamp-3" title={project.data.description}>
@@ -113,7 +110,7 @@ const showSeeAll = maxProjects < totalProjects;
                                             </svg>
                                         </a>
                                     )}
-                                    <a href={`/blog/${project.slug}`} class="link-hover inline-flex items-center gap-2">
+                                    <a href={projectHref} class="link-hover inline-flex items-center gap-2">
                                         Read more
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
                                             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
@@ -123,8 +120,9 @@ const showSeeAll = maxProjects < totalProjects;
                             </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                    </div>
+                );
+            })}
             
             {showSeeAll && (
                 <div class="flex justify-center pt-4">
