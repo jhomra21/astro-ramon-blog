@@ -1,7 +1,8 @@
 ---
-title: 'Building a Collaborative DAW in the Browser'
-description: 'Deep dive into building a realtime Digital Audio Workstation with SolidJS, Convex real-time sync, Web Audio API scheduling, and Cloudflare edge infrastructure.'
+title: 'A Model-Independent Control Platform for a Browser DAW'
+description: 'A versioned control contract for browser and desktop DAW operations, with typed SDK clients, MCP and CLI adapters, bounded JSONL transport, and packaged Electron acceptance.'
 pubDate: '2025-10-01'
+updatedDate: '2026-08-24'
 heroImage: '/src/assets/images/browser-daw-thumbnail.png'
 isProject: true
 projectUrl: 'https://daw-browser-convex.jhonra121.workers.dev/'
@@ -9,465 +10,96 @@ githubUrl: 'https://github.com/jhomra21/daw-browser-convex'
 projectStatus: 'live'
 projectType: 'featured'
 techStack: [
-    { name: 'SolidJS', description: 'Reactive frontend framework with fine-grained reactivity' },
-    { name: 'Convex', description: 'Real-time backend-as-a-service for timeline data sync' },
-    { name: 'Cloudflare Workers', description: 'Edge computing platform for serverless audio processing' },
-    { name: 'TanStack Query', description: 'Powerful data synchronization and state management' },
-    { name: 'BetterAuth', description: 'Modern authentication with TypeScript support' },
-    { name: 'Cloudflare R2', description: 'Object storage for audio samples and exports' },
-    { name: 'Web Audio API', description: 'Native browser audio processing and scheduling' },
-    { name: 'Hono', description: 'Lightweight web framework for Cloudflare Workers' },
-    { name: 'TypeScript', description: 'Type-safe development across the full stack' }
+    { name: 'Control contracts', description: 'Versioned V1/V2 requests, snapshots, approvals, commits, and recovery records' },
+    { name: 'Control core', description: 'Pure planning, projection, MIDI resolution, deletion, and recovery semantics' },
+    { name: 'Control SDK', description: 'Typed transport-neutral clients for cloud and desktop targets' },
+    { name: 'MCP + JSONL', description: 'Thin model and process adapters over the canonical operation catalog' },
+    { name: 'Electron', description: 'Authenticated packaged desktop host and native control transport' },
+    { name: 'VST3', description: 'Desktop host discovery, parameters, editors, playback, and recovery' },
+    { name: 'TypeScript', description: 'Shared contracts across the app, SDK, adapters, and tests' }
 ]
-tags: ['SolidJS', 'Convex', 'Cloudflare', 'Web Audio', 'Realtime', 'DAW', 'Music Production']
+tags: ['DAW', 'Control Platform', 'TypeScript', 'MCP', 'JSONL', 'CLI', 'Electron', 'VST3', 'Automation']
 ---
 
-When you think about building a Digital Audio Workstation (DAW), the browser probably isn't the first platform that comes to mind. But what if you could build a fully featured, collaborative music production tool that runs entirely in the browser with realtime synchronization, multi-track editing, effects chains, and sample-accurate audio playback?
+The `feat/model-independent-control-platform` branch gives the DAW one control contract for project operations across the browser, CLI, MCP, and packaged desktop host. A model discovers the available operations from the same public catalog that typed clients and human-facing tools use.
 
-## The Challenge: Real-Time Audio Collaboration
+The branch treats model independence as a protocol property. The workflow does not depend on a special mutation tool, a prompt written for one model, or a transport-specific copy of the project logic.
 
-Building a DAW is complex enough on its own. Add real-time collaboration, and you've got some challenges:
+## Four layers keep the contract stable
 
-- **Timeline synchronization**: When one user drags a clip, everyone needs to see it move instantly
-- **Audio sample management**: Large audio files need efficient storage and streaming
-- **Sample-accurate playback**: Audio scheduling needs millisecond precision
-- **Ownership and permissions**: Users should only delete their own clips
-- **Live mix state**: Volume, mute, solo—should these sync across users or stay local?
+The control platform separates meaning from transport and storage.
 
-Let me walk you through how I solved these problems using Convex for realtime data sync and Web Audio API for precise audio scheduling.
+- **`@daw-browser/control`** owns the versioned V1 and V2 schemas, serialization, digests, durable request metadata, limits, approvals, commits, history, recoveries, and keyed operation catalog.
+- **`@daw-browser/control-core`** owns pure planning and projection behavior. It also handles MIDI resolution, deletion, and recovery semantics without transport or durable storage.
+- **`@daw-browser/control-sdk`** exposes typed transport-neutral clients. It retains the legacy REST client and provides the sequential JSONL JSON-RPC adapter. Node consumers can create a canonical client or connect to the authenticated desktop host.
+- **Handlers, invokers, and clients** own separate responsibilities. Handlers bind trusted target state. `ControlInvoker` binds a target and principal, validates one catalog operation, and dispatches it. Clients group typed calls without adding retries or transport policy.
 
-## Convex: Schema-Driven Real-Time Database
+The catalog defines the operation. Each adapter translates that operation into its own protocol.
 
-The heart of the collaborative experience is Convex, a real-time backend that automatically syncs data across clients. What makes Convex special is its schema-first approach with automatic TypeScript generation, making it easier to develop and use LLMs to code along with.
-
-Here's the core schema that powers the timeline:
-
-```typescript
-export default defineSchema({
-  tracks: defineTable({
-    roomId: v.string(),
-    index: v.number(),
-    volume: v.number(),
-    muted: v.optional(v.boolean()),
-    soloed: v.optional(v.boolean()),
-  })
-    .index("by_room", ["roomId"])
-    .index("by_room_index", ["roomId", "index"]),
-
-  clips: defineTable({
-    roomId: v.string(),
-    trackId: v.id("tracks"),
-    startSec: v.number(),
-    duration: v.number(),
-    leftPadSec: v.optional(v.number()),
-    bufferOffsetSec: v.optional(v.number()),
-    name: v.optional(v.string()),
-    sampleUrl: v.optional(v.string()),
-  })
-    .index("by_room", ["roomId"])
-    .index("by_track", ["trackId"]),
-
-  ownerships: defineTable({
-    roomId: v.string(),
-    ownerUserId: v.string(),
-    clipId: v.optional(v.id("clips")),
-    trackId: v.optional(v.id("tracks")),
-  })
-    .index("by_clip", ["clipId"])
-    .index("by_track", ["trackId"])
-    .index("by_owner", ["ownerUserId"]),
-});
+```text
+versioned contracts + keyed operation catalog
+                    │
+            control-core semantics
+                    │
+           trusted handlers and invoker
+                    │
+   REST   desktop   CLI   MCP   sequential JSONL
 ```
 
-Notice the intentional minimalism here. I deliberately avoid storing track names or complex metadata in Convex. Instead, I focus on what needs to be synchronized: positioning, timing, and ownership. Everything else stays client side.
+## Every client follows the same operation loop
 
-### Room-Based Multi-Tenancy
+The branch exposes a canonical workflow:
 
-The `ownerships` table is key to authorization. When a user creates a clip or track, an ownership record is created. This enables enforcing owner-only deletions in Convex mutations:
-
-```typescript
-// Example mutation: only owners can delete their clips
-export const deleteClip = mutation({
-  args: { clipId: v.id("clips") },
-  handler: async (ctx, { clipId }) => {
-    const userId = await getUserId(ctx);
-    const ownership = await ctx.db
-      .query("ownerships")
-      .withIndex("by_clip", (q) => q.eq("clipId", clipId))
-      .first();
-
-    if (!ownership || ownership.ownerUserId !== userId) {
-      throw new Error("Unauthorized: only the owner can delete this clip");
-    }
-
-    await ctx.db.delete(clipId);
-    await ctx.db.delete(ownership._id);
-  },
-});
+```text
+discover → canonical snapshot → preview → approval → commit → verify
 ```
 
-### Effects Chains with Convex
-
-EQ and reverb settings are also stored in Convex, enabling synchronized effect chains across collaborators:
+Discovery returns the available capabilities and the authoritative project snapshot. A preview calculates the proposed change without mutating that snapshot. The commit includes the expected revision and an idempotency key. The caller then reads the new snapshot and verifies the result.
 
-```typescript
-effects: defineTable({
-  roomId: v.string(),
-  targetType: v.string(), // 'track' | 'master'
-  trackId: v.optional(v.id("tracks")),
-  index: v.number(), // chain order
-  type: v.string(), // 'eq' | 'reverb'
-  params: v.any(), // flexible for different effect types
-})
-  .index("by_track", ["trackId"])
-  .index("by_track_order", ["trackId", "index"])
-```
+Revision checks prevent a stale client from overwriting a newer edit. Idempotency keys make a retry safe when the first request already committed. Approval tokens protect destructive operations and must match the request that uses them. History and recovery records make a committed deletion reversible.
 
-This flexible schema allows different effect types while maintaining ordered chains per track or master bus.
-
-## Web Audio API: Sample-Accurate Scheduling
-
-The second pillar is a custom audio engine built on Web Audio API. The challenge with browser DAWs is achieving sample-accurate playback while maintaining the flexibility of a timeline editor.
-
-### The Transport System
-
-At the core is a transport system that maps timeline seconds to audio context time:
-
-```typescript
-export class AudioEngine {
-  private transportEpochCtxTime = 0;
-  private transportEpochTimelineSec = 0;
-  private transportRunning = false;
-
-  private timelineToCtxTime(timelineSec: number) {
-    if (!this.audioCtx) return 0;
-    const delta = timelineSec - this.transportEpochTimelineSec;
-    return this.transportEpochCtxTime + Math.max(0, delta);
-  }
-
-  onTransportStart(playheadSec: number) {
-    if (!this.audioCtx) return;
-    this.transportEpochCtxTime = this.audioCtx.currentTime;
-    this.transportEpochTimelineSec = Math.max(0, playheadSec);
-    this.transportRunning = true;
-    this.scheduleAllClipsFromPlayhead();
-  }
-}
-```
+The branch tested these rules through MCP, CLI, JSONL, the standalone TypeScript SDK, and the packaged desktop host. Each adapter reaches the same operation catalog.
 
-When you hit play, the engine captures the current `audioContext.currentTime` as an epoch and maps all timeline positions relative to it. This enables precise scheduling regardless of when playback starts.
+## Project control and host control stay separate
 
-### Clip Scheduling with Offsets
+The project-control catalog supports `cloud` and `desktop` targets. `project.current` remains desktop-only because the packaged host can identify the mounted local project while a cloud client cannot make that claim.
 
-Each clip can have trimming and padding, so scheduling needs to account for buffer offsets:
+Desktop host operations use a separate typed catalog in `@daw-browser/desktop-protocol`. It covers transport, diagnostics, VST discovery and parameters, import and export, and host status. Electron lifecycle, filesystem paths, capability tokens, and native internals stay in that host catalog. They do not become project-control operations.
 
-```typescript
-scheduleClip(
-  clip: Clip,
-  buffer: AudioBuffer,
-  playheadSec: number
-) {
-  if (!this.audioCtx) return;
-
-  const startSec = clip.startSec + (clip.leftPadSec || 0);
-
-  if (playheadSec > startSec + clip.duration) return; // already past
-
-  const bufferOffset = clip.bufferOffsetSec || 0;
-  const playOffset = Math.max(0, playheadSec - startSec);
-  const bufferStart = bufferOffset + playOffset;
-  const remainingDuration = clip.duration - playOffset;
+REST routes and the desktop socket retain their V1 and V2 contracts. CLI and MCP expose thin adapters over the same canonical calls. An external Node consumer can use `createCanonicalControlClient` or `connectDesktopControl` without importing browser-only code.
 
-  const scheduleTime = this.timelineToCtxTime(
-    Math.max(startSec, playheadSec)
-  );
+## The process boundary rejects bad input safely
 
-  const source = this.audioCtx.createBufferSource();
-  source.buffer = buffer;
-  source.connect(this.getTrackChain(clip.trackId));
-  source.start(scheduleTime, bufferStart, remainingDuration);
+The JSONL adapter accepts one bounded JSON-RPC 2.0 request per line and processes lines in order. Notifications execute without output. Batches, malformed requests, unknown methods, invalid parameters, unsupported targets, and oversized or deeply nested inputs return structured errors.
 
-  this.activeSources.push(source);
-}
-```
+The decoder bounds UTF-8 input before parsing. When a line exceeds its limit, the process discards that line through its newline and continues with the next request. The CLI reaches the authenticated desktop host through `rpc --target host`. Host acquisition failures return a stable unavailable error without exposing registration paths, socket paths, or temporary-directory details.
 
-This handles:
-- **Left padding**: Silent space before audio starts in the clip window
-- **Buffer offset**: Trimming from the left (start playing X seconds into the sample)
-- **Playhead offset**: Resume playback mid-clip if user seeks
+Cloud JSONL remains deferred because the project does not have an equivalent secure process-authentication path for a cloud client.
 
-### Effect Chains: Per-Track EQ and Reverb
+## Extensions receive narrow permissions
 
-Each track has its own effects chain built with Web Audio nodes:
-
-```typescript
-private rebuildTrackRouting(trackId: string) {
-  const input = this.trackInputs.get(trackId);
-  const gain = this.trackGains.get(trackId);
-  if (!input || !gain) return;
-
-  // Disconnect current routing
-  try { input.disconnect(); } catch {}
-
-  const eqChain = this.eqChains.get(trackId) || [];
-
-  // Build the chain: input -> [EQ nodes] -> gain -> master
-  let currentNode: AudioNode = input;
-
-  for (const eqNode of eqChain) {
-    currentNode.connect(eqNode);
-    currentNode = eqNode;
-  }
-
-  const reverb = this.trackReverbs.get(trackId);
-  if (reverb?.enabled) {
-    // Parallel wet/dry routing
-    currentNode.connect(reverb.dryGain);
-    currentNode.connect(reverb.preDelay);
-    reverb.preDelay.connect(reverb.convolver);
-    reverb.convolver.connect(reverb.wetGain);
-
-    reverb.dryGain.connect(gain);
-    reverb.wetGain.connect(gain);
-  } else {
-    currentNode.connect(gain);
-  }
-
-  gain.connect(this.masterGain);
-}
-```
-
-This routing system:
-- Connects EQ nodes in series (each BiquadFilter applies frequency shaping)
-- Implements parallel dry/wet routing for reverb
-- Maintains clean separation between track input, effects, and output gain
-
-### Metronome with Lookahead Scheduling
-
-The metronome demonstrates precise timing with a lookahead scheduler:
-
-```typescript
-private scheduleMetronomeTicks() {
-  if (!this.transportRunning || !this.metronomeEnabled) return;
-
-  const nowCtx = this.audioCtx.currentTime;
-  const scheduleUntil = nowCtx + this.metronomeLookaheadSec; // 250ms ahead
-  const secondsPerBeat = 60 / this.bpm;
-
-  let nextBeatTimeline = this.nextMetronomeBeatTimelineSec;
-
-  while (nextBeatTimeline) {
-    const eventTime = this.timelineToCtxTime(nextBeatTimeline);
-    if (eventTime > scheduleUntil) break;
-
-    if (eventTime >= nowCtx - 0.02) { // small tolerance
-      const source = this.audioCtx.createBufferSource();
-      source.buffer = this.metronomeBuffer;
-      source.connect(this.metronomeGain);
-      source.start(eventTime);
-      this.metronomeSources.push(source);
-    }
-
-    nextBeatTimeline += secondsPerBeat;
-  }
-
-  this.nextMetronomeBeatTimelineSec = nextBeatTimeline;
-}
-```
-
-This runs every 50ms, scheduling clicks 250ms in advance. The Web Audio API's precise scheduling ensures sample-accurate timing even if JavaScript execution is delayed.
-
-## MediaBunny: Browser-Native Audio Recording
-
-One of the most interesting features of the DAW is the ability to record audio directly from your microphone and add it to the timeline. For this, I use MediaBunny—a pure TypeScript media toolkit that handles audio recording, encoding, and metadata extraction entirely in the browser.
-
-MediaBunny is perfect for browser-based DAWs because it's:
-- **Dependency-free**: No need for server-side processing or FFmpeg binaries
-- **Format-agnostic**: Works with WebM, MP4, WAV, and more
-- **TypeScript-native**: Excellent type safety and IDE support
-- **Lightweight**: Only ~5KB when tree-shaken
-
-### Recording Pipeline with MediaBunny
-
-Here's how the recording workflow integrates MediaBunny with the browser's MediaStream API:
-
-```typescript
-import {
-  Output,
-  BufferTarget,
-  WebMOutputFormat,
-  MediaStreamAudioTrackSource,
-  QUALITY_MEDIUM,
-} from 'mediabunny';
-
-const startRecording = async () => {
-  // Request microphone access
-  const mediaStream = await navigator.mediaDevices.getUserMedia({
-    audio: {
-      echoCancellation: true,
-      noiseSuppression: true,
-      sampleRate: 44100,
-    },
-  });
-
-  const audioTrack = mediaStream.getAudioTracks()[0];
-  
-  // Create MediaBunny output with WebM container
-  const output = new Output({
-    format: new WebMOutputFormat(),
-    target: new BufferTarget(), // Record to in-memory buffer
-  });
-
-  // Create audio source from the live MediaStream track
-  const audioSource = new MediaStreamAudioTrackSource(audioTrack, {
-    codec: 'opus',
-    bitrate: QUALITY_MEDIUM,
-  });
-
-  output.addAudioTrack(audioSource);
-  await output.start(); // Begin recording
-};
-```
-
-This creates a live audio pipeline that continuously encodes microphone input to Opus-compressed WebM. The `BufferTarget` accumulates the encoded data in memory, ready for export when recording stops.
-
-### Stopping and Analyzing Recordings
-
-When the user stops recording, MediaBunny finalizes the output and provides the encoded buffer:
-
-```typescript
-const stopRecording = async () => {
-  // Stop all media tracks
-  mediaStream.getTracks().forEach(track => track.stop());
-
-  // Finalize MediaBunny output
-  await output.finalize();
-  const buffer = (output.target as BufferTarget).buffer;
-
-  // Create a blob from the encoded data
-  const blob = new Blob([buffer], { type: 'audio/webm' });
-  
-  // Analyze the recording to extract metadata
-  const audioFile = await analyzeAudioFile(blob, `recording-${Date.now()}.webm`);
-};
-```
-
-### Metadata Extraction
-
-MediaBunny's `Input` class can parse audio files and extract detailed metadata—crucial for properly scheduling clips on the timeline:
-
-```typescript
-import { Input, ALL_FORMATS, BlobSource } from 'mediabunny';
+The branch manages trusted built-in extensions through an app-local kernel. The kernel publishes registries atomically, isolates diagnostics, aborts stale generations, and cleans up in reverse order. Replacement requires a matching contribution contract.
 
-const analyzeAudioFile = async (blob: Blob, fileName: string) => {
-  const input = new Input({
-    formats: ALL_FORMATS,
-    source: new BlobSource(blob as File),
-  });
+The extension system supports bounded native menu projection. It validates stable contribution IDs, titles, ordering, enabled state, and checked state across 16 first-level slots. Existing native menu commands remain compatibility commands instead of being regenerated by the extension system.
 
-  // Extract duration and track metadata
-  const duration = await input.computeDuration();
-  const audioTrack = await input.getPrimaryAudioTrack();
+Project actions receive explicit action-kind and operation grants. The action facade exposes separate preview, approval, and commit methods. It does not expose raw stores or an arbitrary invoker. External manifests, package loading, DSP ABIs, evaluation, ambient store access, and extension preference persistence remain outside the branch.
 
-  if (!audioTrack) {
-    throw new Error('No audio track found');
-  }
+## Packaged acceptance tested the public path
 
-  return {
-    name: fileName,
-    blob,
-    duration,
-    sampleRate: audioTrack.sampleRate,
-    numberOfChannels: audioTrack.numberOfChannels,
-    url: URL.createObjectURL(blob),
-  };
-};
-```
+The acceptance report exercised an unsigned Electron package on macOS arm64 with an isolated temporary profile. The packaged run covered desktop registration, private socket creation, project discovery, canonical V2 snapshots, immutable previews, approved commits, idempotent replay, revision conflicts, recovery, MCP and JSONL parity, transport, native menus, and the installed VST3 lifecycle.
 
-This metadata extraction is essential because:
-- **Duration**: Determines the clip's length on the timeline
-- **Sample rate**: Ensures proper playback speed through Web Audio API
-- **Channel count**: Enables stereo/mono routing decisions
+Two protocol-naive models completed the same MCP task without protocol hints. Each model discovered the desktop project, selected the canonical V2 reads, built a persisted track reference, previewed the rename, committed it with an idempotency key, and verified the resulting revision. GPT-5.6 Sol and GPT-5.5 reached the workflow independently.
 
-### From Recording to Timeline
+The final source and native checks recorded 160 control-platform tests, 40 compatibility tests, a passing production build, and 6 of 6 native CTest cases. Repository lint completed with zero warnings and zero errors. The full Bun suite still records 2,400 passing tests, 1 skipped test, and 10 known failures in the five-second exhaustive local-control threshold and stale MIDI-expression or automation expectations. The affected blocker tests pass in their focused suites. The correctness and security review reported no P0 or P1 findings.
 
-Once MediaBunny has captured and analyzed the audio, the workflow is:
+## Current limits
 
-1. **Upload to R2**: The audio blob is sent to the Cloudflare Worker for storage
-2. **Create Convex clip**: A new clip document is created with the R2 URL
-3. **Schedule playback**: The audio engine decodes the buffer and schedules it for playback
+The branch leaves three product boundaries open:
 
-This seamless integration between MediaBunny, Convex, and the audio engine enables a professional recording workflow entirely in the browser—no server-side processing required.
+- The packaged product has no extension lifecycle entry point, so extension lifecycle acceptance is marked `PRODUCT SKIP`.
+- No disposable authenticated cloud environment was available, so cloud control acceptance is marked `ENVIRONMENT SKIP`.
+- External extension packages, arbitrary DSP or package loading, public operation endpoints, extension preference persistence, cloud JSONL process authentication, external deployment, and installed-consumer parity remain deferred or unverified.
 
-## Edge Infrastructure: Cloudflare Workers + R2
+Those limits define the current control platform. The branch provides one versioned operation model and adapters for REST, desktop, CLI, MCP, and JSONL. It does not claim a public cloud process transport or an open extension runtime.
 
-Audio files are large, so efficient storage and streaming is critical. I use Cloudflare R2 for object storage, accessed through a Hono Worker API:
-
-```typescript
-// Upload endpoint
-app.post('/api/samples', async (c) => {
-  const { user } = c.var;
-  if (!user) return c.json({ error: 'Unauthorized' }, 401);
-
-  const formData = await c.req.formData();
-  const file = formData.get('file') as File;
-  const roomId = formData.get('roomId') as string;
-
-  const key = `rooms/${roomId}/clips/${file.name}`;
-
-  await c.env.AUDIO_SAMPLES.put(key, file.stream(), {
-    httpMetadata: { contentType: file.type },
-  });
-
-  const url = `/api/samples/${roomId}/${encodeURIComponent(file.name)}`;
-  return c.json({ url, key });
-});
-```
-
-The streaming endpoint serves audio with proper caching headers:
-
-```typescript
-app.get('/api/samples/:roomId/:filename', async (c) => {
-  const { roomId, filename } = c.req.param();
-  const key = `rooms/${roomId}/clips/${filename}`;
-
-  const object = await c.env.AUDIO_SAMPLES.get(key);
-  if (!object) return c.notFound();
-
-  return new Response(object.body, {
-    headers: {
-      'Content-Type': object.httpMetadata?.contentType || 'audio/wav',
-      'Cache-Control': 'public, max-age=31536000',
-      'X-R2-Key': key,
-    },
-  });
-});
-```
-
-This edge-first approach means audio samples are served from Cloudflare's global network with minimal latency.
-
-## Lessons Learned
-
-Building this DAW taught me several valuable lessons:
-
-**1. Embrace eventual consistency**: Users must have local-only preferences (solo/mute) while other edits sync globally. Not everything needs real-time sync.
-
-**2. Schema minimalism**: Convex works best with minimal, focused schemas. Store only what truly needs synchronization.
-
-**3. Lookahead scheduling is essential**: Web Audio scheduling is sample-accurate, but JavaScript isn't. Always schedule audio events ahead of time.
-
-**4. TypeScript everywhere pays off**: From Convex schema to audio engine types, type safety caught countless bugs during development.
-
-**5. Edge infrastructure matters**: Serving audio from R2 through Cloudflare's network.
-
-## What's Next?
-
-The project is live and functional, but there's always more to explore:
-- MIDI support for virtual instruments
-- Audio effects like compression and delay
-- Collaborative mixing with per-user mix snapshots
-- Offline editing with sync when reconnected
-
-If you're interested in real-time collaboration, audio programming, or edge computing, I encourage you to check out the [live demo](https://daw-browser-convex.jhonra121.workers.dev/) and explore the [source code](https://github.com/jhomra21/daw-browser-convex).
-
-Building a DAW in the browser pushes the limits of what's possible on the web platform—and it's incredibly rewarding to see it all come together.
+Read the [control platform source and architecture notes](https://github.com/jhomra21/daw-browser-convex/tree/feat/model-independent-control-platform) or try the [live DAW](https://daw-browser-convex.jhonra121.workers.dev/).

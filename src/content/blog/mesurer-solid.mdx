@@ -1,0 +1,43 @@
+---
+title: 'Mesurer Solid: UI Measurement for Humans and Coding Agents'
+description: 'A framework-agnostic browser inspection and visual context layer built with Solid 2 for measuring interfaces, annotating intent, and giving coding agents exact rendered evidence.'
+pubDate: '2026-08-24'
+heroImage: '/src/assets/images/mesurer-solid-showcase.jpg'
+isProject: true
+githubUrl: 'https://github.com/jhomra21/mesurer-solid'
+projectType: 'featured'
+techStack: [
+    { name: 'Solid 2', description: 'Isolated renderer and reactive UI runtime' },
+    { name: 'TypeScript', description: 'Typed measurement, plugin, and agent contracts' },
+    { name: 'Browser DOM', description: 'Framework-independent rendered UI inspection' },
+    { name: 'Manifest V3', description: 'Extension delivery for arbitrary Chromium pages' },
+    { name: 'Web APIs', description: 'Geometry, styles, screenshots, and interaction state' }
+]
+tags: ['SolidJS', 'Solid 2', 'UI Tools', 'Browser Tooling', 'Coding Agents', 'TypeScript']
+---
+
+Mesurer Solid is my Solid 2 port and extension of Mesurer. It adds an isolated inspection layer to real browser applications without requiring the host app to use Solid. The layer connects rendered UI measurements, human feedback, and coding-agent workflows.
+
+## What it does
+
+- Measures rendered geometry, spacing, typography, layout, overflow, and computed styles.
+- Provides selection, rulers, guides, distances, X-ray, text inspection, color picking, settings, history, and persistence.
+- Captures human intent through element annotations or arbitrary visual regions.
+- Exposes JSON-safe context, feedback, inspection, and review APIs through `window.__MESURER__`.
+- Supports runtime extensions with tools, commands, overlays, settings, state, and disposal.
+- Runs through a browser extension or a transport-neutral injection script, so the outer browser harness stays in control of navigation, screenshots, and interaction.
+
+## A rendered-evidence workflow
+
+Mesurer treats the rendered page as the source of truth. Source code can say that a gap is 16 pixels or that two edges align. Fonts, intrinsic sizing, transforms, breakpoints, and neighboring elements can change the result. Mesurer makes each claim inspectable:
+
+```text
+annotation → rendered context → source edit → stable page
+  → review / feedback → measurements and screenshots → iterate
+```
+
+Tests cover complex pages, stacking contexts, browser top-layer UI, strict Trusted Types pages, and Electron renderers. The current beta includes a removable context plugin, deterministic revalidation, screenshot planning, and a portable agent skill.
+
+Mesurer handles measurement and annotation. The surrounding harness owns tabs, authentication, navigation, screenshots, and source changes.
+
+Read the [Mesurer Solid source code](https://github.com/jhomra21/mesurer-solid) for the implementation, examples, extension, and agent integration docs.

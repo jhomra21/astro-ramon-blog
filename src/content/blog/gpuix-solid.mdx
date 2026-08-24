@@ -1,0 +1,38 @@
+---
+title: 'GPUix Solid: Solid 2 Bindings for Native GPU Interfaces'
+description: 'An independently implemented Solid 2 renderer for GPUIX and GPUI. It connects Solid’s universal runtime and fine-grained reactivity to Zed’s GPU-accelerated UI stack.'
+pubDate: '2026-08-24'
+heroImage: '/src/assets/images/gpuix-solid-placeholder.png'
+isProject: true
+githubUrl: 'https://github.com/jhomra21/gpuix-solid'
+projectType: 'featured'
+techStack: [
+    { name: 'Solid 2', description: 'Universal renderer and fine-grained reactivity' },
+    { name: 'TypeScript', description: 'Typed renderer, component, and automation APIs' },
+    { name: 'GPUIX', description: 'Public native mutation and element contract' },
+    { name: 'GPUI', description: 'Zed’s GPU-accelerated UI framework' },
+    { name: 'Rust / N-API', description: 'Native retained-tree bridge through @gpuix/native' }
+]
+tags: ['SolidJS', 'Solid 2', 'GPUI', 'GPU', 'Native UI', 'TypeScript', 'Rust']
+---
+
+GPUix Solid is an independently implemented Solid 2 renderer built against GPUIX’s public native mutation contract. It connects Solid’s compiler and runtime to GPUI, the GPU-accelerated UI framework used by Zed. The native bridge stays in `@gpuix/native`, so the project does not fork the Rust layer.
+
+## Renderer architecture
+
+Solid updates affected host properties and children. The renderer records those changes in a small JavaScript shadow tree, then batches mutations into GPUIX’s retained native tree:
+
+```text
+Solid signal → universal renderer → JS shadow tree
+                         → batched N-API mutations → Rust retained tree → GPUI
+```
+
+The shadow tree answers Solid’s synchronous `parent`, `firstChild`, and `nextSibling` queries. Native rendering stays retained and batched.
+
+## Current milestone
+
+Milestones M0 through M5 are complete. They cover renderer integration, root-scoped ownership, event and ref handling, hot remounts, native element parity, focus and selection, native animations, and Solid-native `Tooltip`, `Select`, and `Combobox` components. The repository also includes a GPU-backed test renderer, screenshot parity coverage, and a Playwright-like native automation API with live stdio transport.
+
+M6 covers release hardening, cross-platform CI, compatibility documentation, versioning, npm provenance, and beta publication. The project is independent of GPUIX, Zed, and SolidJS. It tests Solid’s programming model against native GPU interfaces.
+
+Read the [GPUix Solid source code](https://github.com/jhomra21/gpuix-solid) for the architecture notes, compatibility matrix, examples, and release documentation.
