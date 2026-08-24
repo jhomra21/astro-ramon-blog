@@ -7,11 +7,11 @@ This repository is Juan's personal website, blog, and portfolio. It showcases te
 ## Stack
 
 - Use **Bun** for package management and scripts. Do not use npm, pnpm, or yarn.
-- Use **Astro 6** for pages, layouts, static rendering, content collections, RSS, and sitemap generation.
-- Use **React 18** primarily for interactive islands; TSX components are also used for reusable static UI primitives.
+- Use **Astro 7** for pages, layouts, static rendering, content collections, RSS, and sitemap generation.
+- Use **React 19** primarily for interactive islands; TSX components are also used for reusable static UI primitives.
 - Use **TypeScript** for all code.
 - Use **MDX** for blog and project content.
-- Use **Tailwind CSS** for styling, with CSS only as a fallback.
+- Use **Tailwind CSS 4** through `@tailwindcss/vite`, with CSS only as a fallback.
 - Use **shadcn/ui**, **Radix UI**, and existing `src/components/ui` primitives for reusable UI.
 - Use **TanStack Query** for client-side API/server-state fetching.
 - Use **Framer Motion** only where animation needs cannot be handled cleanly with CSS or Astro transitions.

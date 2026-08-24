@@ -11,10 +11,14 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 - Added a Mesurer showcase image and temporary Solid logo artwork so both new project cards use the site’s full image layout.
 - Rewrote the DAW post around `feat/model-independent-control-platform`, covering canonical control contracts, transport adapters, extension boundaries, packaged acceptance, and deferred work.
 - Applied the global Stop Slop and Cursor technical-writing guidance to the three project posts, tightening prose while preserving their implementation details.
+- Upgraded the local dependency set to Astro 7.2.6, the Astro integrations, React 19, Sharp 0.35.3, and the current compatible UI/tooling releases.
+- Migrated Tailwind from the deprecated `@astrojs/tailwind` integration to Tailwind 4 through `@tailwindcss/vite`, preserving the existing Tailwind config and scoped component styles.
+- Added Bun overrides for patched transitive versions of Babel, fast-uri, Sharp, SVGO, and YAML; `bun audit` now reports no vulnerabilities.
 
 ### Validation
 
 - Verified project names, repository links, README capabilities, and recent commit details against GitHub before authoring the entries.
+- `bun run build` passed with 0 errors, 0 warnings, and 0 hints across 20 generated pages.
 
 ## 2026-05-08
 

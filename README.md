@@ -6,10 +6,10 @@ Welcome to Juan.dev, a personal blog and portfolio site showcasing my work and e
 
 This site is built using a modern tech stack to ensure high performance, scalability, and a seamless user experience:
 
-- **Astro 6**: Static site generation, routing, content collections, RSS, sitemap generation, and image optimization.
-- **React 18**: Interactive UI islands plus reusable TSX UI primitives.
+- **Astro 7**: Static site generation, routing, content collections, RSS, sitemap generation, and image optimization.
+- **React 19**: Interactive UI islands plus reusable TSX UI primitives.
 - **TypeScript**: Strict type checking for application and component code.
-- **Tailwind CSS**: A utility-first CSS framework for styling, providing a responsive and customizable design.
+- **Tailwind CSS 4**: A utility-first CSS framework integrated through Tailwind's Vite plugin.
 - **MDX**: Blog and project content authored as Markdown with JSX support.
 - **shadcn/ui and Radix UI**: Reusable UI primitives.
 - **TanStack Query**: Client-side API fetching for the weather widget.

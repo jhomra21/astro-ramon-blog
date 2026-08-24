@@ -2,12 +2,15 @@
 import { defineConfig, envField } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 
 export default defineConfig({
     site: 'https://juanrmb.pages.dev',
     output: 'static',
+    vite: {
+        plugins: [tailwindcss()],
+    },
     env: {
         schema: {
             PUBLIC_OPENWEATHER_API_KEY: envField.string({
@@ -21,20 +24,12 @@ export default defineConfig({
         mdx({
             syntaxHighlight: 'shiki',
             shikiConfig: { theme: 'dracula' },
-            remarkPlugins: [],
-            rehypePlugins: [],
-            remarkRehype: {},
         }),
         sitemap(),
-        tailwind({
-            applyBaseStyles: false,
-        }),
         react(),
     ],
     markdown: {
         syntaxHighlight: 'shiki',
         shikiConfig: { theme: 'dracula' },
-        remarkPlugins: [],
-        rehypePlugins: [],
     }
 });
