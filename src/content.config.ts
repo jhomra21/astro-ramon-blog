@@ -20,6 +20,7 @@ const blog = defineCollection({
 			projectStatus: z.enum(['live']).optional(),
 			projectType: z.enum(['featured']).optional(),
 			githubUrl: z.url().optional(),
+			npmUrl: z.url().optional(),
 			techStack: z
 				.array(
 					z.object({

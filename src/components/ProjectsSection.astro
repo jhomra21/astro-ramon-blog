@@ -2,12 +2,14 @@
 import { getCollection } from 'astro:content';
 import TechBadge from './TechBadge';
 import { Image } from 'astro:assets';
+import { REVEAL_MAX_CARD_STEPS, REVEAL_STEP_MS, getRevealStyle } from '@/lib/reveal';
 
 interface Props {
     maxProjects?: number;
+    revealDelayMs?: number;
 }
 
-const { maxProjects = 100 } = Astro.props;
+const { maxProjects = 100, revealDelayMs = 0 } = Astro.props;
 
 const allProjects = (await getCollection('blog', ({ data }) => data.isProject || false))
     .sort((a, b) => {
@@ -22,10 +24,10 @@ const showSeeAll = maxProjects < totalProjects;
 ---
 
 <div class="space-y-8">
-    <div class="flex justify-between items-center">
+    <div class="reveal flex flex-wrap justify-between items-center gap-x-4 gap-y-1" style={getRevealStyle(revealDelayMs)}>
         <h2 class="section-title">Things I've Built</h2>
         {showSeeAll && (
-            <a href="/projects" class="link-hover text-sm font-mono">
+            <a href="/projects" class="link-hover text-sm font-mono whitespace-nowrap">
                 See all projects
                 <span class="font-sans ml-1">→</span>
             </a>
@@ -35,63 +37,69 @@ const showSeeAll = maxProjects < totalProjects;
     {projects.length === 0 ? (
         <p class="text-zinc-700 dark:text-zinc-300">No projects found.</p>
     ) : (
-        <div class="space-y-8">
-            {projects.map((project) => {
+        <div class="space-y-4">
+            {projects.map((project, index) => {
                 const projectHref = `/blog/${project.id}`;
 
                 return (
-                    <div class="project-card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-                    <div class="grid grid-cols-1 md:grid-cols-[280px,1fr] h-full">
-                        {project.data.heroImage && (
-                            <div class="relative overflow-hidden flex items-center justify-center h-full">
-                                <a href={projectHref} class="block relative w-full h-full">
-                                    <div class="relative w-full h-full flex items-center justify-center">
-                                        <div class="placeholder absolute inset-0 bg-white/50 dark:bg-zinc-800/50 backdrop-blur-md animate-pulse" />
-                                        <Image
-                                            src={project.data.heroImage}
-                                            alt={`Preview of ${project.data.title}`}
-                                            width={1920}
-                                            height={1080}
-                                            class="project-image opacity-0 w-full h-full object-contain object-center hover:scale-105 transition-all duration-300 relative z-10"
-                                            loading="lazy"
-                                            format="webp"
-                                            quality="high"
-                                        />
-                                    </div>
-                                    <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 z-20"></div>
+                    <div
+                        class="project-card reveal bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 overflow-hidden"
+                        style={getRevealStyle(revealDelayMs + REVEAL_STEP_MS * Math.min(index + 1, REVEAL_MAX_CARD_STEPS))}
+                    >
+                        <div class="p-4 sm:p-5 space-y-3">
+                            <div class="flex items-start justify-between gap-3">
+                                <a href={projectHref} class="link-hover min-w-0">
+                                    <h2 class="text-lg sm:text-xl font-bold tracking-tight line-clamp-2" title={project.data.title}>{project.data.title}</h2>
                                 </a>
-                            </div>
-                        )}
-                        <div class="relative z-10 p-6 flex flex-col h-full">
-                            <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
-                                <div class="flex items-center gap-2">
+                                <div class="flex shrink-0 items-center gap-2">
                                     <span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700">
                                         {project.data.pubDate.getFullYear()}
                                     </span>
-                                </div>
-                                {project.data.projectStatus === 'live' && (
-                                    <span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1.5">
-                                        <span class="relative flex h-2 w-2">
-                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                    {project.data.projectStatus === 'live' && (
+                                        <span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1.5">
+                                            <span class="relative flex h-2 w-2">
+                                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                            </span>
+                                            LIVE
                                         </span>
-                                        LIVE
-                                    </span>
+                                    )}
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="min-w-0 flex-1 space-y-3">
+                                    <p class="text-sm text-zinc-700 dark:text-zinc-300 tracking-tight line-clamp-2" title={project.data.description}>
+                                        {project.data.description}
+                                    </p>
+                                    {project.data.techStack && project.data.techStack.length > 0 && (
+                                        <div class="flex flex-wrap gap-2">
+                                            {project.data.techStack.map((tech) => (
+                                                <TechBadge tech={tech.name} tooltip={tech.description} />
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                {project.data.heroImage && (
+                                    <a
+                                        href={projectHref}
+                                        class="project-thumb block shrink-0 overflow-hidden border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-900 w-14 h-14 sm:w-[140px] sm:h-[88px]"
+                                        tabindex="-1"
+                                        aria-hidden="true"
+                                    >
+                                        <Image
+                                            src={project.data.heroImage}
+                                            alt=""
+                                            width={280}
+                                            height={176}
+                                            class="block w-full h-full object-cover object-center"
+                                            loading="lazy"
+                                            format="webp"
+                                            quality={80}
+                                        />
+                                    </a>
                                 )}
                             </div>
-                            <div class="flex-grow flex flex-col min-h-0">
-                                <a href={projectHref} class="link-hover">
-                                    <h2 class="text-2xl font-bold mb-2 tracking-tight line-clamp-2" title={project.data.title}>{project.data.title}</h2>
-                                </a>
-                                <p class="text-zinc-700 dark:text-zinc-300 mb-4 tracking-tight line-clamp-3" title={project.data.description}>
-                                    {project.data.description}
-                                </p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    {project.data.techStack?.map((tech) => (
-                                        <TechBadge tech={tech.name} tooltip={tech.description} />
-                                    ))}
-                                </div>
-                                <div class="mt-auto pt-4 flex flex-wrap items-center gap-4 border-t border-zinc-100 dark:border-zinc-700">
+                            <div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 text-sm">
                                     {project.data.projectUrl && (
                                         <a href={project.data.projectUrl} target="_blank" class="link-hover inline-flex items-center gap-2">
                                             Live Site
@@ -110,16 +118,22 @@ const showSeeAll = maxProjects < totalProjects;
                                             </svg>
                                         </a>
                                     )}
+                                    {project.data.npmUrl && (
+                                        <a href={project.data.npmUrl} target="_blank" rel="noopener noreferrer" class="link-hover inline-flex items-center gap-2">
+                                            NPM Package
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                <path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z"></path>
+                                            </svg>
+                                        </a>
+                                    )}
                                     <a href={projectHref} class="link-hover inline-flex items-center gap-2">
                                         Read more
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
                                             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
                                         </svg>
                                     </a>
-                                </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 );
             })}
@@ -140,7 +154,7 @@ const showSeeAll = maxProjects < totalProjects;
     @reference "../styles/global.css";
 
     .project-card {
-        transition: all 0.2s ease;
+        transition: border-color 0.2s ease;
         border-left: 4px solid transparent;
     }
     .project-card:hover {
@@ -159,42 +173,4 @@ const showSeeAll = maxProjects < totalProjects;
         @apply text-2xl font-bold tracking-tight;
     }
 
-    .project-image {
-        opacity: 0;
-        transition: opacity 0.5s ease-in-out;
-    }
-
-    .project-image.loaded {
-        opacity: 1;
-    }
-
-    .placeholder {
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    .placeholder.hidden {
-        opacity: 0;
-    }
 </style>
-
-<script>
-    // Handle image loading
-    const images = document.querySelectorAll('.project-image');
-    images.forEach(img => {
-        if (img instanceof HTMLImageElement) {
-            if (img.complete) {
-                handleImageLoad(img);
-            } else {
-                img.addEventListener('load', () => handleImageLoad(img));
-            }
-        }
-    });
-
-    function handleImageLoad(img: HTMLImageElement) {
-        img.classList.add('loaded');
-        const placeholder = img.parentElement?.querySelector('.placeholder');
-        if (placeholder) {
-            placeholder.classList.add('hidden');
-        }
-    }
-</script>

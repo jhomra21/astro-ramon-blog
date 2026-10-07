@@ -1,0 +1,55 @@
+---
+title: 'BG Cut: Local Background Removal for the Browser, CLI, and Node'
+description: 'A background remover that runs on your own machine. It uses WebGPU and ONNX Runtime across a hosted web app, a local app, a batch CLI, and a Node API, and source images never leave the device.'
+pubDate: '2026-10-07'
+heroImage: '/src/assets/images/bgcut-ui.webp'
+isProject: true
+projectUrl: 'https://bgcut.dev'
+projectStatus: 'live'
+projectType: 'featured'
+githubUrl: 'https://github.com/jhomra21/bgcut'
+npmUrl: 'https://www.npmjs.com/package/bgcut'
+techStack: [
+    { name: 'Solid 2', description: 'Reactive UI for the hosted and local apps' },
+    { name: 'TypeScript', description: 'Typed Node API, CLI, and browser runtime' },
+    { name: 'WebGPU', description: 'GPU inference and image compositing in the browser' },
+    { name: 'ONNX Runtime', description: 'BiRefNet Lite inference on WebGPU, WebAssembly, and native CPU' },
+    { name: 'Cloudflare', description: 'Workers Static Assets plus R2 for model and runtime files' }
+]
+tags: ['Background Removal', 'WebGPU', 'ONNX', 'SolidJS', 'CLI', 'Node.js', 'Privacy', 'TypeScript']
+---
+
+BG Cut removes image backgrounds locally. The same engine runs in a hosted web app, a local app served from the npm package, a command-line tool, and a Node API. Source images, decoded pixels, masks, and results stay on the user's machine; there is no inference backend that receives uploads.
+
+## What it does
+
+- Removes the background from JPEG, PNG, WebP, and AVIF images and exports transparent PNG, lossless WebP, or JPG on white.
+- Shows a before-and-after comparison slider, with copy, download, and rerun actions and keyboard shortcuts for each.
+- Runs from the hosted app at [bgcut.dev](https://bgcut.dev), or from `npx bgcut`, which starts the packaged app on a loopback-only server.
+- Processes single files, several files, or whole directories from the CLI, writing results next to the source or into an output directory that keeps the folder structure.
+- Exposes one `bgcut()` object in Node with `removeBackground()`, `removeMany()`, and `close()`, so one warm runtime serves repeated work. The CLI calls the same public methods.
+- Ships an Agent Skills file inside the npm package so coding agents can use the CLI and API without a separate skill repository.
+
+## How inference works
+
+The browser path decodes the image, resizes and normalizes it on the GPU with TypeGPU, runs BiRefNet Lite through ONNX Runtime, reads back the matte, and composites it at the original source resolution:
+
+```text
+image → browser decode → TypeGPU resize + normalize
+  → BiRefNet Lite ONNX inference → matte readback
+  → source-resolution compositing → transparent PNG
+```
+
+WebGPU is the primary path. Chromium-family browsers use the FP32 model, and Safari adapters that expose `shader-f16` use a validated internal-FP16 conversion. When WebGPU inference cannot run, the browser falls back to ONNX Runtime WebAssembly. Native CLI and Node runs try WebGPU first and fall back to the CPU provider, and `--gpu` or `--cpu` pins one provider so a failure is never hidden.
+
+Model artifacts are pinned by file size and SHA-256 and verified before use. The first run downloads a model of about 187 MiB for the FP32 build and about 94 MiB for the Safari FP16 build, then reuses the cached copy.
+
+## Hosting and delivery
+
+The hosted app is prerendered from the same Solid component tree it hydrates in the browser. Cloudflare Workers Static Assets serves the app shell. A private R2 bucket holds the ONNX model and the ONNX Runtime files, and the Worker serves them same-origin through `/models/...` and `/runtime/...`. The Worker never receives a source image and never performs inference.
+
+Releases go through npm Trusted Publishing from GitHub, with stable versions on the npm `latest` tag and beta candidates on `beta`. The package check installs the packed tarball in a clean project and verifies the CLI, the local app and its health route, the Node API export, and the bundled skill.
+
+A local video editor with subject selection and trimmed WebM or MP4 export exists as a development experiment. It is not part of the released package or the hosted site.
+
+Read the [BG Cut source code](https://github.com/jhomra21/bgcut) for the implementation, release notes, and engineering benchmarks, or install it from [npm](https://www.npmjs.com/package/bgcut).

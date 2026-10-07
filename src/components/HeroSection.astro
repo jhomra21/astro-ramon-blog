@@ -2,6 +2,7 @@
 import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer";
 import { Image } from "astro:assets";
 import { InfoDialog } from "@/components/react/InfoDialog";
+import { HERO_REVEAL, getRevealStyle } from "@/lib/reveal";
 
 const juanImage = import("@/assets/images/juan-falling.JPG" as any);
 const ANIMATION_CONFIG = {
@@ -15,11 +16,15 @@ const ANIMATION_CONFIG = {
 
 <div class="relative min-h-[40vh] hero-container">
 	<div class="w-full py-12 md:py-16">
-		<div
-			class="grid grid-cols-1 lg:grid-cols-[auto,1fr] gap-12 lg:gap-16 items-start"
-		>
+		<div class="flex flex-col items-center gap-12">
 			<!-- Profile Image Column -->
-			<div class="flex justify-center lg:justify-start">
+			<div
+				class="reveal flex justify-center"
+				style={getRevealStyle(HERO_REVEAL.portrait.delayMs, {
+					durationMs: HERO_REVEAL.portrait.durationMs,
+					scale: HERO_REVEAL.portrait.scale,
+				})}
+			>
 				<div class="relative group">
 					<div
 						class="w-40 h-40 md:w-52 md:h-52 overflow-hidden rounded-full border-2 border-zinc-200/50 dark:border-zinc-700/50 shadow-2xl transition-all duration-500 group-hover:shadow-3xl group-hover:scale-[1.02] group-hover:border-zinc-300 dark:group-hover:border-zinc-600"
@@ -27,6 +32,7 @@ const ANIMATION_CONFIG = {
 						<Image
 							src={juanImage}
 							alt="Juan Martinez"
+							priority
 							class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
 						/>
 					</div>
@@ -43,41 +49,41 @@ const ANIMATION_CONFIG = {
 			</div>
 
 			<!-- Content Column -->
-			<div class="flex flex-col space-y-8 text-center lg:text-left">
+			<div class="flex flex-col space-y-8 text-center">
 				<!-- Name and Title -->
 				<div class="space-y-4">
-					<TextScrambleShimmer
-						text="Juan Martinez"
-						className="text-4xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 bg-clip-text text-transparent"
-						scrambleDuration={ANIMATION_CONFIG.scrambleDuration}
-						shimmerDuration={5}
-						client:load
-					/>
+					<div class="reveal" style={getRevealStyle(HERO_REVEAL.name.delayMs)}>
+						<TextScrambleShimmer
+							text="Juan Martinez"
+							className="text-4xl md:text-6xl lg:text-7xl font-sans font-bold tracking-tight bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-900 dark:from-zinc-100 dark:via-zinc-300 dark:to-zinc-100 bg-clip-text text-transparent"
+							scrambleDuration={ANIMATION_CONFIG.scrambleDuration}
+							shimmerDuration={5}
+							client:load
+						/>
+					</div>
 
-					<div class="space-y-2">
+					<div class="reveal space-y-2" style={getRevealStyle(HERO_REVEAL.subtitle.delayMs)}>
 						<h2
 							class="text-xl md:text-2xl font-mono text-zinc-600 dark:text-zinc-400 tracking-wide"
 						>
 							Software Developer
 						</h2>
 						<div
-							class="w-16 h-0.5 bg-gradient-to-r from-zinc-400 to-transparent dark:from-zinc-600 mx-auto lg:mx-0"
+							class="w-16 h-0.5 bg-gradient-to-r from-zinc-400 to-transparent dark:from-zinc-600 mx-auto"
 						>
 						</div>
 					</div>
 				</div>
 
 				<!-- Bio -->
-				<div class="relative max-w-4xl">
+				<div class="reveal relative mx-auto max-w-4xl" style={getRevealStyle(HERO_REVEAL.bio.delayMs)}>
 					<p
 						class="text-lg md:text-xl text-zinc-700 dark:text-zinc-300 font-mono leading-relaxed"
 					>
-						Specializing in 
-						<span
+						Specializing in{" "}<span
 							class="text-zinc-900 dark:text-zinc-100 font-semibold"
 							>modern web development</span
-						> and
-						<span
+						>{" "}and{" "}<span
 							class="text-zinc-900 dark:text-zinc-100 font-semibold"
 							>full-stack solutions</span
 						>
@@ -86,7 +92,8 @@ const ANIMATION_CONFIG = {
 
 				<!-- Social Links -->
 				<div
-					class="flex flex-wrap justify-center lg:justify-start gap-x-6 gap-y-3 text-sm text-zinc-600 dark:text-zinc-400 font-mono"
+					class="reveal flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-zinc-600 dark:text-zinc-400 font-mono"
+					style={getRevealStyle(HERO_REVEAL.socials.delayMs)}
 				>
 					<a
 						href="https://twitter.com/jhomra21"
@@ -159,9 +166,9 @@ const ANIMATION_CONFIG = {
 				</div>
 
 				<!-- CTA Buttons -->
-				<div class="pt-4">
+				<div class="reveal pt-4" style={getRevealStyle(HERO_REVEAL.buttons.delayMs)}>
 					<div
-						class="flex flex-wrap justify-center lg:justify-start gap-4 items-center"
+						class="flex flex-wrap justify-center gap-4 items-center"
 					>
 						<a
 							href="/about"

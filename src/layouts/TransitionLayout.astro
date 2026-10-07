@@ -15,6 +15,15 @@ const { title, description = 'Personal website and blog' } = Astro.props;
     <head>
         <BaseHead title={title} description={description} />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+        <script is:inline>
+            // The cross-document sweep mask below hides the new page for ~450ms
+            // (0.15s delay + 0.3s sweep), so entrance animations that start earlier are never seen.
+            addEventListener('pagereveal', (event) => {
+                if (!event.viewTransition) return;
+                if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                document.documentElement.style.setProperty('--vt-offset', '450ms');
+            });
+        </script>
     </head>
     <body class="bg-zinc-50 dark:bg-zinc-900">
         <div class="flex min-h-screen flex-col">

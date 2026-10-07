@@ -14,6 +14,11 @@ export function TextScrambleShimmer({
   scrambleDuration = 0.8,
 }: TextScrambleShimmerProps) {
   const [isScrambling, setIsScrambling] = useState(true);
+  const [shouldScramble] = useState(
+    () =>
+      typeof window === 'undefined' ||
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
 
   const handleScrambleComplete = () => {
     setIsScrambling(false);
@@ -26,6 +31,7 @@ export function TextScrambleShimmer({
           text={text}
           className={className}
           duration={scrambleDuration}
+          trigger={shouldScramble}
           onScrambleComplete={handleScrambleComplete}
         />
       ) : (
