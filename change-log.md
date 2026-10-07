@@ -20,6 +20,7 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 - Centered the hero as a vertical stack at all screen widths and softened the reveal entrance from an 8px rise to 4px with a default scale of 0.98.
 - Made the portrait entrance clearly visible before the name: it now starts at 80ms and runs 220ms; subsequent hero reveals start at 220ms, 320ms, 400ms, 480ms, and 560ms, with projects at 620ms. Reduced-motion styling remains a fade without stagger or scale.
 - Compressed the homepage reveal delays toward a 700ms first-project completion: hero delays are proportionally scaled to 53ms, 144ms, 210ms, 262ms, 315ms, and 367ms; projects start at 390ms. Portrait duration, card step, and 260ms project reveal duration are unchanged, so the first project finishes at 700ms.
+- Set the first homepage project card to start at 290ms and finish at 550ms by starting projects at 240ms; compressed hero delays to 35ms, 95ms, 139ms, 173ms, 208ms, and 241ms. Kept the 50ms card step, portrait and card durations, 4px rise, and scale values unchanged. Refined the shared entrance easing from `cubic-bezier(0.23, 1, 0.32, 1)` to the gentler `cubic-bezier(0.2, 0.8, 0.2, 1)` so movement and opacity ease out without an abrupt early snap.
 - Removed global smooth scrolling so browser refresh scroll restoration is immediate; in-page scrolling uses the browser default.
 
 ### Validation

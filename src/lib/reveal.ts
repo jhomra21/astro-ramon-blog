@@ -2,15 +2,15 @@ export const REVEAL_STEP_MS = 50;
 export const REVEAL_MAX_CARD_STEPS = 9;
 
 export const HERO_REVEAL = {
-	portrait: { delayMs: 53, durationMs: 220, scale: 0.94 },
-	name: { delayMs: 144 },
-	subtitle: { delayMs: 210 },
-	bio: { delayMs: 262 },
-	socials: { delayMs: 315 },
-	buttons: { delayMs: 367 },
+	portrait: { delayMs: 35, durationMs: 220, scale: 0.94 },
+	name: { delayMs: 95 },
+	subtitle: { delayMs: 139 },
+	bio: { delayMs: 173 },
+	socials: { delayMs: 208 },
+	buttons: { delayMs: 241 },
 } as const;
 
-export const PROJECTS_REVEAL_START_MS = 390;
+export const PROJECTS_REVEAL_START_MS = 240;
 
 interface RevealStyleOptions {
 	durationMs?: number;
