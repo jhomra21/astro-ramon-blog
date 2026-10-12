@@ -1,0 +1,42 @@
+---
+title: 'audiocn Solid: Audio Components for Solid Apps'
+description: 'A Solid port of audiocn/ui. Audio meters, visualizers, faders, knobs, a mixer, players, and sound pads, distributed as shadcn registry source.'
+pubDate: '2026-10-02'
+heroImage: '/src/assets/images/audiocn-solid-home.png'
+isProject: true
+projectUrl: 'https://audiocn-solid.jhonra121.workers.dev'
+projectStatus: 'live'
+projectType: 'featured'
+githubUrl: 'https://github.com/jhomra21/audiocn-solid'
+techStack: [
+    { name: 'Solid 1 and 2', description: 'Stable Solid 1.9 registry and an experimental Solid 2 registry' },
+    { name: 'shadcn Registry', description: 'The shadcn CLI copies component source into your project' },
+    { name: 'Tailwind CSS 4', description: 'Themed through the standard shadcn CSS variables' },
+    { name: 'Web Audio API', description: 'Hooks for microphones, system audio, analysers, and playback' }
+]
+tags: ['SolidJS', 'Audio', 'Web Audio', 'shadcn', 'Tailwind CSS', 'Component Library', 'TypeScript']
+---
+
+audiocn Solid ports [audiocn/ui](https://github.com/audiocn/ui) to Solid. Like shadcn, the CLI copies component source into your project, and you edit that copy. The repository has 23 components, 6 blocks, and 18 hooks.
+
+## What it includes
+
+- Meters and visualizers: a level meter with peak, RMS, peak hold, and clip detection, plus spectrum, waveform, and bar visualizers.
+- Controls: a decibel fader, knobs, a parameter slider, and a volume control.
+- Mixing: channel strips and a mixer with shared meter settings and keyboard navigation.
+- Playback: an audio player, a track list, and sound pads with hotkeys.
+- Blocks: a system audio mixer, a music player, a soundboard, and a microphone setup.
+
+## Components receive data
+
+The components never open a microphone. They take levels and values as props. The Web Audio hooks handle capture: `useMicrophone` opens a `MediaStream`, `useSystemAudio` captures tab or system audio through the browser picker, and `useAudioAnalyser` reads streams, media elements, or audio nodes. You can also feed the components from another audio engine.
+
+## Solid 1 and Solid 2
+
+The Solid 1 registry targets Solid 1.9.15 or later and is stable. The Solid 2 registry is experimental and targets a Solid 2 release candidate. The two registries use different JSX transforms, so configure the matching runtime before you add components.
+
+## License
+
+The project is MIT licensed, and parts are adapted from audiocn/ui. The docs site plays a Warcraft audio clip that the MIT license does not cover, and the registry items do not install it.
+
+The [source repository](https://github.com/jhomra21/audiocn-solid) has the component code, registry build, and tests. The [live docs](https://audiocn-solid.jhonra121.workers.dev/docs) are also available.

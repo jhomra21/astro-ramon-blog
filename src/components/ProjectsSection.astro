@@ -7,9 +7,10 @@ import { REVEAL_MAX_CARD_STEPS, REVEAL_STEP_MS, getRevealStyle } from '@/lib/rev
 interface Props {
     maxProjects?: number;
     revealDelayMs?: number;
+    featuredOnly?: boolean;
 }
 
-const { maxProjects = 100, revealDelayMs = 0 } = Astro.props;
+const { maxProjects = 100, revealDelayMs = 0, featuredOnly = false } = Astro.props;
 
 const allProjects = (await getCollection('blog', ({ data }) => data.isProject || false))
     .sort((a, b) => {
@@ -18,7 +19,8 @@ const allProjects = (await getCollection('blog', ({ data }) => data.isProject ||
         return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
     });
 
-const projects = allProjects.slice(0, maxProjects);
+const visibleProjects = featuredOnly ? allProjects.filter((project) => project.data.projectType === 'featured') : allProjects;
+const projects = visibleProjects.slice(0, maxProjects);
 const totalProjects = allProjects.length;
 const showSeeAll = maxProjects < totalProjects;
 ---

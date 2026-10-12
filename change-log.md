@@ -2,6 +2,24 @@
 
 This file tracks notable repository state, implementation work, cleanup reviews, and validation results. Keep entries in reverse chronological order with the newest date first.
 
+## 2026-10-12
+
+### Work completed
+
+- Added featured entries for two public GitHub repositories that were missing from the portfolio: `audiocn-solid` and `robot-heads-solid`. Each `pubDate` is the repository's GitHub creation date: 2026-10-02 and 2026-10-09.
+- Both entries link their hosted pages through `projectUrl` with `projectStatus: 'live'`: the audiocn docs site and the robot-heads playground. `robot-heads-solid` also links its npm package.
+- Copied the audiocn README hero (`site/public/og/home-14a5416dabae.png`, 1200x630) to `src/assets/images/audiocn-solid-home.png`. `robot-heads-solid` has no suitable image, so its entry has no `heroImage`.
+- The `robot-heads-solid` repository has no GitHub description, so its entry is based on its README, `package.json`, and `src/RobotHead.tsx`.
+- Removed the `air-local` and `ours-privacy-demo` entries and the Privacy Rehearsal screenshot (`src/assets/images/ours-privacy-demo-desktop.png`), which only the removed entry used. Both were added earlier today and removed at the owner's request.
+- The featured set is now seven projects: DAW (`daw-browser-convex`, 2025-10-01), MACROS, Mesurer Solid, GPUix Solid, BG Cut, robot-heads-solid, and audiocn-solid. FastAI Photos, `thebrandbe`, `convex-cloudflare-workers-solid-spa`, `do-per-user-convex-multi-db`, and `do-better-auth-convex-testing` lost `projectType: 'featured'` and stay on `/projects`. All five are older than DAW.
+- `ProjectsSection.astro` has a `featuredOnly` prop that filters to `projectType: 'featured'` before the `maxProjects` slice. `index.astro` passes `maxProjects={7} featuredOnly`, up from 5 unfiltered, so all seven featured projects fit. Without the higher limit, DAW (2025-10-01) would drop off. `totalProjects` still counts every project, so the "See all projects" link stays. `/projects` keeps `maxProjects={999}`.
+
+### Validation
+
+- Read each repository README and `package.json` through the GitHub API. `https://audiocn-solid.jhonra121.workers.dev` and `https://robot-heads-solid.jhonra121.workers.dev` each returned HTTP 200. `robot-heads-solid@0.2.0` exists on npm. `audiocn-solid` is not published to npm.
+- `bun run build` passed with 0 errors, 0 warnings, and 0 hints from `astro check`, and built 23 pages, including `/blog/audiocn-solid` and `/blog/robot-heads-solid`.
+- The fresh `dist` has no `/blog/air-local` or `/blog/ours-privacy-demo` routes and no references to either removed entry or the privacy screenshot. The homepage renders seven project cards (robot-heads-solid, BG Cut, audiocn Solid, GPUix Solid, Mesurer Solid, MACROS, DAW) and none of the older unfeatured entries. `/projects` renders all 18 remaining project cards, including the older entries, and none of the removed ones.
+
 ## 2026-10-07
 
 ### Work completed

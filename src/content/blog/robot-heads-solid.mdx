@@ -1,0 +1,53 @@
+---
+title: 'robot-heads-solid: Animated Canvas Robot Heads for Solid'
+description: 'Animated TV-headed robot avatars for Solid. Each head draws an LED face on a 2D canvas that shows an agent''s state, such as thinking, searching, or speaking.'
+pubDate: '2026-10-09'
+isProject: true
+projectUrl: 'https://robot-heads-solid.jhonra121.workers.dev'
+projectStatus: 'live'
+projectType: 'featured'
+githubUrl: 'https://github.com/jhomra21/robot-heads-solid'
+npmUrl: 'https://www.npmjs.com/package/robot-heads-solid'
+techStack: [
+    { name: 'Solid 1.9 and 2', description: 'Default entry for Solid 1.9+ and a separate prerelease entry for Solid 2' },
+    { name: 'Canvas 2D', description: 'Draws the head without WebGL or runtime dependencies' },
+    { name: 'TypeScript', description: 'Typed props for shapes, states, and appearance' },
+    { name: 'Playwright', description: 'Browser tests for consumer apps on Solid 1 and Solid 2' }
+]
+tags: ['SolidJS', 'Canvas 2D', 'Animation', 'UI Components', 'AI Agents', 'npm', 'TypeScript']
+---
+
+robot-heads-solid ports [Fayaz Ahmed's robot-heads React library](https://github.com/fayazara/robot-heads) to Solid. It draws an animated TV-headed robot on a 2D canvas. The LED face follows the `state` prop, so an agent interface can show whether it is thinking, searching, listening, speaking, or in error.
+
+## States and shapes
+
+The component takes nine states: `idle`, `thinking`, `searching`, `listening`, `speaking`, `working`, `happy`, `error`, and `sleeping`. Each state has its own face, head motion, and antenna light. Switching states plays a short glitch and cross-fade.
+
+Four outlines are available: `rectangle` (the default), `square`, `circle`, and `hexagon`. Every shape shares the same screen, ears, antenna, and motion.
+
+```tsx
+import { RobotHead } from 'robot-heads-solid';
+
+<RobotHead state="thinking" size={160} />
+```
+
+## Solid 1 and Solid 2
+
+The default entry supports Solid 1.9 and later. Solid 2 has its own entry, `robot-heads-solid/solid2`, and it is a prerelease. The package checks it against a Solid 2 release candidate, not a stable release. Do not import both entries into one application.
+
+## Behavior
+
+- With `interactive` on (the default), the head and eyes follow the pointer, and a click makes it hop and spin.
+- With `prefers-reduced-motion: reduce`, `paused`, or a speed of `0`, the component draws the still pose for the current state.
+- The canvas has `role="img"` and an `aria-label` that names the state. Pass your own `aria-label` to replace it.
+- Every head on a page shares one animation loop, which pauses while the tab is hidden.
+
+## Drawing
+
+The shell is 3D geometry projected onto Canvas 2D, with no WebGL: a rolled-edge body, knob ears, and a spring antenna that whips when the head hops or lands. Each frame projects the shell and lights it with a key light, a fill, a sky dome, and clear-coat reflections. The LEDs fill the screen, and a bloom pass gives them their glow.
+
+## License
+
+The package is MIT licensed, and the original library is by Fayaz Ahmed.
+
+The [source repository](https://github.com/jhomra21/robot-heads-solid) has the component, playground, and release notes. Install the package from [npm](https://www.npmjs.com/package/robot-heads-solid).
