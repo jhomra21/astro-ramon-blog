@@ -147,7 +147,7 @@ Project entries are MDX posts with `isProject: true`.
 
 The `about` entry is special: `src/content/blog/about.mdx` powers `/about` and should not be treated as a normal blog post or project card.
 
-The resume PDF is not in the repo. It lives in the Cloudflare R2 bucket `juanrmb-assets` as `juan-martinez-resume.pdf`, served from the bucket's public r2.dev URL that `about.mdx` links to. To replace it, upload over the same key with `bunx wrangler r2 object put juanrmb-assets/juan-martinez-resume.pdf --remote --file <pdf> --content-type application/pdf --content-disposition 'attachment; filename=juan-martinez-resume.pdf'`.
+The resume PDF is not in the repo. It lives in the Cloudflare R2 bucket `juanrmb-assets` as `juan-martinez-resume.pdf`, served from the bucket's public r2.dev URL that `about.mdx` links to. To replace it, upload over the same key with `bunx wrangler r2 object put juanrmb-assets/juan-martinez-resume.pdf --remote --file <pdf> --content-type application/pdf --content-disposition 'inline; filename=juan-martinez-resume.pdf'`. `inline` makes browsers open it in their PDF viewer, which has its own download button.
 
 ## Change Log Conventions
 
