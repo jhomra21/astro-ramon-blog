@@ -5,7 +5,7 @@ interface TechBadgeProps {
   tooltip: string;
 }
 
-const techColors = {
+const techColors = new Map(Object.entries({
   "React": "hover:bg-sky-500 hover:border-sky-500 border-sky-500/50 text-sky-500 dark:border-sky-400/50 dark:text-sky-400",
   "TypeScript": "hover:bg-blue-500 hover:border-blue-500 border-blue-500/50 text-blue-500 dark:border-blue-400/50 dark:text-blue-400",
   "FFMPEG": "hover:bg-green-500 hover:border-green-500 border-green-500/50 text-green-500 dark:border-green-400/50 dark:text-green-400",
@@ -19,10 +19,12 @@ const techColors = {
   "Fal.ai": "hover:bg-violet-500 hover:border-violet-500 border-violet-500/50 text-violet-500 dark:border-violet-400/50 dark:text-violet-400",
   "Together AI": "hover:bg-[#4385BE] hover:border-[#4385BE] border-[#4385BE]/50 text-[#4385BE] dark:border-blue-400/50 dark:text-blue-400",
   "Real-time": "hover:bg-emerald-500 hover:border-emerald-500 border-emerald-500/50 text-emerald-500 dark:border-emerald-400/50 dark:text-emerald-400",
-} as const;
+}));
+
+const defaultColorClasses = "border-zinc-500/50 text-zinc-500 hover:bg-zinc-500 hover:border-zinc-500 dark:border-zinc-400/50 dark:text-zinc-400";
 
 export default function TechBadge({ tech, tooltip }: TechBadgeProps) {
-  const colorClasses = techColors[tech as keyof typeof techColors] || "border-zinc-500/50 text-zinc-500 hover:bg-zinc-500 hover:border-zinc-500 dark:border-zinc-400/50 dark:text-zinc-400";
+  const colorClasses = techColors.get(tech) ?? defaultColorClasses;
 
   return (
     <div className="group relative inline-block">

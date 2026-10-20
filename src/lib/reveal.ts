@@ -19,7 +19,10 @@ interface RevealStyleOptions {
 
 export function getRevealStyle(delayMs: number, { durationMs, scale }: RevealStyleOptions = {}) {
 	const declarations = [`--reveal-delay:${delayMs}ms`];
+
 	if (durationMs !== undefined) declarations.push(`--reveal-duration:${durationMs}ms`);
+
 	if (scale !== undefined) declarations.push(`--reveal-scale:${scale}`);
+
 	return declarations.join(";");
 }

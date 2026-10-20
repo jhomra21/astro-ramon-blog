@@ -2,6 +2,24 @@
 
 This file tracks notable repository state, implementation work, cleanup reviews, and validation results. Keep entries in reverse chronological order with the newest date first.
 
+## 2026-10-20
+
+### Work completed
+
+- Installed the `install-anti-slop` agent skill globally at `~/.factory/skills/install-anti-slop` from `dmmulroy/anti-slop` commit `13909c9`, so every Droid project can use it.
+- Vendored the anti-slop Oxlint plugin into `tools/oxlint/anti-slop/` with the skill's installer and recorded provenance in `tools/oxlint/anti-slop/UPSTREAM.md`. The Effect rule group is not registered because the site does not depend on `effect`.
+- Added `oxlint` and `@oxlint/plugins` 1.89.0 (exact pins) as dev dependencies, a `.oxlintrc.json` that enables every generic anti-slop rule plus `oxc/no-accumulating-spread` at `error`, and `bun run lint` / `bun run lint:fix` scripts.
+- Enabled Oxlint's native port of the ESLint `complexity` rule at `["error", { "max": 10 }]`, so the project does not need a separate ESLint setup.
+- Applied `require-readable-spacing` with lint autofix across 26 files (blank lines only) and removed a useless regex escape in `HeaderLink.astro`.
+- Rewrote the MCP dialog to clear the complexity and `no-runtime-typeof` findings (complexity 37 and 28 before). JSON-RPC parsing now lives in `src/lib/mcp.ts` and validates server messages at the boundary with `zod/mini` schemas. Connection state lives in `src/components/react/useMcpConnection.ts`. `InfoDialog.tsx` is split into small subcomponents with the same markup and classes. SSE and endpoint failures now leave the status at `Error`; before, the following disconnect reset it to `Idle` in the same render. The unreachable `id: 0` capabilities branch was removed because the client never sends request id 0.
+- Added `zod` (^4.6.7) as a direct dependency for `zod/mini`. The full `astro/zod` build added about 90 KB to the island. With `zod/mini`, the `InfoDialog` chunk is 93.5 KB raw (29.7 KB gzip), up from 72.3 KB raw.
+- Removed every unexplained type assertion instead of adding `SAFETY:` comments: `HeroSection.astro` now statically imports the portrait (`src/env.d.ts` declares the uppercase `*.JPG` module), `TechBadge.tsx` looks up colors in a `Map`, `Header.astro` checks `event.target instanceof Element`, and `textscramble.tsx` types `as` as an intrinsic tag and memoizes `motion.create` so the element is not recreated on every scramble tick.
+- Deleted the unused `src/components/Tooltip.tsx` and `src/components/LucideIcon.tsx`. Nothing imported `Tooltip`, and `LucideIcon` needed a cast over the whole `lucide-react` namespace.
+
+### Validation
+
+- `bun run lint` passed with 0 problems, and a second `oxlint --fix` pass left the tree unchanged.
+- `bun run build` passed with 0 errors, 0 warnings, and 0 hints from `astro check`, and built 23 pages.
 ## 2026-10-12
 
 ### Work completed

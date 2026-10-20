@@ -16,6 +16,8 @@ This site is built using a modern tech stack to ensure high performance, scalabi
 - **Framer Motion**: For creating smooth animations and transitions.
 - **Lucide Icons**: A collection of beautiful and customizable icons used throughout the site.
 - **Sharp**: Image optimization during builds.
+- **Zod Mini**: Validates MCP server messages in the MCP dialog island.
+- **Oxlint + anti-slop**: Linting with the vendored [anti-slop](https://github.com/dmmulroy/anti-slop) rules in `tools/oxlint/anti-slop/` and a cyclomatic complexity limit of 10.
 - **Bun**: JavaScript runtime and package manager for installing dependencies and running scripts.
 - **Cloudflare Pages**: Static deployment target.
 
@@ -54,6 +56,8 @@ Use Bun for all project commands:
 | `bun run start`           | Alias for `bun run dev`                          |
 | `bun run build`           | Installs with the frozen lockfile, then builds the production site to `./dist/` |
 | `bun run build:site`      | Runs Astro check/build without installing dependencies |
+| `bun run lint`            | Runs Oxlint with anti-slop and complexity rules  |
+| `bun run lint:fix`        | Runs Oxlint and applies autofixes                |
 | `bun run preview`         | Previews the build locally before deploying      |
 | `bun run astro ...`       | Runs Astro CLI commands                          |
 | `bun run astro -- --help` | Displays help for the Astro CLI                  |

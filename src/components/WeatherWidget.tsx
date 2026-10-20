@@ -21,6 +21,7 @@ function getQueryClient() {
   if (typeof window === 'undefined') return new QueryClient(defaultQueryClientOptions);
   // @ts-ignore - we know window exists here
   window.__queryClient = window.__queryClient || new QueryClient(defaultQueryClientOptions);
+
   // @ts-ignore
   return window.__queryClient;
 }

@@ -3,6 +3,7 @@ import { getEntry, render } from 'astro:content';
 import BlogPost from '../layouts/BlogPost.astro';
 
 let about;
+
 try {
 	about = await getEntry('blog', 'about');
 

@@ -20,6 +20,7 @@ const { title, description = 'Personal website and blog' } = Astro.props;
             // (0.15s delay + 0.3s sweep), so entrance animations that start earlier are never seen.
             addEventListener('pagereveal', (event) => {
                 if (!event.viewTransition) return;
+
                 if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
                 document.documentElement.style.setProperty('--vt-offset', '450ms');
             });

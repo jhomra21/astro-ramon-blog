@@ -25,16 +25,19 @@ bun run start
 bun run build
 bun run build:site
 bun run preview
+bun run lint
+bun run lint:fix
 bun run astro ...
 ```
 
 Validation:
 
 ```bash
+bun run lint
 bun run build
 ```
 
-`bun run build` runs `bun install --frozen-lockfile --silent` before `bun run build:site` for Cloudflare Pages compatibility. `bun run build:site` runs `astro check && astro build`. There are no separate lint, test, or format scripts currently defined.
+`bun run build` runs `bun install --frozen-lockfile --silent` before `bun run build:site` for Cloudflare Pages compatibility. `bun run build:site` runs `astro check && astro build`. `bun run lint` runs Oxlint with `.oxlintrc.json`. There are no test or format scripts currently defined.
 
 ## Repository Structure
 
@@ -58,6 +61,7 @@ src/
   content.config.ts    Astro content collection schema and loaders
   consts.ts            Site-wide constants
   env.d.ts             Environment type declarations
+tools/oxlint/anti-slop/ Vendored anti-slop Oxlint plugin (see UPSTREAM.md)
 ```
 
 Root config files:
@@ -66,6 +70,7 @@ Root config files:
 - `tailwind.config.mjs`: Tailwind content paths, dark mode, theme tokens, typography, plugins.
 - `components.json`: shadcn/ui configuration and aliases.
 - `tsconfig.json`: strict TypeScript config and `@/*` path alias.
+- `.oxlintrc.json`: Oxlint config with the anti-slop plugin and `eslint/complexity` (max 10).
 
 ## README Conventions
 
@@ -89,6 +94,8 @@ Root config files:
 - Keep components organized as: exported component, small subcomponents, helpers, static content, types.
 - Do not leave TODOs, placeholders, or partially implemented behavior.
 - Do not add comments unless they clarify non-obvious behavior.
+- Keep `bun run lint` clean. Do not disable, downgrade, or suppress anti-slop or complexity rules to pass lint; split complex functions, parse external data at its boundary (for example with `zod/mini`), and remove type assertions rather than annotating them.
+- Treat `tools/oxlint/anti-slop/` as vendored code. Use the global `install-anti-slop` skill to update it, and keep `UPSTREAM.md` accurate.
 
 ## Styling and UX
 
@@ -166,6 +173,7 @@ The `about` entry is special: `src/content/blog/about.mdx` powers `/about` and s
 After modifying code, configuration, or content, run:
 
 ```bash
+bun run lint
 bun run build
 ```
 

@@ -1,6 +1,8 @@
 'use client';
+
 import { useState } from 'react';
 import { TextScramble } from './textscramble';
+
 interface TextScrambleShimmerProps {
   text: string;
   className?: string;
@@ -14,6 +16,7 @@ export function TextScrambleShimmer({
   scrambleDuration = 0.8,
 }: TextScrambleShimmerProps) {
   const [isScrambling, setIsScrambling] = useState(true);
+
   const [shouldScramble] = useState(
     () =>
       typeof window === 'undefined' ||

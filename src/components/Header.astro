@@ -104,8 +104,9 @@ import TypewriterEffect from './TypewriterEffect.astro';
 
 	// Close mobile menu when clicking outside
 	document.addEventListener('click', (event) => {
-		const target = event.target as HTMLElement;
-		if (!target.closest('#mobile-menu') && !target.closest('#mobile-menu-button')) {
+		const target = event.target;
+
+		if (target instanceof Element && !target.closest('#mobile-menu') && !target.closest('#mobile-menu-button')) {
 			mobileMenuButton?.setAttribute('aria-expanded', 'false');
 			mobileMenu?.setAttribute('aria-hidden', 'true');
 			mobileMenu?.classList.remove('mobile-menu-open');

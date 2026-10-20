@@ -15,7 +15,9 @@ const { maxProjects = 100, revealDelayMs = 0, featuredOnly = false } = Astro.pro
 const allProjects = (await getCollection('blog', ({ data }) => data.isProject || false))
     .sort((a, b) => {
         if (a.data.projectType === 'featured' && b.data.projectType !== 'featured') return -1;
+
         if (a.data.projectType !== 'featured' && b.data.projectType === 'featured') return 1;
+
         return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
     });
 
