@@ -43,7 +43,7 @@
 	}
 
 	body {
-		@apply antialiased text-zinc-900 dark:text-zinc-100 min-h-screen;
+		@apply antialiased text-zinc-900 dark:text-zinc-100 min-h-dvh;
 	}
 
 	::selection {

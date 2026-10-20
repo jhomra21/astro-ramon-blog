@@ -98,7 +98,7 @@ const WeatherWidgetContent = () => {
         <span className="tabular-nums tracking-tight font-medium text-[13px] text-neutral-600">
           {weather.temp}°C
         </span>
-        <span className="text-[13px] text-neutral-400 hidden md:inline tracking-tight">
+        <span className="text-[13px] text-neutral-500 hidden md:inline tracking-tight">
           {weather.city}
         </span>
       </div>

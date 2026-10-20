@@ -32,13 +32,14 @@ export function TextScrambleShimmer({
       {isScrambling ? (
         <TextScramble
           text={text}
+          as="h1"
           className={className}
           duration={scrambleDuration}
           trigger={shouldScramble}
           onScrambleComplete={handleScrambleComplete}
         />
       ) : (
-        <div className={className}>{text}</div>
+        <h1 className={className}>{text}</h1>
       )}
     </div>
   );

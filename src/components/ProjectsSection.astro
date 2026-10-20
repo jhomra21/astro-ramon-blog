@@ -72,7 +72,7 @@ const showSeeAll = maxProjects < totalProjects;
                             </div>
                             <div class="flex items-center gap-4">
                                 <div class="min-w-0 flex-1 space-y-3">
-                                    <p class="text-sm text-zinc-700 dark:text-zinc-300 tracking-tight line-clamp-2" title={project.data.description}>
+                                    <p class="max-w-[75ch] text-sm text-zinc-700 dark:text-zinc-300 tracking-tight line-clamp-2" title={project.data.description}>
                                         {project.data.description}
                                     </p>
                                     {project.data.techStack && project.data.techStack.length > 0 && (
@@ -153,6 +153,27 @@ const showSeeAll = maxProjects < totalProjects;
         </div>
     )}
 </div>
+
+<script>
+    const TOOLTIP_EDGE_GAP_PX = 8;
+
+    // Tooltips are centered on their badge with CSS; this nudges one back inside the viewport when its badge sits near an edge.
+    document.addEventListener('pointerover', (event) => {
+        if (!(event.target instanceof Element)) return;
+
+        const tooltip = event.target.closest('[data-tech-badge]')?.querySelector<HTMLElement>('[data-tooltip]');
+
+        if (!tooltip) return;
+
+        tooltip.style.setProperty('--tooltip-shift', '0px');
+
+        const { left, right } = tooltip.getBoundingClientRect();
+        const viewportWidth = document.documentElement.clientWidth;
+        const shift = Math.max(TOOLTIP_EDGE_GAP_PX - left, 0) + Math.min(viewportWidth - TOOLTIP_EDGE_GAP_PX - right, 0);
+
+        tooltip.style.setProperty('--tooltip-shift', `${shift}px`);
+    });
+</script>
 
 <style>
     @reference "../styles/global.css";

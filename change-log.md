@@ -6,6 +6,13 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 
 ### Work completed
 
+- Created the Cloudflare R2 bucket `juanrmb-assets`, uploaded the resume as `juan-martinez-resume.pdf` with `Content-Type: application/pdf` and `Content-Disposition: attachment`, and enabled the bucket's public r2.dev URL. The About page's Get in Touch list now has a "Resume (PDF)" download link under Email, and the closing "Let's build something amazing together! 🚀" line is gone. The PDF stays out of the public repo, so it can be replaced without a commit; `AGENTS.md` records the upload command.
+- Added a Reference Codebases section to `AGENTS.md` with the same list as the global agent instructions, using GitHub URLs. `daw-effect-research` is Mac-only because it has no git remote.
+- Reviewed the site with the `impeccable` detector, the `design-taste-frontend` (taste-skill v2) lint and browser inspector, and a `break-ui` worst-case data pass, keeping the current monospace, zinc, Swiss look. Findings that target that look (monospace, hairline borders, gradients, shadows, 14px body text) were left alone on purpose.
+- The homepage name is now the page's `<h1>` (it was a `<div>`, so the homepage had no `h1`).
+- Contrast: header links and the weather city use `neutral-500` instead of `neutral-400` (2.5:1 before), tech badge text uses darker shades in light mode (TypeScript was 3.8:1, Cloudflare 2.6:1), and the footer copyright and "Built with" line use `white/60` instead of `white/40`.
+- Tech badge tooltips wrap at a 16rem maximum width instead of one unbroken line (up to 483px wide, which ran off both edges on phones). They open above the badge at any height. A small script in `ProjectsSection.astro` shifts a tooltip back inside the viewport when its badge is near an edge, and keeps the arrow on the badge.
+- The mobile menu button is a 44px tap target (32px before). Project descriptions cap at 75 characters per line. The page wrapper and `body` use `min-h-dvh` instead of `min-h-screen`. The loading skeleton pulse respects reduced motion.
 - Installed the `install-anti-slop` agent skill globally at `~/.factory/skills/install-anti-slop` from `dmmulroy/anti-slop` commit `13909c9`, so every Droid project can use it.
 - Vendored the anti-slop Oxlint plugin into `tools/oxlint/anti-slop/` with the skill's installer and recorded provenance in `tools/oxlint/anti-slop/UPSTREAM.md`. The Effect rule group is not registered because the site does not depend on `effect`.
 - Added `oxlint` and `@oxlint/plugins` 1.89.0 (exact pins) as dev dependencies, a `.oxlintrc.json` that enables every generic anti-slop rule plus `oxc/no-accumulating-spread` at `error`, and `bun run lint` / `bun run lint:fix` scripts.
@@ -33,6 +40,7 @@ This file tracks notable repository state, implementation work, cleanup reviews,
 
 ### Validation
 
+- After the review pass: `bun run lint` passed with 0 problems and `bun run build` passed with 0 errors, 0 warnings, and 0 hints. The impeccable detector no longer reports low contrast. The taste-skill inspector finds one `h1`. Nothing overflows the page at 320px or 390px. Hovering every tech badge (98 on `/projects`, 38 on the homepage) at 320, 390, 900, and 1280px kept every tooltip inside the viewport with its arrow centered on the badge.
 - `bun run lint` passed with 0 problems, and a second `oxlint --fix` pass left the tree unchanged.
 - `bun run build` passed with 0 errors, 0 warnings, and 0 hints from `astro check`, and built 23 pages.
 - After the design and animation pass: `bun run lint` passed with 0 problems, and `bun run build` passed with 0 errors, 0 warnings, and 0 hints. In the dev server, `--ease-out` is the computed timing for transitions and `.reveal`, the CTA transitions only `background-color, box-shadow, scale`, the MCP dialog stays centered and enters over 200ms with the ease-out curve, the mobile menu opens to its content height and closes on Escape with focus back on the button, and the menu stays hidden at desktop widths.

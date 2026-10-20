@@ -147,6 +147,8 @@ Project entries are MDX posts with `isProject: true`.
 
 The `about` entry is special: `src/content/blog/about.mdx` powers `/about` and should not be treated as a normal blog post or project card.
 
+The resume PDF is not in the repo. It lives in the Cloudflare R2 bucket `juanrmb-assets` as `juan-martinez-resume.pdf`, served from the bucket's public r2.dev URL that `about.mdx` links to. To replace it, upload over the same key with `bunx wrangler r2 object put juanrmb-assets/juan-martinez-resume.pdf --remote --file <pdf> --content-type application/pdf --content-disposition 'attachment; filename=juan-martinez-resume.pdf'`.
+
 ## Change Log Conventions
 
 - Keep `change-log.md` updated for notable implementation work, dependency upgrades, migrations, cleanup reviews, and validation outcomes.
@@ -178,6 +180,16 @@ bun run build
 ```
 
 Fix all diagnostics before finishing. If a change only affects non-executable instructions such as this file, validation may still be run to ensure the repository remains healthy.
+
+## Reference Codebases
+Reference these codebases when designing apis, code, solutions or other programming things. They are cloned locally on the Mac; on Windows, read them on GitHub.
+- https://github.com/diffusionstudio/monorepo-new (Fullstack Video Editing Platform/app) [Programming Code]
+- https://github.com/joshpuckett/dialkit (Real-time parameter tweaking for React, Solid, Svelte, and Vue) [UI Code]
+- https://github.com/sst/opencode/tree/v2 (OpenCode v2 app reference for Solid persistence, app preferences, and product architecture) [Programming Code]
+- https://github.com/solidjs-community/solid-primitives (Solid Primitives source and docs, especially storage/persistence primitives) [Library Reference]
+- daw-effect-research (DAW/audio effect implementation reference) [Audio DSP Reference]: Mac only, at `/Users/juan/Documents/daw-effect-research`; it has no git remote.
+- https://github.com/earendil-works/pi [Pi]
+- https://github.com/anomalyco/opentui [OpenTUI]
 
 ## Important Notes
 
