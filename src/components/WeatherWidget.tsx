@@ -93,7 +93,7 @@ const WeatherWidgetContent = () => {
 
   return (
     <div className="flex items-center gap-2.5 font-mono">
-      <div className="flex items-center gap-2 bg-neutral-100/50 hover:bg-neutral-100 px-2 sm:px-3 py-1.5 rounded-md border border-neutral-200/50">
+      <div className="flex items-center gap-2 bg-neutral-100/50 px-2 sm:px-3 py-1.5 rounded-md border border-neutral-200/50">
         <WeatherIcon icon={weather.icon} description={weather.description} />
         <span className="tabular-nums tracking-tight font-medium text-[13px] text-neutral-600">
           {weather.temp}°C

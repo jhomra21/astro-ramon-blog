@@ -6,20 +6,40 @@
 
 @config "../../tailwind.config.mjs";
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@theme static {
+	--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+	--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+	--default-transition-timing-function: var(--ease-out);
+}
 
 @layer base {
+	/* Nothing toggles the dark class, so native controls and scrollbars must stay light. */
 	:root {
-		color-scheme: light dark;
+		color-scheme: light;
 	}
 
 	html {
 		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 		background: white;
 		background-size: 100% 100%;
+		-webkit-tap-highlight-color: transparent;
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
 	}
 
 	html.dark {
 		background: #18181b;
+		color-scheme: dark;
+	}
+
+	a,
+	button,
+	summary,
+	label,
+	[role="button"] {
+		touch-action: manipulation;
 	}
 
 	body {
@@ -33,7 +53,7 @@
 
 @layer components {
 	.link-underline {
-		@apply border-b border-zinc-400 hover:border-current transition-all duration-200;
+		@apply border-b border-zinc-400 hover:border-current transition-colors duration-200;
 	}
 
 	.glass-panel {
@@ -63,7 +83,7 @@
 }
 
 .reveal {
-	animation: reveal-in var(--reveal-duration, 260ms) cubic-bezier(0.2, 0.8, 0.2, 1) both;
+	animation: reveal-in var(--reveal-duration, 260ms) var(--ease-out) both;
 	animation-delay: calc(var(--reveal-delay, 0ms) + var(--vt-offset, 0ms));
 }
 

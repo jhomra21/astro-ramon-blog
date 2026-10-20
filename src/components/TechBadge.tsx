@@ -31,13 +31,13 @@ export default function TechBadge({ tech, tooltip }: TechBadgeProps) {
       <span
         className={cn(
           "inline-flex items-center px-2 py-1 text-xs font-mono tracking-tight border bg-white/5 dark:bg-black/5",
-          "transition-all duration-200 hover:text-white cursor-default",
+          "transition-colors duration-150 hover:text-white cursor-default",
           colorClasses
         )}
       >
         {tech}
       </span>
-      <div className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 opacity-0 transition-opacity group-hover:opacity-100 z-50">
+      <div className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 translate-y-1 opacity-0 transition-[opacity,translate] duration-150 ease-out group-hover:translate-y-0 group-hover:opacity-100 z-50">
         <div className="bg-zinc-900 dark:bg-zinc-800 text-zinc-100 px-2 py-1 text-xs font-mono rounded-none shadow-lg whitespace-nowrap border border-zinc-700/50">
           {tooltip}
         </div>

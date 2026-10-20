@@ -13,8 +13,8 @@ const isActive = href === pathname || href === '/' + subpath?.[0];
 <a 
 	href={href} 
 	class:list={[
-		'relative px-2.5 py-1.5 text-neutral-400 hover:text-neutral-900 transition-all duration-200',
-		'after:absolute after:left-2.5 after:right-2.5 after:-bottom-[1px] after:h-[1px] after:bg-neutral-900/0 hover:after:bg-neutral-900/100 after:transition-all after:duration-200',
+		'relative px-2.5 py-1.5 text-neutral-400 hover:text-neutral-900 transition-colors duration-200',
+		'after:absolute after:left-2.5 after:right-2.5 after:-bottom-[1px] after:h-[1px] after:bg-neutral-900/0 hover:after:bg-neutral-900/100 after:transition-colors after:duration-200',
 		className,
 		{
 			'text-neutral-900 font-medium after:bg-neutral-900': isActive

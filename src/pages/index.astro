@@ -21,38 +21,3 @@ import { PROJECTS_REVEAL_START_MS } from "@/lib/reveal";
 	</div>
 </TransitionLayout>
 
-<style>
-	@reference "../styles/global.css";
-
-	.project-card {
-		transition: all 0.2s ease;
-		border-left: 4px solid transparent;
-	}
-	.project-card:hover {
-		border-left-color: #2563eb;
-	}
-	.latest-project:hover {
-		border-left-color: #3b82f6;
-	}
-	.featured-project:hover {
-		border-left-color: #6366f1;
-	}
-	.about-card:hover {
-		border-left-color: #10b981;
-	}
-	.github-card:hover {
-		border-left-color: #6b7280;
-	}
-	.badge {
-		border-radius: 0;
-		@apply px-2 py-1 text-xs font-mono tracking-tight;
-	}
-
-	.link-hover {
-		@apply text-zinc-900 dark:text-zinc-100 border-b border-transparent hover:border-current transition-all duration-200;
-	}
-
-	.section-title {
-		@apply text-2xl font-bold tracking-tight;
-	}
-</style>

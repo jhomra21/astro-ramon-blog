@@ -62,7 +62,7 @@ const showSeeAll = maxProjects < totalProjects;
                                     {project.data.projectStatus === 'live' && (
                                         <span class="badge bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1.5">
                                             <span class="relative flex h-2 w-2">
-                                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                <span class="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                                             </span>
                                             LIVE
@@ -158,11 +158,13 @@ const showSeeAll = maxProjects < totalProjects;
     @reference "../styles/global.css";
 
     .project-card {
-        transition: border-color 0.2s ease;
+        transition: border-color 200ms var(--ease-out);
         border-left: 4px solid transparent;
     }
-    .project-card:hover {
-        border-left-color: #2563eb;
+    @media (hover: hover) and (pointer: fine) {
+        .project-card:hover {
+            border-left-color: #2563eb;
+        }
     }
     .badge {
         border-radius: 0;
@@ -170,7 +172,7 @@ const showSeeAll = maxProjects < totalProjects;
     }
 
     .link-hover {
-        @apply text-zinc-900 dark:text-zinc-100 border-b border-transparent hover:border-current transition-all duration-200;
+        @apply text-zinc-900 dark:text-zinc-100 border-b border-transparent hover:border-current transition-colors duration-200;
     }
 
     .section-title {

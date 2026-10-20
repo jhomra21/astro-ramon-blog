@@ -15,20 +15,10 @@ const { text, delay = 105, className = '' } = Astro.props;
     data-delay={delay}
 >
     <span 
-        class="typewriter-text transition-colors duration-300 absolute left-0 whitespace-nowrap opacity-0"
+        class="typewriter-text absolute left-0 whitespace-nowrap opacity-0"
     ></span>
     <span style="opacity: 0;">{text}</span>
 </typewriter-effect>
-
-<style>
-    .cursor-animation {
-        animation: cursor 1.2s infinite;
-    }
-    @keyframes cursor {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
-    }
-</style>
 
 <script>
     class TypewriterEffect extends HTMLElement {
@@ -47,10 +37,17 @@ const { text, delay = 105, className = '' } = Astro.props;
         }
 
         private init(): void {
-            if (this.textElement) {
-                this.textElement.classList.add('opacity-100');
-                this.type();
+            if (!this.textElement) return;
+
+            this.textElement.classList.add('opacity-100');
+
+            if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                this.textElement.textContent = this.text;
+
+                return;
             }
+
+            this.type();
         }
 
         private async type(): Promise<void> {
@@ -67,7 +64,7 @@ const { text, delay = 105, className = '' } = Astro.props;
             await new Promise(resolve => setTimeout(resolve, 5000));
 
             // Fade out
-            this.textElement.style.transition = 'opacity 0.3s ease';
+            this.textElement.style.transition = 'opacity 0.3s var(--ease-out)';
             this.textElement.style.opacity = '0';
             await new Promise(resolve => setTimeout(resolve, 300));
 

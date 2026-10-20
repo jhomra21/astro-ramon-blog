@@ -33,16 +33,16 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
 
   return (
     <Dialog onOpenChange={handleOpenChange}>
-      <DialogTrigger className={cn(triggerClassName)} asChild={false}>
+      <DialogTrigger className={cn("cursor-pointer", triggerClassName)} asChild={false}>
         <span className="flex items-center gap-2">
           {triggerText}
-          <FileText className="w-4 h-4 transition-all duration-300 ease-in-out group-hover:text-blue-500 group-hover:rotate-3 group-hover:scale-110" />
+          <FileText className="w-4 h-4 transition-[color,rotate,scale] duration-200 ease-out group-hover:text-blue-500 group-hover:rotate-3 group-hover:scale-110" />
         </span>
       </DialogTrigger>
       <DialogContent
         className={cn(
-          "sm:max-w-lg bg-white dark:bg-zinc-900 transition-all duration-300 ease-in-out",
-          "overflow-hidden text-wrap will-change-[height,width,max-height,max-width]",
+          "sm:max-w-lg bg-white dark:bg-zinc-900 transition-[max-width] duration-200 ease-out",
+          "overflow-hidden text-wrap",
           "border-t-2 border-t-blue-500 dark:border-t-blue-400",
           mcp.selectedTool && "sm:max-w-5xl",
           dialogClassName
@@ -129,19 +129,19 @@ function CopyUrlButton({ url }: CopyUrlButtonProps) {
     <button
       onClick={handleCopy}
       aria-label="Copy URL"
-      className="p-1.5 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-500 dark:text-zinc-400 transition-colors duration-150 flex-shrink-0"
+      className="cursor-pointer p-1.5 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-500 dark:text-zinc-400 transition-[background-color,scale] duration-150 ease-out active:scale-90 flex-shrink-0"
     >
       <span className="relative flex items-center justify-center w-3 h-3">
         <Check
           className={cn(
-            "absolute transition-all duration-300 ease-in-out text-green-600 w-3 h-3",
-            isCopied ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-50 blur-sm"
+            "absolute transition-[opacity,scale,filter] duration-200 ease-out text-green-600 w-3 h-3",
+            isCopied ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-25 blur-xs"
           )}
         />
         <Copy
           className={cn(
-            "absolute transition-all duration-300 ease-in-out w-3 h-3",
-            isCopied ? "opacity-0 scale-50 blur-sm" : "opacity-100 scale-100 blur-0"
+            "absolute transition-[opacity,scale,filter] duration-200 ease-out w-3 h-3",
+            isCopied ? "opacity-0 scale-25 blur-xs" : "opacity-100 scale-100 blur-0"
           )}
         />
       </span>
@@ -153,14 +153,14 @@ function ToolsSection({ tools, isVisible, selectedTool, toolResult, onSelectTool
   return (
     <div
       className={cn(
-        "flex flex-col flex-1 min-h-0 mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700 transition-all duration-300 ease-in-out",
+        "flex flex-col flex-1 min-h-0 mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700 transition-[opacity,max-height] duration-250 ease-out",
         isVisible ? "opacity-100 max-h-[500px]" : "opacity-0 max-h-0 overflow-hidden"
       )}
       aria-live="polite"
     >
       <div
         className={cn(
-          "flex-1 min-h-0 transition-all duration-300 ease-in-out",
+          "flex-1 min-h-0",
           selectedTool ? "grid grid-cols-2 gap-6 h-[300px]" : "flex flex-col h-auto"
         )}
       >
@@ -195,27 +195,36 @@ function ToolListItem({ tool, index, isVisible, isSelected, onSelect }: ToolList
 
   return (
     <li
-      onClick={handleClick}
       className={cn(
-        "text-xs font-mono text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 rounded px-2.5 py-1.5 border border-transparent dark:hover:border-zinc-700 hover:border-zinc-200 cursor-pointer",
-        "transform transition-all duration-300 ease-in-out",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
-        isSelected && "ring-2 ring-blue-500 dark:ring-blue-400 ring-offset-2 dark:ring-offset-zinc-900 bg-blue-50 dark:bg-blue-900/30"
+        "transition-[opacity,translate] duration-200 ease-out",
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
       )}
       style={{ transitionDelay: `${index * 50}ms` }}
     >
-      {tool.name}
+      <button
+        type="button"
+        onClick={handleClick}
+        aria-pressed={isSelected}
+        className={cn(
+          "w-full text-left text-xs font-mono text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 rounded px-2.5 py-1.5 border border-transparent dark:hover:border-zinc-700 hover:border-zinc-200 cursor-pointer",
+          "outline-none focus-visible:ring-2 focus-visible:ring-zinc-400",
+          "transition-[background-color,border-color,box-shadow,scale] duration-150 ease-out active:scale-[0.98]",
+          isSelected && "ring-2 ring-blue-500 dark:ring-blue-400 ring-offset-2 dark:ring-offset-zinc-900 bg-blue-50 dark:bg-blue-900/30"
+        )}
+      >
+        {tool.name}
+      </button>
     </li>
   );
 }
 
 function ToolResponsePanel({ tool, result }: ToolResponsePanelProps) {
   return (
-    <div className="col-span-1 flex flex-col min-h-0 border-l border-zinc-200 dark:border-zinc-700 pl-6 animate-in fade-in slide-in-from-left duration-300">
+    <div className="col-span-1 flex flex-col min-h-0 border-l border-zinc-200 dark:border-zinc-700 pl-6 animate-in fade-in slide-in-from-left-2 duration-200 ease-out">
       <h4 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3 flex-shrink-0 border-b border-zinc-200 dark:border-zinc-700 pb-2">
         Tool: <code className="ml-1 font-normal text-blue-600 dark:text-blue-400">{tool.name}</code>
       </h4>
-      <div className="flex-1 min-h-0 overflow-y-auto pr-3 transition-all duration-300 ease-in-out">
+      <div className="flex-1 min-h-0 overflow-y-auto pr-3">
         <ToolResultView toolName={tool.name} result={result} />
       </div>
     </div>
@@ -228,13 +237,13 @@ function ToolResultView({ toolName, result }: ToolResultViewProps) {
       return null;
     case "loading":
       return (
-        <p className="text-xs text-zinc-500 dark:text-zinc-500 italic flex items-center gap-1.5 animate-in fade-in duration-300">
+        <p className="text-xs text-zinc-500 dark:text-zinc-500 italic flex items-center gap-1.5 animate-in fade-in duration-200">
           <Loader2 className="w-3 h-3 animate-spin" /> Executing...
         </p>
       );
     case "error":
       return (
-        <p className="text-xs text-red-500 dark:text-red-400 animate-in fade-in duration-300">
+        <p className="text-xs text-red-500 dark:text-red-400 animate-in fade-in duration-200">
           <span className="font-semibold">Error:</span> {result.message}
         </p>
       );
@@ -243,11 +252,11 @@ function ToolResultView({ toolName, result }: ToolResultViewProps) {
         <img
           src={`data:image/jpeg;base64,${result.data}`}
           alt={`Generated image from ${toolName}`}
-          className="max-w-full h-auto rounded border border-zinc-200 dark:border-zinc-700 animate-in fade-in duration-300"
+          className="max-w-full h-auto rounded border border-zinc-200 dark:border-zinc-700 animate-in fade-in duration-200"
         />
       );
     case "text":
-      return <pre className="text-xs whitespace-pre-wrap break-words animate-in fade-in duration-300">{result.text}</pre>;
+      return <pre className="text-xs whitespace-pre-wrap break-words animate-in fade-in duration-200">{result.text}</pre>;
   }
 }
 
@@ -267,9 +276,9 @@ function ConnectionControls({ status, isToolListVisible, canConnect, onConnect, 
               size="sm"
               onClick={onConnect}
               disabled={!canConnect}
-              className="gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-zinc-300 dark:border-zinc-700 transition-all duration-200 text-xs sm:text-sm"
+              className="cursor-pointer gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 border-zinc-300 dark:border-zinc-700 text-xs sm:text-sm"
             >
-              <Plug className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-all group-hover:text-blue-500" />
+              <Plug className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               Connect
             </Button>
           ) : (
@@ -277,7 +286,7 @@ function ConnectionControls({ status, isToolListVisible, canConnect, onConnect, 
               variant="destructive"
               size="sm"
               onClick={onDisconnect}
-              className="gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm"
+              className="cursor-pointer gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm"
             >
               <Plug className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               Disconnect

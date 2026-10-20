@@ -5,7 +5,7 @@ import WeatherWidget from './WeatherWidget';
 import TypewriterEffect from './TypewriterEffect.astro';
 ---
 
-<header class="sticky top-0 z-50 w-full border-b border-neutral-200 bg-white/80 backdrop-blur-sm">
+<header class="sticky top-0 z-50 w-full border-b border-neutral-200 bg-white/80 backdrop-blur-sm transition-shadow duration-200">
 	<nav class="mx-auto flex h-14 items-center justify-between px-4 sm:max-w-[1120px]">
 		<a href="/" class="font-mono text-sm text-neutral-700 hover:text-neutral-900">
 			<TypewriterEffect text={SITE_TITLE} />
@@ -20,7 +20,7 @@ import TypewriterEffect from './TypewriterEffect.astro';
 			</div>
 			<button 
 				id="mobile-menu-button" 
-				class="ml-1 flex h-8 w-8 items-center justify-center rounded-md hover:bg-neutral-100 sm:hidden"
+				class="ml-1 flex h-8 w-8 cursor-pointer items-center justify-center rounded-md hover:bg-neutral-100 transition-[background-color,scale] duration-150 ease-out active:scale-[0.97] sm:hidden"
 				aria-label="Toggle menu"
 				aria-expanded="false"
 				aria-controls="mobile-menu"
@@ -35,37 +35,52 @@ import TypewriterEffect from './TypewriterEffect.astro';
 	</nav>
 	<div 
 		id="mobile-menu" 
-		class="mobile-menu-closed border-t border-neutral-100 bg-white sm:hidden"
-		aria-hidden="true"
+		class="mobile-menu grid border-t border-neutral-100 bg-white sm:hidden"
+		data-state="closed"
+		inert
 	>
-		<div class="space-y-1 px-4 py-3">
-			<HeaderLink href="/" class="block py-2">home</HeaderLink>
-			<HeaderLink href="/about" class="block py-2">about</HeaderLink>
-			<HeaderLink href="/projects" class="block py-2">projects</HeaderLink>
+		<div class="mobile-menu-inner">
+			<div class="space-y-1 px-4 py-3">
+				<HeaderLink href="/" class="block py-2">home</HeaderLink>
+				<HeaderLink href="/about" class="block py-2">about</HeaderLink>
+				<HeaderLink href="/projects" class="block py-2">projects</HeaderLink>
+			</div>
 		</div>
 	</div>
 </header>
 
 <style>
-	.mobile-menu-closed {
-		max-height: 0;
+	/* Animating grid rows lets the menu open to its natural height without a hard-coded max-height. */
+	.mobile-menu {
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 150ms var(--ease-out);
+	}
+
+	.mobile-menu[data-state="open"] {
+		grid-template-rows: 1fr;
+		transition-duration: 200ms;
+	}
+
+	.mobile-menu-inner {
+		min-height: 0;
 		overflow: hidden;
-		transition: max-height 0.2s ease-out 0.1s;
 	}
 
-	.mobile-menu-closed > div {
+	.mobile-menu-inner > div {
 		opacity: 0;
-		transition: opacity 0.15s ease-out;
+		transition: opacity 120ms var(--ease-out);
 	}
 
-	.mobile-menu-open {
-		max-height: 200px;
-		transition: max-height 0.2s ease-in;
-	}
-
-	.mobile-menu-open > div {
+	.mobile-menu[data-state="open"] .mobile-menu-inner > div {
 		opacity: 1;
-		transition: opacity 0.15s ease-in 0.1s;
+		transition-duration: 200ms;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.mobile-menu,
+		.mobile-menu[data-state="open"] {
+			transition: none;
+		}
 	}
 </style>
 
@@ -74,53 +89,40 @@ import TypewriterEffect from './TypewriterEffect.astro';
 	const mobileMenuButton = document.getElementById('mobile-menu-button');
 	const mobileMenu = document.getElementById('mobile-menu');
 
-	// Toggle mobile menu with accessibility
-	const toggleMobileMenu = () => {
-		const isExpanded = mobileMenuButton?.getAttribute('aria-expanded') === 'true';
-		mobileMenuButton?.setAttribute('aria-expanded', (!isExpanded).toString());
-		mobileMenu?.setAttribute('aria-hidden', isExpanded.toString());
-		
-		if (isExpanded) {
-			mobileMenu?.classList.remove('mobile-menu-open');
-			mobileMenu?.classList.add('mobile-menu-closed');
-		} else {
-			mobileMenu?.classList.remove('mobile-menu-closed');
-			mobileMenu?.classList.add('mobile-menu-open');
-		}
+	const setMobileMenuOpen = (isOpen: boolean) => {
+		mobileMenuButton?.setAttribute('aria-expanded', String(isOpen));
+		mobileMenu?.setAttribute('data-state', isOpen ? 'open' : 'closed');
+		mobileMenu?.toggleAttribute('inert', !isOpen);
 	};
 
-	mobileMenuButton?.addEventListener('click', toggleMobileMenu);
+	const isMobileMenuOpen = () => mobileMenuButton?.getAttribute('aria-expanded') === 'true';
 
-	// Handle scroll effects
+	mobileMenuButton?.addEventListener('click', () => {
+		setMobileMenuOpen(!isMobileMenuOpen());
+	});
+
 	const handleScroll = () => {
-		if (window.scrollY > 0) {
-			header?.classList.add('shadow-sm');
-		} else {
-			header?.classList.remove('shadow-sm');
-		}
+		header?.classList.toggle('shadow-sm', window.scrollY > 0);
 	};
 
-	window.addEventListener('scroll', handleScroll);
+	window.addEventListener('scroll', handleScroll, { passive: true });
 
-	// Close mobile menu when clicking outside
 	document.addEventListener('click', (event) => {
 		const target = event.target;
 
 		if (target instanceof Element && !target.closest('#mobile-menu') && !target.closest('#mobile-menu-button')) {
-			mobileMenuButton?.setAttribute('aria-expanded', 'false');
-			mobileMenu?.setAttribute('aria-hidden', 'true');
-			mobileMenu?.classList.remove('mobile-menu-open');
-			mobileMenu?.classList.add('mobile-menu-closed');
+			setMobileMenuOpen(false);
 		}
 	});
 
-	// Close mobile menu when resizing to desktop
+	document.addEventListener('keydown', (event) => {
+		if (event.key !== 'Escape' || !isMobileMenuOpen()) return;
+
+		setMobileMenuOpen(false);
+		mobileMenuButton?.focus();
+	});
+
 	window.addEventListener('resize', () => {
-		if (window.innerWidth >= 640) {
-			mobileMenuButton?.setAttribute('aria-expanded', 'false');
-			mobileMenu?.setAttribute('aria-hidden', 'true');
-			mobileMenu?.classList.remove('mobile-menu-open');
-			mobileMenu?.classList.add('mobile-menu-closed');
-		}
+		if (window.innerWidth >= 640) setMobileMenuOpen(false);
 	});
 </script>

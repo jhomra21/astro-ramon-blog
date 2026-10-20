@@ -23,7 +23,7 @@ const {
 		<div class="mb-6">
 			<button
 				id="back-button"
-				class="inline-flex items-center gap-2 px-4 py-2 text-sm font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors duration-200 rounded-sm"
+				class="inline-flex items-center gap-2 px-4 py-2 text-sm font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer transition-[background-color,scale] duration-150 ease-out active:scale-[0.97] rounded-sm"
 				aria-label="Go back to previous page"
 				tabindex="0"
 			>
@@ -211,7 +211,7 @@ const {
 	}
 
 	.prose :global(a) {
-		@apply text-zinc-900 dark:text-zinc-100 border-b border-zinc-400 hover:border-current transition-all duration-200;
+		@apply text-zinc-900 dark:text-zinc-100 border-b border-zinc-400 hover:border-current transition-colors duration-200;
 	}
 
 	.prose :global(code) {
