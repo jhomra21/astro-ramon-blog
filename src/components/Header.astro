@@ -6,33 +6,35 @@ import TypewriterEffect from './TypewriterEffect.astro';
 ---
 
 <header class="sticky top-0 z-50 w-full border-b border-neutral-200 bg-white/80 backdrop-blur-sm transition-shadow duration-200">
-	<nav class="mx-auto flex h-14 items-center justify-between px-4 sm:max-w-[1120px]">
-		<a href="/" class="font-mono text-sm text-neutral-700 hover:text-neutral-900">
-			<TypewriterEffect text={SITE_TITLE} />
-		</a>
-		<div class="flex items-center gap-x-4">
-			<WeatherWidget client:load />
-			<div class="h-4 w-px bg-neutral-200" />
-			<div class="hidden sm:flex items-center gap-x-1 font-mono text-sm">
-				<HeaderLink href="/">home</HeaderLink>
-				<HeaderLink href="/about">about</HeaderLink>
-				<HeaderLink href="/projects">projects</HeaderLink>
+	<div class="mx-auto max-w-[1120px] px-4">
+		<nav class="flex h-14 max-w-3xl items-center justify-between">
+			<a href="/" class="font-mono text-sm text-neutral-700 hover:text-neutral-900">
+				<TypewriterEffect text={SITE_TITLE} />
+			</a>
+			<div class="flex items-center gap-x-4">
+				<WeatherWidget client:load />
+				<div class="h-4 w-px bg-neutral-200" />
+				<div class="-mr-2.5 hidden sm:flex items-center gap-x-1 font-mono text-sm">
+					<HeaderLink href="/">home</HeaderLink>
+					<HeaderLink href="/about">about</HeaderLink>
+					<HeaderLink href="/projects">projects</HeaderLink>
+				</div>
+				<button 
+					id="mobile-menu-button" 
+					class="-mr-1.5 flex h-11 w-11 cursor-pointer items-center justify-center rounded-md hover:bg-neutral-100 transition-[background-color,scale] duration-150 ease-out active:scale-[0.97] sm:hidden"
+					aria-label="Toggle menu"
+					aria-expanded="false"
+					aria-controls="mobile-menu"
+				>
+					<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<line x1="3" y1="12" x2="21" y2="12"></line>
+						<line x1="3" y1="6" x2="21" y2="6"></line>
+						<line x1="3" y1="18" x2="21" y2="18"></line>
+					</svg>
+				</button>
 			</div>
-			<button 
-				id="mobile-menu-button" 
-				class="-mr-1.5 flex h-11 w-11 cursor-pointer items-center justify-center rounded-md hover:bg-neutral-100 transition-[background-color,scale] duration-150 ease-out active:scale-[0.97] sm:hidden"
-				aria-label="Toggle menu"
-				aria-expanded="false"
-				aria-controls="mobile-menu"
-			>
-				<svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-					<line x1="3" y1="12" x2="21" y2="12"></line>
-					<line x1="3" y1="6" x2="21" y2="6"></line>
-					<line x1="3" y1="18" x2="21" y2="18"></line>
-				</svg>
-			</button>
-		</div>
-	</nav>
+		</nav>
+	</div>
 	<div 
 		id="mobile-menu" 
 		class="mobile-menu grid border-t border-neutral-100 bg-white sm:hidden"

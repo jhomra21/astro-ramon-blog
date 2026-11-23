@@ -105,7 +105,7 @@ Root config files:
 - Maintain the current visual language, modeled on shadcn.com:
   - Schibsted Grotesk for text, 14px base size; JetBrains Mono for the header, small labels, and dates.
   - White background, neutral palette, dark-mode support.
-  - One left-aligned column (`PageColumn`, `max-w-3xl`; `width="reading"` and `max-w-2xl` for posts) aligned with the header logo. Lists stay one column.
+  - One left-aligned column (`PageColumn`, `max-w-3xl`; `width="reading"` and `max-w-2xl` for posts) aligned with the header logo. The header nav and the footer bar use the same `max-w-3xl` width inside the 1120px container, so the last nav link, the list years, and the footer photo button share one right edge. Lists stay one column.
   - Plain underlined links (`.link`, `.link-inverse` on the footer image), slash-separated link rows (`SlashLinks`), and title-plus-sentence lists (`EntryList`) instead of cards.
   - No cards, shadows, gradients, or badges. The flat grey `.button-flat` is the only button style.
 - Keep the header typewriter, the scrambling name on the homepage, and the footer photo.

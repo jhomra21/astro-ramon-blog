@@ -29,27 +29,29 @@ const footerLinks = [
 	</div>
 
 	<div class="footer-bar sticky bottom-0 z-[3] h-(--footer-bar)">
-		<div class="relative mx-auto flex h-full max-w-[1120px] flex-col justify-center px-4">
-			<button
-				type="button"
-				data-photo-toggle
-				data-state="closed"
-				aria-label="Show the photo full screen"
-				class="photo-toggle absolute right-4 bottom-6 grid size-11 cursor-pointer place-items-center border border-white/30 bg-black/40 text-white transition-[background-color,border-color,scale] duration-150 ease-out outline-none hover:border-white/60 hover:bg-black/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.97]"
-			>
-				<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-					<path class="photo-icon-arm arm-tl" d="M0 5V0h5" />
-					<path class="photo-icon-arm arm-tr" d="M0 5V0h5" />
-					<path class="photo-icon-arm arm-br" d="M0 5V0h5" />
-					<path class="photo-icon-arm arm-bl" d="M0 5V0h5" />
-				</svg>
-			</button>
-			<div data-footer-content class="footer-content flex max-w-3xl flex-col gap-5 pr-14">
-				<p class="font-mono text-sm text-white">{SITE_TITLE}</p>
-				<SlashLinks links={footerLinks} label="Footer" tone="inverse" />
-				<p class="font-mono text-xs text-white/60">
-					© {new Date().getFullYear()} {SITE_TITLE} · built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="link-inverse">Astro</a>
-				</p>
+		<div class="mx-auto h-full max-w-[1120px] px-4">
+			<div class="relative flex h-full max-w-3xl flex-col justify-center">
+				<button
+					type="button"
+					data-photo-toggle
+					data-state="closed"
+					aria-label="Show the photo full screen"
+					class="photo-toggle absolute right-0 bottom-6 grid size-11 cursor-pointer place-items-center border border-white/30 bg-black/40 text-white transition-[background-color,border-color,scale] duration-150 ease-out outline-none hover:border-white/60 hover:bg-black/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.97]"
+				>
+					<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<path class="photo-icon-arm arm-tl" d="M0 5V0h5" />
+						<path class="photo-icon-arm arm-tr" d="M0 5V0h5" />
+						<path class="photo-icon-arm arm-br" d="M0 5V0h5" />
+						<path class="photo-icon-arm arm-bl" d="M0 5V0h5" />
+					</svg>
+				</button>
+				<div data-footer-content class="footer-content flex flex-col gap-5 pr-14">
+					<p class="font-mono text-sm text-white">{SITE_TITLE}</p>
+					<SlashLinks links={footerLinks} label="Footer" tone="inverse" />
+					<p class="font-mono text-xs text-white/60">
+						© {new Date().getFullYear()} {SITE_TITLE} · built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="link-inverse">Astro</a>
+					</p>
+				</div>
 			</div>
 		</div>
 	</div>
