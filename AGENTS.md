@@ -142,12 +142,14 @@ projectUrl: "https://example.com"
 projectStatus: "live"
 projectType: "featured"
 githubUrl: "https://github.com/user/repo"
+npmUrl: "https://www.npmjs.com/package/example"
+appStoreUrl: "https://apps.apple.com/us/app/example/id000"
 techStack:
   - name: "TypeScript"
     description: "Type-safe development"
 ```
 
-Project entries are MDX posts with `isProject: true`.
+Project entries are MDX posts with `isProject: true`. `appStoreUrl` adds an "app store" link to the post and an "App Store" button next to the project in the home and `/projects` lists.
 
 The `about` entry is special: `src/content/blog/about.mdx` powers `/about` and should not be treated as a normal blog post or project card.
 

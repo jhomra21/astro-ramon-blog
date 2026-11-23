@@ -21,6 +21,7 @@ const blog = defineCollection({
 			projectType: z.enum(['featured']).optional(),
 			githubUrl: z.url().optional(),
 			npmUrl: z.url().optional(),
+			appStoreUrl: z.url().optional(),
 			techStack: z
 				.array(
 					z.object({

@@ -9,9 +9,10 @@ import { REVEAL_STEP_MS, getRevealStyle } from "../lib/reveal";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, heroImage, githubUrl, npmUrl, projectUrl, techStack } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, githubUrl, npmUrl, appStoreUrl, projectUrl, techStack } = Astro.props;
 
 const projectLinks = [
+	...(appStoreUrl ? [{ label: "app store", href: appStoreUrl, isExternal: true }] : []),
 	...(projectUrl ? [{ label: "live site", href: projectUrl, isExternal: true }] : []),
 	...(githubUrl ? [{ label: "git repo", href: githubUrl, isExternal: true }] : []),
 	...(npmUrl ? [{ label: "npm package", href: npmUrl, isExternal: true }] : []),

@@ -15,19 +15,33 @@ const { entries, dateStyle = 'year', headingLevel: Heading = 'h2', revealStartMs
 
 <ul class="flex flex-col gap-8">
 	{entries.map((entry, index) => (
-		<li class="reveal" style={getRevealStyle(revealStartMs + REVEAL_STEP_MS * getStaggerStep(index))}>
-			<a href={`/blog/${entry.id}/`} class="group flex flex-col gap-2">
-				<div class="flex items-baseline gap-3">
-					<Heading class="text-base font-medium text-neutral-950 decoration-neutral-400 underline-offset-4 group-hover:underline dark:text-neutral-50">
+		<li
+			class="reveal group relative flex flex-col gap-2"
+			style={getRevealStyle(revealStartMs + REVEAL_STEP_MS * getStaggerStep(index))}
+		>
+			<div class="flex min-h-7 items-center gap-3">
+				<Heading class="text-base font-medium text-neutral-950 decoration-neutral-400 underline-offset-4 group-hover:underline dark:text-neutral-50">
+					<a href={`/blog/${entry.id}/`} class="outline-none after:absolute after:inset-0 focus-visible:underline">
 						{getShortTitle(entry.data.title)}
-					</Heading>
-					<span class="flex-1"></span>
-					<span class="shrink-0 font-mono text-xs text-neutral-600 tabular-nums dark:text-neutral-400">
-						{dateStyle === 'full' ? <FormattedDate date={entry.data.pubDate} /> : entry.data.pubDate.getFullYear()}
-					</span>
-				</div>
-				<p class="text-balance text-sm text-neutral-600 dark:text-neutral-400">{getSummary(entry.data.description)}</p>
-			</a>
+					</a>
+				</Heading>
+				{entry.data.appStoreUrl && (
+					<a
+						href={entry.data.appStoreUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="button-flat relative z-10 h-7 px-2 text-xs before:absolute before:-inset-2"
+						aria-label={`${getShortTitle(entry.data.title)} on the App Store`}
+					>
+						App Store
+					</a>
+				)}
+				<span class="flex-1"></span>
+				<span class="shrink-0 font-mono text-xs text-neutral-600 tabular-nums dark:text-neutral-400">
+					{dateStyle === 'full' ? <FormattedDate date={entry.data.pubDate} /> : entry.data.pubDate.getFullYear()}
+				</span>
+			</div>
+			<p class="text-balance text-sm text-neutral-600 dark:text-neutral-400">{getSummary(entry.data.description)}</p>
 		</li>
 	))}
 </ul>
