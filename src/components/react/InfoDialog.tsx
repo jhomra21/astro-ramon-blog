@@ -53,7 +53,7 @@ export const InfoDialog: React.FC<InfoDialogProps> = ({
           <DialogTitle className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 flex items-center">
             <span className="relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-blue-500 dark:after:bg-blue-400 after:transform after:translate-y-1">{title}</span>
           </DialogTitle>
-          <p className="italic text-xs text-left text-zinc-600 dark:text-zinc-400 pt-4">Connect to my personal MCP Server! Hosted on Cloudflare.</p>
+          <p className="italic text-xs text-left text-zinc-600 dark:text-zinc-400 pt-4">Connect to my MCP server on Cloudflare Workers.</p>
           <DialogDescription asChild className="mt-6 space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
             <div>
               <McpUrlField url={mcpSseUrl} />
@@ -165,7 +165,7 @@ function ToolsSection({ tools, isVisible, selectedTool, toolResult, onSelectTool
         )}
       >
         <div className={cn("flex flex-col min-h-0", selectedTool ? "col-span-1" : "flex-1")}>
-          <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3 flex-shrink-0">Available Tools</h3>
+          <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3 flex-shrink-0">Available tools</h3>
           <ScrollArea className="h-full w-full pr-3">
             <ul className="space-y-1.5">
               {tools.map((tool, index) => (
@@ -267,7 +267,7 @@ function ConnectionControls({ status, isToolListVisible, canConnect, onConnect, 
     <div className="flex flex-col items-center gap-4 sm:gap-5 w-full">
       <div className="flex flex-col items-center text-center gap-1.5 w-full">
         {isDisconnected && (
-          <p className="italic text-xs text-zinc-600 dark:text-zinc-400 w-full text-center mb-2">Or Connect directly here:</p>
+          <p className="italic text-xs text-zinc-600 dark:text-zinc-400 w-full text-center mb-2">Or connect from this page:</p>
         )}
         <div className="flex justify-center w-full">
           {isDisconnected ? (

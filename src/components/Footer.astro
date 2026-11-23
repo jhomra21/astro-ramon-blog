@@ -1,138 +1,306 @@
 ---
-import HeaderLink from './HeaderLink.astro';
-import { SITE_TITLE } from '../consts';
 import { Image } from 'astro:assets';
+import SlashLinks from './SlashLinks.astro';
+import { EMAIL_URL, GITHUB_URL, SITE_TITLE } from '../consts';
 import footerImage from '../assets/images/NASA-astronaut-Matthew-Dominick-amazing-photo-Milky-Way-Soyuz-spacecraft-ISS-Nikon-Z9-camera-3.jpeg';
+
+const footerLinks = [
+	{ label: 'home', href: '/' },
+	{ label: 'about', href: '/about' },
+	{ label: 'projects', href: '/projects' },
+	{ label: 'github', href: GITHUB_URL, isExternal: true },
+	{ label: 'email', href: EMAIL_URL },
+];
 ---
 
-<footer class="relative border-t border-white/10 mt-auto">
-	<!-- Background Image -->
-	<div class="absolute inset-0 z-0">
-		<Image 
+<footer data-footer class="relative flex h-[calc(100svh-3.5rem)] flex-col justify-end">
+	<div data-footer-photo class="footer-photo absolute inset-x-0 bottom-0 z-[1] h-svh overflow-hidden">
+		<Image
 			loading="lazy"
 			src={footerImage}
-			alt="NASA Milky Way view from ISS"
-			class="w-full h-full object-cover"
+			alt=""
+			class="h-full w-full object-cover"
 			width={1920}
 			height={1080}
-			quality={'high'}
+			quality="high"
 			format="webp"
 		/>
-		<!-- Dark overlay with industrial feel -->
-		<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/80 to-black/70 backdrop-blur-[2px]"></div>
+		<div class="footer-scrim absolute inset-0"></div>
 	</div>
 
-	<!-- Content -->
-	<div class="relative z-10 mx-auto max-w-[960px] py-12 px-4">
-		<div class="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
-			<!-- Site Info -->
-			<div class="space-y-4">
-				<h2 class="font-mono text-lg tracking-tight text-white/90">
-					{SITE_TITLE}
-				</h2>
-				<p class="font-mono text-sm tracking-tighter text-white/60">
-					personal blog and portfolio
+	<div class="footer-bar sticky bottom-0 z-[3] h-(--footer-bar)">
+		<div class="relative mx-auto flex h-full max-w-[1120px] flex-col justify-center px-4">
+			<button
+				type="button"
+				data-photo-toggle
+				data-state="closed"
+				aria-label="Show the photo full screen"
+				class="photo-toggle absolute right-4 bottom-6 grid size-11 cursor-pointer place-items-center border border-white/30 bg-black/40 text-white transition-[background-color,border-color,scale] duration-150 ease-out outline-none hover:border-white/60 hover:bg-black/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.97]"
+			>
+				<svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path class="photo-icon-arm arm-tl" d="M0 5V0h5" />
+					<path class="photo-icon-arm arm-tr" d="M0 5V0h5" />
+					<path class="photo-icon-arm arm-br" d="M0 5V0h5" />
+					<path class="photo-icon-arm arm-bl" d="M0 5V0h5" />
+				</svg>
+			</button>
+			<div data-footer-content class="footer-content flex max-w-3xl flex-col gap-5 pr-14">
+				<p class="font-mono text-sm text-white">{SITE_TITLE}</p>
+				<SlashLinks links={footerLinks} label="Footer" tone="inverse" />
+				<p class="font-mono text-xs text-white/60">
+					© {new Date().getFullYear()} {SITE_TITLE} · built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="link-inverse">Astro</a>
 				</p>
-				<div class="h-px w-16 bg-gradient-to-r from-white/20 to-transparent"></div>
-			</div>
-
-			<!-- Navigation Links -->
-			<div class="space-y-4">
-				<h3 class="font-mono text-sm tracking-tight text-white/90 uppercase">navigation</h3>
-				<div class="flex flex-col space-y-2">
-					<HeaderLink href="/" class="font-mono text-sm tracking-tighter text-white/60 hover:text-white/90 transition-colors">home</HeaderLink>
-					<HeaderLink href="/about" class="font-mono text-sm tracking-tighter text-white/60 hover:text-white/90 transition-colors">about</HeaderLink>
-					<HeaderLink href="/projects" class="font-mono text-sm tracking-tighter text-white/60 hover:text-white/90 transition-colors">projects</HeaderLink>
-				</div>
-				<div class="h-px w-16 bg-gradient-to-r from-white/20 to-transparent"></div>
-			</div>
-
-			<!-- Contact -->
-			<div class="space-y-4">
-				<h3 class="font-mono text-sm tracking-tight text-white/90 uppercase">contact</h3>
-				<div class="font-mono text-sm tracking-tighter text-white/60">
-					<p class="flex items-center gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-							<polyline points="22,6 12,13 2,6"></polyline>
-						</svg>
-						<a href="mailto:jhonra121@gmail.com">email me</a>
-					</p>
-					<p class="flex items-center gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-						</svg>
-						<a href="https://github.com/jhomra21" target="_blank" rel="noopener noreferrer">github.com/jhomra21</a>
-					</p>
-				</div>
-				<div class="h-px w-16 bg-gradient-to-r from-white/20 to-transparent"></div>
-			</div>
-		</div>
-
-		<div class="mt-12 pt-8 border-t border-white/10">
-			<div class="flex flex-col items-center justify-center space-y-4">
-				<p class="font-mono text-[0.7rem] tracking-tighter text-white/60 uppercase">
-					© {new Date().getFullYear()} {SITE_TITLE}
-				</p>
-				<div class="font-mono text-[0.7rem] tracking-tighter text-white/60 flex items-center gap-2">
-					<span class="w-2 h-px bg-white/20"></span>
-					<span>Built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="text-white/80 hover:text-white transition-colors">Astro</a></span>
-					<span class="w-2 h-px bg-white/20"></span>
-				</div>
 			</div>
 		</div>
 	</div>
 </footer>
 
 <style>
-	a {
-		position: relative;
-		display: inline-block;
+	/* The page text scrolls over the upper part of the photo, so it is darkened enough for grey text; the footer's own bar keeps the lighter tone. */
+	.footer-scrim {
+		background: linear-gradient(
+			to bottom,
+			rgb(0 0 0 / 0.88) calc(100% - var(--footer-bar) - 4rem),
+			rgb(0 0 0 / 0.72) 100%
+		);
+		transition: opacity 400ms var(--ease-out);
 	}
 
-	a::after {
-		content: '';
-		position: absolute;
-		width: 100%;
-		height: 1px;
-		bottom: -2px;
-		left: 0;
-		background: linear-gradient(to right, rgba(255,255,255,0.4), transparent);
-		transform: scaleX(0);
-		transform-origin: left;
-		transition: transform 200ms var(--ease-out);
+	/* The photo is one viewport tall and pinned to the footer's bottom, so full-screen mode only moves and unclips it; the image never rescales. */
+	.footer-photo {
+		clip-path: inset(3.5rem 0 0 0);
 	}
 
-	@media (hover: hover) and (pointer: fine) {
-		a:hover::after {
-			transform: scaleX(1);
+	:global(:root[data-photo-mode]) .footer-photo {
+		position: fixed;
+		z-index: 60;
+		height: 100dvh;
+		clip-path: none;
+	}
+
+	:global(:root[data-photo-mode]) .footer-scrim {
+		opacity: 0;
+	}
+
+	:global(:root[data-photo-mode]) .footer-bar {
+		z-index: 70;
+	}
+
+	.footer-content {
+		transition: opacity 200ms var(--ease-out), visibility 200ms;
+	}
+
+	:global(:root[data-photo-mode]) .footer-content {
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	/* Each arm is one corner bracket. Opening rotates every bracket 225deg about its corner and moves the corner to the center, so the four brackets overlap into an X. */
+	.photo-icon-arm {
+		transform-box: view-box;
+		transform-origin: 0 0;
+		vector-effect: non-scaling-stroke;
+		transition: transform 320ms var(--ease-out);
+	}
+
+	.arm-tl { transform: translate(4px, 4px) rotate(0deg); }
+	.arm-tr { transform: translate(20px, 4px) rotate(90deg); }
+	.arm-br { transform: translate(20px, 20px) rotate(180deg); }
+	.arm-bl { transform: translate(4px, 20px) rotate(270deg); }
+
+	[data-state='open'] .arm-tl { transform: translate(12px, 12px) rotate(225deg) scale(1.5); }
+	[data-state='open'] .arm-tr { transform: translate(12px, 12px) rotate(315deg) scale(1.5); }
+	[data-state='open'] .arm-br { transform: translate(12px, 12px) rotate(405deg) scale(1.5); }
+	[data-state='open'] .arm-bl { transform: translate(12px, 12px) rotate(495deg) scale(1.5); }
+
+	@media (prefers-reduced-motion: reduce) {
+		.photo-icon-arm,
+		.footer-scrim,
+		.footer-content {
+			transition: none;
 		}
-	}
-
-	a:focus-visible::after {
-		transform: scaleX(1);
-	}
-
-	.h-px {
-		position: relative;
-		overflow: hidden;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.h-px::after {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: -100%;
-			width: 200%;
-			height: 100%;
-			background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
-			animation: shimmer 3s linear infinite;
-		}
-	}
-
-	@keyframes shimmer {
-		0% { transform: translateX(0); }
-		100% { transform: translateX(50%); }
 	}
 </style>
+
+<script>
+	const photo = document.querySelector<HTMLElement>('[data-footer-photo]');
+	const toggle = document.querySelector<HTMLButtonElement>('[data-photo-toggle]');
+	const footerEl = document.querySelector<HTMLElement>('[data-footer]');
+
+	if (photo && toggle && footerEl) {
+		const root = document.documentElement;
+		const hiddenWhileOpen = [document.querySelector('header'), document.querySelector('[data-page-main]'), footerEl.querySelector('[data-footer-content]')];
+		const EASE = 'cubic-bezier(0.23, 1, 0.32, 1)';
+		const FOOTER_CLIP = 'inset(3.5rem 0 0 0)';
+		let isOpen = false;
+		let animation: Animation | null = null;
+		let token = 0;
+
+		const prefersReducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		const setButton = () => {
+			toggle.dataset.state = isOpen ? 'open' : 'closed';
+			toggle.setAttribute('aria-label', isOpen ? 'Close the full-screen photo' : 'Show the photo full screen');
+		};
+
+		const setPageHidden = (isHidden: boolean) => {
+			for (const element of hiddenWhileOpen) element?.toggleAttribute('inert', isHidden);
+
+			root.style.paddingRight = isHidden ? `${window.innerWidth - root.clientWidth}px` : '';
+			root.style.overflow = isHidden ? 'hidden' : '';
+		};
+
+		const finishClose = () => {
+			animation?.cancel();
+			animation = null;
+			root.removeAttribute('data-photo-mode');
+			setPageHidden(false);
+		};
+
+		const open = () => {
+			isOpen = true;
+			token += 1;
+			setButton();
+
+			// Reopening during the close animation turns it around instead of jumping.
+			if (animation && root.hasAttribute('data-photo-mode')) {
+				animation.reverse();
+
+				return;
+			}
+
+			const offset = photo.getBoundingClientRect().bottom - window.innerHeight;
+
+			setPageHidden(true);
+			root.setAttribute('data-photo-mode', '');
+
+			if (prefersReducedMotion()) return;
+
+			animation = photo.animate(
+				[
+					{ transform: `translateY(${offset}px)`, clipPath: FOOTER_CLIP },
+					{ transform: 'none', clipPath: 'inset(0)' },
+				],
+				{ duration: 500, easing: EASE, fill: 'both' },
+			);
+		};
+
+		const close = () => {
+			isOpen = false;
+			token += 1;
+			setButton();
+
+			if (prefersReducedMotion()) {
+				finishClose();
+
+				return;
+			}
+
+			const closeToken = token;
+			const offset = footerEl.getBoundingClientRect().bottom - window.innerHeight;
+
+			if (animation?.playState === 'running') {
+				animation.reverse();
+			} else {
+				animation?.cancel();
+				animation = photo.animate(
+					[
+						{ transform: 'none', clipPath: 'inset(0)' },
+						{ transform: `translateY(${offset}px)`, clipPath: FOOTER_CLIP },
+					],
+					{ duration: 380, easing: EASE, fill: 'both' },
+				);
+			}
+
+			animation.finished.then(
+				() => {
+					if (closeToken === token) finishClose();
+				},
+				() => {},
+			);
+		};
+
+		toggle.addEventListener('click', () => {
+			if (isOpen) close();
+			else open();
+		});
+
+		document.addEventListener('keydown', (event) => {
+			if (event.key !== 'Escape' || !isOpen) return;
+
+			close();
+			toggle.focus();
+		});
+	}
+</script>
+
+<script>
+	const main = document.querySelector<HTMLElement>('[data-page-main]');
+	const footer = document.querySelector<HTMLElement>('[data-footer]');
+
+	if (main && footer) {
+		const root = document.documentElement;
+		let frame = 0;
+
+		const overlays = new Map<HTMLImageElement, HTMLImageElement>();
+
+		// main's inverted "difference" blend would also invert its photos over the dark footer photo.
+		// Each photo gets an inverted copy on top, shown only below the reveal line, so the two
+		// inversions cancel there and the photo looks unchanged on both sides of the line.
+		const getOverlay = (image: HTMLImageElement) => {
+			const existing = overlays.get(image);
+
+			if (existing) return existing;
+
+			const overlay = document.createElement('img');
+
+			overlay.src = image.currentSrc || image.src;
+			overlay.className = image.className;
+			overlay.classList.remove('reveal');
+			overlay.alt = '';
+			overlay.setAttribute('aria-hidden', 'true');
+			overlay.style.cssText = 'position:absolute;margin:0;pointer-events:none;filter:invert(1);clip-path:inset(100% 0 0 0)';
+			main.append(overlay);
+			overlays.set(image, overlay);
+
+			return overlay;
+		};
+
+		const update = () => {
+			frame = 0;
+
+			const edge = footer.getBoundingClientRect().top;
+			const mainBox = main.getBoundingClientRect();
+
+			root.toggleAttribute('data-footer-reveal', edge < window.innerHeight);
+
+			for (const image of main.querySelectorAll<HTMLImageElement>('img:not([aria-hidden])')) {
+				const box = image.getBoundingClientRect();
+				const hidden = Math.min(Math.max(edge - box.top, 0), box.height);
+
+				if (hidden === box.height && !overlays.has(image)) continue;
+
+				const overlay = getOverlay(image);
+
+				overlay.style.left = `${box.left - mainBox.left}px`;
+				overlay.style.top = `${box.top - mainBox.top}px`;
+				overlay.style.width = `${box.width}px`;
+				overlay.style.height = `${box.height}px`;
+				overlay.style.clipPath = `inset(${hidden}px 0 0 0)`;
+			}
+		};
+
+		const scheduleUpdate = () => {
+			if (frame === 0) frame = requestAnimationFrame(update);
+		};
+
+		new ResizeObserver(() => {
+			main.style.setProperty('--main-h', `${main.offsetHeight}px`);
+			scheduleUpdate();
+		}).observe(main);
+
+		addEventListener('scroll', scheduleUpdate, { passive: true });
+		addEventListener('resize', scheduleUpdate);
+		update();
+	}
+</script>

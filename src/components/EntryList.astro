@@ -1,0 +1,33 @@
+---
+import FormattedDate from './FormattedDate.astro';
+import { getShortTitle, getSummary, type BlogEntry } from '@/lib/content';
+import { REVEAL_STEP_MS, getRevealStyle, getStaggerStep } from '@/lib/reveal';
+
+interface Props {
+	entries: BlogEntry[];
+	dateStyle?: 'year' | 'full';
+	headingLevel?: 'h2' | 'h3';
+	revealStartMs?: number;
+}
+
+const { entries, dateStyle = 'year', headingLevel: Heading = 'h2', revealStartMs = 0 } = Astro.props;
+---
+
+<ul class="flex flex-col gap-8">
+	{entries.map((entry, index) => (
+		<li class="reveal" style={getRevealStyle(revealStartMs + REVEAL_STEP_MS * getStaggerStep(index))}>
+			<a href={`/blog/${entry.id}/`} class="group flex flex-col gap-2">
+				<div class="flex items-baseline gap-3">
+					<Heading class="text-base font-medium text-neutral-950 decoration-neutral-400 underline-offset-4 group-hover:underline dark:text-neutral-50">
+						{getShortTitle(entry.data.title)}
+					</Heading>
+					<span class="flex-1"></span>
+					<span class="shrink-0 font-mono text-xs text-neutral-600 tabular-nums dark:text-neutral-400">
+						{dateStyle === 'full' ? <FormattedDate date={entry.data.pubDate} /> : entry.data.pubDate.getFullYear()}
+					</span>
+				</div>
+				<p class="text-balance text-sm text-neutral-600 dark:text-neutral-400">{getSummary(entry.data.description)}</p>
+			</a>
+		</li>
+	))}
+</ul>

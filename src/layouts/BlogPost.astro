@@ -1,236 +1,141 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import TransitionLayout from "./TransitionLayout.astro";
-import FormattedDate from "../components/FormattedDate.astro";
 import { Image } from "astro:assets";
+import TransitionLayout from "./TransitionLayout.astro";
+import PageColumn from "../components/PageColumn.astro";
+import SlashLinks from "../components/SlashLinks.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import { REVEAL_STEP_MS, getRevealStyle } from "../lib/reveal";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const {
-	title,
-	description,
-	pubDate,
-	updatedDate,
-	heroImage,
-	githubUrl,
-	npmUrl,
-	projectUrl,
-} = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, githubUrl, npmUrl, projectUrl, techStack } = Astro.props;
+
+const projectLinks = [
+	...(projectUrl ? [{ label: "live site", href: projectUrl, isExternal: true }] : []),
+	...(githubUrl ? [{ label: "git repo", href: githubUrl, isExternal: true }] : []),
+	...(npmUrl ? [{ label: "npm package", href: npmUrl, isExternal: true }] : []),
+];
 ---
 
 <TransitionLayout title={title} description={description}>
-	<article class="w-full max-w-[1120px] mx-auto px-4 pt-2 pb-16">
-		<div class="mb-6">
-			<button
-				id="back-button"
-				class="inline-flex items-center gap-2 px-4 py-2 text-sm font-mono text-zinc-800 dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer transition-[background-color,scale] duration-150 ease-out active:scale-[0.97] rounded-sm"
-				aria-label="Go back to previous page"
-				tabindex="0"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="16"
-					height="16"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="w-4 h-4"
-				>
-					<line x1="19" y1="12" x2="5" y2="12"></line>
-					<polyline points="12 19 5 12 12 5"></polyline>
-				</svg>
-				Go Back
-			</button>
-		</div>
-		<div
-			class="border-l-2 border-zinc-700 dark:border-zinc-300 bg-white dark:bg-zinc-800/50 p-6 backdrop-blur-sm"
-		>
-			{
-				heroImage && (
-					<div class="mb-8">
-						<Image
-							src={heroImage}
-							alt={"banner for project"}
-							width={1020}
-							height={510}
-							class="w-full h-auto"
-							quality={"high"}
-							format="webp"
-							loading="eager"
-						/>
-					</div>
-				)
-			}
-			<div
-				class="prose prose-zinc dark:prose-invert max-w-none font-mono"
-			>
-				<h1 class="text-4xl font-bold mb-4 tracking-tight">{title}</h1>
-				<div
-					class="flex gap-2 text-zinc-600 dark:text-zinc-400 mb-8 font-mono text-sm tracking-tight"
-				>
+	<PageColumn width="reading">
+		<article class="flex flex-col gap-10">
+			<header class="reveal flex flex-col gap-4">
+				<button id="back-button" type="button" class="link self-start cursor-pointer font-mono text-xs" aria-label="Go back to the previous page">
+					← back
+				</button>
+				<h1 class="text-xl font-medium tracking-tight text-balance text-neutral-950 dark:text-neutral-50">{title}</h1>
+				<p class="flex flex-wrap gap-x-2 font-mono text-xs text-neutral-600">
 					<FormattedDate date={pubDate} />
-					{
-						updatedDate && (
-							<div>
-								Last updated on{" "}
-								<FormattedDate date={updatedDate} />
-							</div>
-						)
-					}
-				</div>
-				<div class="flex flex-wrap items-center gap-x-6 gap-y-4 mb-8">
-					{
-						projectUrl && (
-							<a
-								href={projectUrl}
-								target="_blank"
-								class="link-hover inline-flex items-center gap-2 text-sm font-mono"
-							>
-								Live Site
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									class="w-4 h-4"
-								>
-									<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-									<polyline points="15 3 21 3 21 9" />
-									<line x1="10" y1="14" x2="21" y2="3" />
-								</svg>
-							</a>
-						)
-					}
-					{
-						githubUrl && (
-							<a
-								href={githubUrl}
-								target="_blank"
-								class="link-hover inline-flex items-center gap-2 text-sm font-mono"
-							>
-								Git Repo
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="w-4 h-4"
-									viewBox="0 0 24 24"
-									fill="currentColor"
-								>
-									<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-								</svg>
-							</a>
-						)
-					}
-					{
-						npmUrl && (
-							<a
-								href={npmUrl}
-								target="_blank"
-								rel="noopener noreferrer"
-								class="link-hover inline-flex items-center gap-2 text-sm font-mono"
-							>
-								NPM Package
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="w-4 h-4"
-									viewBox="0 0 24 24"
-									fill="currentColor"
-									aria-hidden="true"
-								>
-									<path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z" />
-								</svg>
-							</a>
-						)
-					}
-				</div>
+					{updatedDate && (
+						<span>
+							· updated <FormattedDate date={updatedDate} />
+						</span>
+					)}
+				</p>
+				{projectLinks.length > 0 && <SlashLinks links={projectLinks} label="Project links" />}
+			</header>
+
+			{heroImage && (
+				<Image
+					src={heroImage}
+					alt=""
+					width={1344}
+					height={672}
+					class="reveal w-full h-auto border border-neutral-200 dark:border-neutral-800"
+					style={getRevealStyle(REVEAL_STEP_MS)}
+					quality="high"
+					format="webp"
+					loading="eager"
+				/>
+			)}
+
+			<div class="reveal prose prose-neutral dark:prose-invert max-w-none" style={getRevealStyle(REVEAL_STEP_MS * 2)}>
 				<slot />
 			</div>
-		</div>
-	</article>
+
+			{techStack && techStack.length > 0 && (
+				<section class="flex flex-col gap-3 border-t border-neutral-200 pt-8 dark:border-neutral-800" aria-labelledby="stack-heading">
+					<h2 id="stack-heading" class="font-mono text-xs text-neutral-600">stack</h2>
+					<dl class="flex flex-col gap-2 text-sm">
+						{techStack.map((tech) => (
+							<div class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
+								<dt class="shrink-0 font-medium sm:w-44">{tech.name}</dt>
+								<dd class="text-neutral-600 dark:text-neutral-400">{tech.description}</dd>
+							</div>
+						))}
+					</dl>
+				</section>
+			)}
+		</article>
+	</PageColumn>
 </TransitionLayout>
 
 <script>
-	document.addEventListener("DOMContentLoaded", () => {
-		const backButton = document.getElementById("back-button");
-
-		if (backButton) {
-			// Handle click events
-			backButton.addEventListener("click", () => {
-				history.back();
-			});
-			// Handle keyboard events
-			backButton.addEventListener("keydown", (event) => {
-				if (event.key === "Enter" || event.key === " ") {
-					event.preventDefault();
-					history.back();
-				}
-			});
-		}
+	document.getElementById("back-button")?.addEventListener("click", () => {
+		history.back();
 	});
 </script>
 
 <style>
 	@reference "../styles/global.css";
 
-	/* Blog post styles */
-	.prose :global(h1),
-	.prose :global(h2),
-	.prose :global(h3),
-	.prose :global(h4),
-	.prose :global(h5),
-	.prose :global(h6) {
-		@apply font-mono tracking-tight text-zinc-900 dark:text-zinc-100 font-bold;
+	.prose :global(:where(h2, h3, h4, h5, h6)) {
+		@apply font-sans font-medium tracking-tight text-neutral-950 dark:text-neutral-50;
 	}
 
 	.prose :global(h2) {
-		@apply text-2xl mb-4 mt-8;
+		@apply mt-10 mb-3 text-lg;
+	}
+
+	.prose :global(h3) {
+		@apply mt-8 mb-2 text-base;
 	}
 
 	.prose :global(p) {
-		@apply mb-4 text-zinc-700 dark:text-zinc-300 tracking-tight leading-relaxed;
+		@apply my-4 leading-relaxed text-neutral-700 dark:text-neutral-300;
 	}
 
 	.prose :global(ul) {
-		@apply mb-4 list-none pl-4 space-y-2;
+		@apply my-4 list-none space-y-2 pl-4;
 	}
 
 	.prose :global(li) {
-		@apply text-zinc-700 dark:text-zinc-300 tracking-tight relative;
+		@apply relative text-neutral-700 dark:text-neutral-300;
 	}
 
 	.prose :global(li::before) {
 		content: "—";
-		@apply absolute -left-4 text-zinc-400;
+		@apply absolute -left-4 text-neutral-400;
 	}
 
 	.prose :global(a) {
-		@apply text-zinc-900 dark:text-zinc-100 border-b border-zinc-400 hover:border-current transition-colors duration-200;
+		@apply font-normal text-neutral-950 underline decoration-neutral-400 underline-offset-4 transition-[text-decoration-color] duration-200 hover:decoration-current dark:text-neutral-50 dark:decoration-neutral-600;
 	}
 
 	.prose :global(code) {
-		@apply font-mono bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-sm tracking-tight;
+		@apply rounded-sm bg-neutral-100 px-1 py-0.5 font-mono text-[0.85em] font-normal dark:bg-neutral-800;
+	}
+
+	.prose :global(code::before),
+	.prose :global(code::after) {
+		content: none;
 	}
 
 	.prose :global(pre) {
-		@apply bg-zinc-100 dark:bg-zinc-800 p-4 rounded-lg overflow-x-auto;
+		@apply overflow-x-auto rounded-none border border-neutral-200 bg-neutral-50 p-4 text-xs leading-relaxed text-neutral-800 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200;
 	}
 
 	.prose :global(pre code) {
-		@apply bg-transparent p-0;
+		@apply bg-transparent p-0 text-inherit;
 	}
 
 	.prose :global(blockquote) {
-		@apply border-l-2 border-zinc-300 dark:border-zinc-600 pl-4 italic;
+		@apply border-l-2 border-neutral-300 pl-4 font-normal not-italic text-neutral-600 dark:border-neutral-700 dark:text-neutral-400;
 	}
 
 	.prose :global(img) {
-		@apply rounded-lg shadow-lg my-8;
+		@apply my-8 border border-neutral-200 dark:border-neutral-800;
 	}
 </style>

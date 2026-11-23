@@ -1,42 +1,20 @@
 ---
 import TransitionLayout from '../../layouts/TransitionLayout.astro';
+import PageColumn from '@/components/PageColumn.astro';
+import EntryList from '@/components/EntryList.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
-import { Image } from 'astro:assets';
+import { getPosts } from '@/lib/content';
+import { REVEAL_STEP_MS } from '@/lib/reveal';
 
-const posts = (await getCollection('blog'))
-	.filter(post => !post.id.startsWith('about'))
-	.sort((a, b) => {
-		return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
-	});
+const posts = await getPosts();
 ---
 
-<TransitionLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-	<section class="w-full max-w-[1120px] mx-auto p-8">
-		<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-			{
-				posts.map((post) => (
-					<li>
-						<a href={`/blog/${post.id}/`} class="block transition-transform hover:-translate-y-1">
-							{post.data.heroImage && (
-								<Image 
-									src={post.data.heroImage} 
-									alt=""
-									width={720} 
-									height={360} 
-									loading="eager" 
-									class="w-full h-48 object-cover rounded-none mb-4"
-								/>
-							)}
-							<h4 class="text-xl font-semibold text-zinc-800 dark:text-zinc-200 mb-2">{post.data.title}</h4>
-							<p class="text-sm text-zinc-600 dark:text-zinc-400">
-								<FormattedDate date={post.data.pubDate} />
-							</p>
-						</a>
-					</li>
-				))
-			}
-		</ul>
-	</section>
+<TransitionLayout title={`Blog | ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
+	<PageColumn>
+		<div class="reveal flex flex-col gap-2">
+			<h1 class="text-lg font-medium tracking-tight">Blog</h1>
+			<p class="text-sm text-neutral-600 dark:text-neutral-400">{posts.length} posts and project write-ups, newest first.</p>
+		</div>
+		<EntryList entries={posts} dateStyle="full" revealStartMs={REVEAL_STEP_MS} />
+	</PageColumn>
 </TransitionLayout>

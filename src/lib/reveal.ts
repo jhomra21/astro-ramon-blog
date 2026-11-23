@@ -1,28 +1,16 @@
 export const REVEAL_STEP_MS = 50;
-export const REVEAL_MAX_CARD_STEPS = 9;
+export const REVEAL_MAX_STEPS = 9;
 
-export const HERO_REVEAL = {
-	portrait: { delayMs: 35, durationMs: 220, scale: 0.94 },
-	name: { delayMs: 95 },
-	subtitle: { delayMs: 139 },
-	bio: { delayMs: 173 },
-	socials: { delayMs: 208 },
-	buttons: { delayMs: 241 },
-} as const;
-
-export const PROJECTS_REVEAL_START_MS = 240;
-
-interface RevealStyleOptions {
-	durationMs?: number;
-	scale?: number;
+export function getRevealStyle(delayMs: number) {
+	return `--reveal-delay:${delayMs}ms`;
 }
 
-export function getRevealStyle(delayMs: number, { durationMs, scale }: RevealStyleOptions = {}) {
-	const declarations = [`--reveal-delay:${delayMs}ms`];
+/** Step of a list item within a stagger; long lists stop adding delay after REVEAL_MAX_STEPS. */
+export function getStaggerStep(index: number) {
+	return Math.min(index, REVEAL_MAX_STEPS);
+}
 
-	if (durationMs !== undefined) declarations.push(`--reveal-duration:${durationMs}ms`);
-
-	if (scale !== undefined) declarations.push(`--reveal-scale:${scale}`);
-
-	return declarations.join(";");
+/** Steps a staggered list of `count` items takes, so the next element can follow its last item. */
+export function getStaggerLength(count: number) {
+	return count === 0 ? 0 : getStaggerStep(count - 1) + 1;
 }

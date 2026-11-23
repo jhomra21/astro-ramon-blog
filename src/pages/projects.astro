@@ -1,11 +1,22 @@
 ---
 import TransitionLayout from "../layouts/TransitionLayout.astro";
-import ProjectsSection from '../components/ProjectsSection.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import PageColumn from "@/components/PageColumn.astro";
+import EntryList from "@/components/EntryList.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { getProjects } from "@/lib/content";
+import { REVEAL_STEP_MS } from "@/lib/reveal";
+
+const projects = await getProjects();
 ---
 
 <TransitionLayout title={`Projects | ${SITE_TITLE}`} description={SITE_DESCRIPTION}>
-	<main class="container mx-auto max-w-6xl px-8 pt-2 py-12">
-		<ProjectsSection maxProjects={999} />
-	</main>
+	<PageColumn>
+		<div class="reveal flex flex-col gap-2">
+			<h1 class="text-lg font-medium tracking-tight">Projects</h1>
+			<p class="text-sm text-neutral-600 dark:text-neutral-400">
+				{projects.length} projects, with featured ones first and the rest newest first.
+			</p>
+		</div>
+		<EntryList entries={projects} revealStartMs={REVEAL_STEP_MS} />
+	</PageColumn>
 </TransitionLayout>

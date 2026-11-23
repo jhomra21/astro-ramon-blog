@@ -1,0 +1,71 @@
+---
+title: 'PostJr: Social media scheduling for you and your AI agent'
+description: 'A social media scheduler that publishes from Cloudflare at the time you pick, with no browser open. People use the web app; agents and scripts use the same API through MCP, REST, and a CLI.'
+pubDate: '2026-10-26'
+heroImage: '/src/assets/images/postjr-landing-page.png'
+isProject: true
+projectUrl: 'https://postjr.com'
+projectStatus: 'live'
+projectType: 'featured'
+npmUrl: 'https://www.npmjs.com/package/postjr'
+techStack: [
+    { name: 'Solid 2', description: 'Web app served as static assets by the Worker' },
+    { name: 'Cloudflare Workers', description: 'API, MCP server, scheduler, and queue consumer in one Worker' },
+    { name: 'Durable Objects', description: 'One alarm per workspace that publishes posts on time' },
+    { name: 'D1 + R2', description: 'Posts and publication state in D1, uploaded media in R2' },
+    { name: 'Effect 4', description: 'One typed API contract shared by the server and every client' },
+    { name: 'MCP', description: 'Agent access from Claude, ChatGPT, Codex, and Cursor' },
+    { name: 'Better Auth', description: 'Google, GitHub, password, and passkey sign-in' },
+    { name: 'Playwright', description: 'End-to-end tests against a local Worker and a fake network' }
+]
+tags: ['Social Media', 'Scheduling', 'MCP', 'AI Agents', 'Cloudflare Workers', 'Durable Objects', 'Effect', 'SolidJS', 'TypeScript']
+---
+
+PostJr is a social media scheduler for creators and small businesses. You write a post once, pick the accounts, and choose a time. PostJr publishes it at that time from Cloudflare, so no browser tab or laptop has to be open. An AI agent can do the same work for you through MCP.
+
+## What it does
+
+- Publishes to X, Bluesky, Mastodon, LinkedIn personal profiles, YouTube Shorts, Discord, Telegram, and Slack. TikTok, Threads, Instagram, and Pinterest are listed as coming soon while each network reviews the app.
+- Gives every network its own preview and its own edits, so a cut-off line or the wrong image shows up before the post goes live.
+- Crops, trims, and compresses images and video in the browser before upload.
+- Shows each network's result on the queue page the moment it lands.
+- Gives every account a private workspace, with Google, GitHub, password, or passkey sign-in.
+
+## One API for the web app, agents, and scripts
+
+The web app, the MCP server, and the CLI all call one API. The contract is defined once as an Effect `HttpApi`, and a shared client package derives a typed client from it. A change to the API reaches every client at once, and no client re-implements server logic.
+
+- **REST** lives at `/v1`, described by an OpenAPI file.
+- **MCP** lives at `/mcp`. Claude, Claude Code, Codex, ChatGPT, and Cursor connect with the URL and a browser sign-in, without an API key. Each tool maps to one endpoint, so an agent can check a post against each network's limits, schedule it, wait for it to publish, and delete it from the networks. Settings lists connected agents, and Revoke cuts their access immediately.
+- **CLI** ships on npm as [`postjr`](https://www.npmjs.com/package/postjr). It prints JSON for scripts and agents.
+
+## How publishing stays reliable
+
+```text
+browser, CLI, MCP client
+        │
+   Cloudflare Worker ── /api/auth  Better Auth
+        │            ── /v1        Effect HttpApi
+        │            ── /mcp       MCP tools over the same API
+        │
+   D1 (state)    R2 (media)    Images binding
+        ▲
+   Workspace alarm: claims each post at its time
+        │
+   Queue ──► Worker consumer: one result per network
+        │
+   WebSocket events ──► open tabs update live
+```
+
+- D1 is the source of truth. The queue only delivers work, so a lost message is rebuilt from D1.
+- A Durable Object per workspace sets an alarm for the next due post and claims it at that time. A daily cron re-arms every alarm as a backstop.
+- Each scheduled publication keeps a snapshot of the post. Editing after scheduling creates a new revision instead of changing what is already queued.
+- An attempt record with an idempotency key is written before any call to a network. When the outcome is unclear, PostJr does not retry blindly: it reads the network to prove whether the post exists, and waits for the owner if it still cannot tell.
+- A per-channel lease keeps two publishes from refreshing the same single-use token at once.
+- Networks that finish later, such as video processing, park the post in `processing` and resume it with a delayed check. Nothing waits on a provider.
+
+## Stack and testing
+
+The Solid 2 app, the REST API, Better Auth, the MCP server, the scheduler, and the queue consumer all run in one Cloudflare Worker. Alchemy 2 declares the Cloudflare resources and runs them locally. The Playwright suite gives each test worker its own local Worker, fake network, account, and receipt file, and keeps screenshots and publication receipts so every run can be checked again.
+
+The source is private. Try PostJr at [postjr.com](https://postjr.com): 7 days free, then plans start at $29 a month.

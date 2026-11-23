@@ -14,7 +14,9 @@ const { title, description = 'Personal website and blog' } = Astro.props;
 <html lang="en">
     <head>
         <BaseHead title={title} description={description} />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;600&display=swap">
         <script is:inline>
             // The cross-document sweep mask below hides the new page for ~450ms
             // (0.15s delay + 0.3s sweep), so entrance animations that start earlier are never seen.
@@ -26,10 +28,10 @@ const { title, description = 'Personal website and blog' } = Astro.props;
             });
         </script>
     </head>
-    <body class="bg-zinc-50 dark:bg-zinc-900">
+    <body class="bg-white dark:bg-neutral-950">
         <div class="flex min-h-dvh flex-col">
             <Header />
-            <main class="flex-1" transition:animate="slide">
+            <main class="page-main" data-page-main transition:animate="slide">
                 <div transition:name="content">
                     <slot />
                 </div>

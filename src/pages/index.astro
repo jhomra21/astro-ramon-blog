@@ -1,23 +1,97 @@
 ---
-import TransitionLayout from "../layouts/TransitionLayout.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import ProjectsSection from "@/components/ProjectsSection.astro";
-import HeroSection from "@/components/HeroSection.astro";
-import QuickLinks from "@/components/QuickLinks.astro";
-import { PROJECTS_REVEAL_START_MS } from "@/lib/reveal";
+import { Image } from "astro:assets";
+import TransitionLayout from "@/layouts/TransitionLayout.astro";
+import PageColumn from "@/components/PageColumn.astro";
+import SlashLinks from "@/components/SlashLinks.astro";
+import EntryList from "@/components/EntryList.astro";
+import { TextScrambleShimmer } from "@/components/motion-ui/textscrambleshimmer";
+import { InfoDialog } from "@/components/react/InfoDialog";
+import { EMAIL_URL, GITHUB_URL, MCP_URL, RESUME_URL, SITE_DESCRIPTION, SITE_TITLE, TWITTER_URL } from "@/consts";
+import { getProjects, isFeatured } from "@/lib/content";
+import { REVEAL_STEP_MS, getRevealStyle, getStaggerLength } from "@/lib/reveal";
+import juanImage from "@/assets/images/juan-graduation.jpg";
+
+const HOME_PROJECT_LIMIT = 8;
+const SCRAMBLE_DURATION_S = 1.6;
+
+const projects = await getProjects();
+const featuredProjects = projects.filter(isFeatured).slice(0, HOME_PROJECT_LIMIT);
+
+const elsewhereLinks = [
+	{ label: "twitter", href: TWITTER_URL, isExternal: true },
+	{ label: "github", href: GITHUB_URL, isExternal: true },
+	{ label: "email", href: EMAIL_URL },
+	{ label: "resume", href: RESUME_URL, isExternal: true },
+];
+
+const PROJECTS_STEP = 4;
+const MCP_STEP = PROJECTS_STEP + getStaggerLength(featuredProjects.length);
+const ABOUT_STEP = MCP_STEP + 1;
+
+const revealAt = (step: number) => getRevealStyle(REVEAL_STEP_MS * step);
 ---
 
 <TransitionLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-	<div class="max-w-[1120px] mx-auto px-4 pt-6 pb-16 space-y-10">
-		<HeroSection />
+	<PageColumn>
+		<div class="flex flex-col gap-5">
+			<div class="reveal flex items-center gap-4" style={revealAt(0)}>
+				<Image
+					src={juanImage}
+					alt="Juan Martinez"
+					width={128}
+					height={128}
+					priority
+					class="size-16 shrink-0 rounded-full object-cover"
+				/>
+				<div class="flex flex-col gap-0.5">
+					<TextScrambleShimmer
+						text="Juan Martinez"
+						className="text-lg font-medium tracking-tight text-neutral-950 dark:text-neutral-50"
+						scrambleDuration={SCRAMBLE_DURATION_S}
+						client:load
+					/>
+					<p class="font-mono text-xs text-neutral-600">software engineer</p>
+				</div>
+			</div>
 
-		<!-- Projects Section -->
-		<div class="space-y-8">
-			<ProjectsSection maxProjects={7} featuredOnly revealDelayMs={PROJECTS_REVEAL_START_MS} />
+			<SlashLinks links={elsewhereLinks} label="Elsewhere" style={revealAt(1)} />
+
+			<p class="reveal max-w-xl text-sm leading-7 font-medium" style={revealAt(2)}>
+				I'm a software engineer. I build developer tools, real-time web apps, and native apps, mostly in TypeScript and SolidJS.
+				<br />
+				I spent six months at Diffusion Studio moving their video editor's UI to SolidJS.
+				<br />
+				Lately I built <a class="link" href="/blog/postjr/">PostJr</a>, <a class="link" href="/blog/bgcut/">BG Cut</a>, and <a class="link" href="/blog/robot-heads-solid/">robot-heads-solid</a>.
+			</p>
 		</div>
 
-		<!-- Quick Links -->
-		<QuickLinks />
-	</div>
-</TransitionLayout>
+		<section class="flex flex-col gap-6" aria-labelledby="projects-heading">
+			<div class="reveal flex items-baseline justify-between gap-4" style={revealAt(3)}>
+				<h2 id="projects-heading" class="font-mono text-xs text-neutral-600">projects</h2>
+				<a class="link text-sm" href="/projects">see all {projects.length}</a>
+			</div>
+			<EntryList entries={featuredProjects} headingLevel="h3" revealStartMs={REVEAL_STEP_MS * PROJECTS_STEP} />
+		</section>
 
+		<section class="reveal flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-8" style={revealAt(MCP_STEP)}>
+			<div class="flex min-w-0 flex-col gap-2">
+				<h2 class="text-base font-medium">MCP server</h2>
+				<p class="text-sm text-neutral-600 dark:text-neutral-400">
+					An MCP server I run on Cloudflare Workers. You can connect to it from this page and try its tools.
+				</p>
+			</div>
+			<InfoDialog
+				client:visible
+				title="MCP server"
+				contentLines={[`mcp url: ${MCP_URL}`]}
+				triggerText="Open MCP server"
+				triggerClassName="button-flat shrink-0"
+			/>
+		</section>
+
+		<a href="/about" class="reveal group flex flex-col gap-2" style={revealAt(ABOUT_STEP)}>
+			<h2 class="text-base font-medium decoration-neutral-400 underline-offset-4 group-hover:underline">About me</h2>
+			<p class="text-balance text-sm text-neutral-600 dark:text-neutral-400">Work history, projects, tools, and education.</p>
+		</a>
+	</PageColumn>
+</TransitionLayout>

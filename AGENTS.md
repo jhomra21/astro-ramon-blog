@@ -102,13 +102,17 @@ Root config files:
 - Use Tailwind utility classes first.
 - Use CSS in `src/styles/global.css` or component `<style>` blocks when utility classes are insufficient.
 - Prefer Astro `class:list` / `class:` patterns over ternaries in class strings where practical.
-- Maintain the current visual language:
-  - Monospace typography.
-  - Neutral/zinc palette.
-  - Dark-mode support.
-  - Swiss-inspired, clean portfolio aesthetic.
-  - Square or subtle-radius surfaces.
-  - Minimal borders, `glass-panel`, `link-underline`, badge-like details.
+- Maintain the current visual language, modeled on shadcn.com:
+  - Schibsted Grotesk for text, 14px base size; JetBrains Mono for the header, small labels, and dates.
+  - White background, neutral palette, dark-mode support.
+  - One left-aligned column (`PageColumn`, `max-w-3xl`; `width="reading"` and `max-w-2xl` for posts) aligned with the header logo. Lists stay one column.
+  - Plain underlined links (`.link`, `.link-inverse` on the footer image), slash-separated link rows (`SlashLinks`), and title-plus-sentence lists (`EntryList`) instead of cards.
+  - No cards, shadows, gradients, or badges. The flat grey `.button-flat` is the only button style.
+- Keep the header typewriter, the scrambling name on the homepage, and the footer photo.
+- The footer's bottom-right button (`[data-photo-toggle]`) shows the footer photo full screen: it sets `data-photo-mode` on `<html>`, makes the header, `main`, and footer text `inert`, and locks scrolling. The same button closes it, and so does Escape. Its icon is four SVG corner brackets that rotate into an X; the transforms live in `Footer.astro`.
+- Entrance animations use `.reveal` with delays from `src/lib/reveal.ts` (50ms steps). Keep one sequence per page in top-to-bottom order; place anything after a staggered list with `getStaggerLength(count)` instead of a fixed step.
+- The footer reveal pins `main` (`.page-main` in `global.css`, `--main-h` set by the footer script) once the page reaches the footer bar, then the footer photo scrolls up over it and stops at the header. `main` is inverted and blended with `difference` while the footer is in view, so keep its background transparent and avoid `position: fixed` inside it. The footer script lays an inverted copy over each photo in `main`, shown only below the photo's edge, so photos look unchanged over the footer photo.
+- Text in `main` must stay readable over the footer photo too. The `.footer-scrim` gradient darkens the photo to 88% where page text passes over it. Use `text-neutral-600` or darker for secondary text and labels in `main` (not `neutral-500` or lighter), and `decoration-neutral-400` for underlines, since the blend turns lighter greys too faint on the dark photo.
 - Preserve mobile-first responsive design.
 - Preserve accessibility attributes and keyboard behavior on interactive elements.
 - Respect reduced-motion preferences.

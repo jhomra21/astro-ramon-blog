@@ -1,0 +1,39 @@
+---
+interface LinkItem {
+	label: string;
+	href: string;
+	isExternal?: boolean;
+}
+
+interface Props {
+	links: LinkItem[];
+	label: string;
+	tone?: 'default' | 'inverse';
+	style?: string;
+}
+
+const { links, label, tone = 'default', style } = Astro.props;
+---
+
+<nav
+	aria-label={label}
+	class:list={[
+		'reveal flex flex-wrap items-center gap-x-2 gap-y-1 text-sm',
+		{ 'text-neutral-400': tone === 'default', 'text-white/50': tone === 'inverse' },
+	]}
+	style={style}
+>
+	{links.map((link, index) => (
+		<Fragment>
+			{index > 0 && <span aria-hidden="true">/</span>}
+			<a
+				href={link.href}
+				class:list={{ link: tone === 'default', 'link-inverse': tone === 'inverse' }}
+				target={link.isExternal ? '_blank' : undefined}
+				rel={link.isExternal ? 'noopener noreferrer' : undefined}
+			>
+				{link.label}
+			</a>
+		</Fragment>
+	))}
+</nav>

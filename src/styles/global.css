@@ -12,16 +12,19 @@
 	--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 	--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 	--default-transition-timing-function: var(--ease-out);
+	--font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 @layer base {
 	/* Nothing toggles the dark class, so native controls and scrollbars must stay light. */
 	:root {
 		color-scheme: light;
+		--footer-bar: 12rem;
 	}
 
 	html {
-		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+		font-family: var(--font-sans);
 		background: white;
 		background-size: 100% 100%;
 		-webkit-tap-highlight-color: transparent;
@@ -43,7 +46,7 @@
 	}
 
 	body {
-		@apply antialiased text-zinc-900 dark:text-zinc-100 min-h-dvh;
+		@apply antialiased text-sm text-neutral-950 dark:text-neutral-50 min-h-dvh;
 	}
 
 	::selection {
@@ -52,20 +55,42 @@
 }
 
 @layer components {
-	.link-underline {
-		@apply border-b border-zinc-400 hover:border-current transition-colors duration-200;
+	.link {
+		@apply text-neutral-700 underline decoration-neutral-400 underline-offset-4 transition-[color,text-decoration-color] duration-200 hover:text-neutral-950 hover:decoration-current dark:text-neutral-300 dark:decoration-neutral-600 dark:hover:text-neutral-50;
 	}
 
-	.glass-panel {
-		@apply border-l-2 border-zinc-700 dark:border-zinc-300 bg-white dark:bg-zinc-800/50 backdrop-blur-sm;
+	.link-inverse {
+		@apply text-white/80 underline decoration-white/30 underline-offset-4 transition-[color,text-decoration-color] duration-200 hover:text-white hover:decoration-white;
 	}
+
+	.button-flat {
+		@apply inline-flex h-10 cursor-pointer items-center gap-2 border border-[#919191] bg-[#e0e0e0] px-4 text-base text-black transition-[background-color,scale] duration-150 ease-out outline-none hover:bg-[#d6d6d6] focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-2 active:scale-[0.97] sm:h-7 sm:px-2 sm:text-sm;
+	}
+}
+
+/*
+  Footer reveal: once the page bottom reaches the footer bar, main stays pinned (the footer script
+  measures --main-h) and the footer photo keeps scrolling up over it until it meets the header.
+  Inverting main and blending it with "difference" draws every color unchanged over white and
+  light over the dark photo, so text stays readable exactly where the photo's edge passes.
+*/
+.page-main {
+	position: sticky;
+	z-index: 2;
+	top: calc(100svh - var(--footer-bar) - var(--main-h, 100000px));
+	min-height: calc(100svh - 3.5rem - var(--footer-bar));
+}
+
+:root[data-footer-reveal] .page-main {
+	filter: invert(1);
+	mix-blend-mode: difference;
 }
 
 /* Staggered entrance: pure CSS so content stays visible without JS. */
 @keyframes reveal-in {
 	from {
 		opacity: 0;
-		transform: translateY(4px) scale(var(--reveal-scale, 0.98));
+		transform: translateY(4px) scale(0.98);
 	}
 	to {
 		opacity: 1;
@@ -83,7 +108,7 @@
 }
 
 .reveal {
-	animation: reveal-in var(--reveal-duration, 260ms) var(--ease-out) both;
+	animation: reveal-in 260ms var(--ease-out) both;
 	animation-delay: calc(var(--reveal-delay, 0ms) + var(--vt-offset, 0ms));
 }
 
