@@ -2,6 +2,22 @@
 
 This file tracks notable repository state, implementation work, cleanup reviews, and validation results. Keep entries in reverse chronological order with the newest date first.
 
+## 2026-11-25
+
+### Work completed
+
+- Design audit pass. Type scale: page titles (`/projects`, `/blog`, posts) are `text-2xl`, the homepage name `text-xl`, prose `h2`/`h3` `text-xl`/`text-lg` with more space above `h2`. Post text, lists, quotes, and headings are capped at 35rem (about 70 characters per line); images and code blocks keep the full column. Prose paragraphs and list items use `text-wrap: pretty`, prose headings `balance`, and list summaries `pretty` instead of `balance` so they fill the line. The homepage bio line height went from 28px to 24px.
+- Each list row's link now has an 8px larger hit area and a visible focus outline around the whole row for keyboard users.
+- The destructive button variant (MCP dialog) uses `red-600` with white text for contrast.
+- The footer photo is dimmed less: the scrim is 70% black where page text passes over it and 45% at the bottom (was 88% and 72%). Full-screen mode also brightens the photo (`brightness(1.25) saturate(1.1)`).
+- Closing full-screen mode is faster: the photo slides back in 200ms (was 380ms) and the footer text fades in over 150ms (was 200ms). Measured at 1280x800 at the top of the homepage and 600px down, the page is visible at most 83ms after the header.
+- The homepage bio now names PostJr, MACROS, and audiocn Solid, each linking to its project page. MACROS's live-site link now points to https://macrosios.com.
+
+### Validation
+
+- impeccable `detect` on `/`, `/projects`, `/blog`, `/about`, `/blog/postjr/`, and `src` reported 0 findings (15 before). Checked at 1280px and 390px in the browser.
+- `bun run lint` passed with 0 warnings and 0 errors; `bun run build` built 24 pages.
+
 ## 2026-11-23
 
 ### Work completed

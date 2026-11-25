@@ -46,7 +46,7 @@ const revealAt = (step: number) => getRevealStyle(REVEAL_STEP_MS * step);
 				<div class="flex flex-col gap-0.5">
 					<TextScrambleShimmer
 						text="Juan Martinez"
-						className="text-lg font-medium tracking-tight text-neutral-950 dark:text-neutral-50"
+						className="text-xl font-medium tracking-tight text-neutral-950 dark:text-neutral-50"
 						scrambleDuration={SCRAMBLE_DURATION_S}
 						client:load
 					/>
@@ -56,12 +56,12 @@ const revealAt = (step: number) => getRevealStyle(REVEAL_STEP_MS * step);
 
 			<SlashLinks links={elsewhereLinks} label="Elsewhere" style={revealAt(1)} />
 
-			<p class="reveal max-w-xl text-sm leading-7 font-medium" style={revealAt(2)}>
+			<p class="reveal max-w-xl text-sm leading-6 font-medium" style={revealAt(2)}>
 				I'm a software engineer. I build developer tools, real-time web apps, and native apps, mostly in TypeScript and SolidJS.
 				<br />
 				I spent six months at <a class="link" href="https://diffusion.studio" target="_blank" rel="noopener noreferrer">Diffusion Studio</a> moving their video editor's UI to SolidJS.
 				<br />
-				Lately I built <a class="link" href="/blog/postjr/">PostJr</a>, <a class="link" href="/blog/bgcut/">BG Cut</a>, and <a class="link" href="/blog/robot-heads-solid/">robot-heads-solid</a>.
+				Lately I built <a class="link" href="/blog/postjr/">PostJr</a>, <a class="link" href="/blog/macros-monorepo/">MACROS</a>, and <a class="link" href="/blog/audiocn-solid/">audiocn Solid</a>.
 			</p>
 		</div>
 
@@ -91,7 +91,7 @@ const revealAt = (step: number) => getRevealStyle(REVEAL_STEP_MS * step);
 
 		<a href="/about" class="reveal group flex flex-col gap-2" style={revealAt(ABOUT_STEP)}>
 			<h2 class="text-base font-medium decoration-neutral-400 underline-offset-4 group-hover:underline">About me</h2>
-			<p class="text-balance text-sm text-neutral-600 dark:text-neutral-400">Work history, projects, tools, and education.</p>
+			<p class="text-pretty text-sm text-neutral-600 dark:text-neutral-400">Work history, projects, tools, and education.</p>
 		</a>
 	</PageColumn>
 </TransitionLayout>

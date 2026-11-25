@@ -21,7 +21,7 @@ const { entries, dateStyle = 'year', headingLevel: Heading = 'h2', revealStartMs
 		>
 			<div class="flex min-h-7 items-center gap-3">
 				<Heading class="text-base font-medium text-neutral-950 decoration-neutral-400 underline-offset-4 group-hover:underline dark:text-neutral-50">
-					<a href={`/blog/${entry.id}/`} class="outline-none after:absolute after:inset-0 focus-visible:underline">
+					<a href={`/blog/${entry.id}/`} class="outline-none after:absolute after:-inset-2 focus-visible:underline focus-visible:after:outline-2 focus-visible:after:outline-neutral-500">
 						{getShortTitle(entry.data.title)}
 					</a>
 				</Heading>
@@ -41,7 +41,7 @@ const { entries, dateStyle = 'year', headingLevel: Heading = 'h2', revealStartMs
 					{dateStyle === 'full' ? <FormattedDate date={entry.data.pubDate} /> : entry.data.pubDate.getFullYear()}
 				</span>
 			</div>
-			<p class="text-balance text-sm text-neutral-600 dark:text-neutral-400">{getSummary(entry.data.description)}</p>
+			<p class="text-pretty text-sm text-neutral-600 dark:text-neutral-400">{getSummary(entry.data.description)}</p>
 		</li>
 	))}
 </ul>

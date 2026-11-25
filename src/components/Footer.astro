@@ -62,8 +62,8 @@ const footerLinks = [
 	.footer-scrim {
 		background: linear-gradient(
 			to bottom,
-			rgb(0 0 0 / 0.88) calc(100% - var(--footer-bar) - 4rem),
-			rgb(0 0 0 / 0.72) 100%
+			rgb(0 0 0 / 0.7) calc(100% - var(--footer-bar) - 4rem),
+			rgb(0 0 0 / 0.45) 100%
 		);
 		transition: opacity 400ms var(--ease-out);
 	}
@@ -84,12 +84,21 @@ const footerLinks = [
 		opacity: 0;
 	}
 
+	/* The photo is a night shot, so full screen lifts it a little to show the capsule and the stars. */
+	.footer-photo img {
+		transition: filter 400ms var(--ease-out);
+	}
+
+	:global(:root[data-photo-mode]) .footer-photo img {
+		filter: brightness(1.25) saturate(1.1);
+	}
+
 	:global(:root[data-photo-mode]) .footer-bar {
 		z-index: 70;
 	}
 
 	.footer-content {
-		transition: opacity 200ms var(--ease-out), visibility 200ms;
+		transition: opacity 150ms var(--ease-out), visibility 150ms;
 	}
 
 	:global(:root[data-photo-mode]) .footer-content {
@@ -118,6 +127,7 @@ const footerLinks = [
 	@media (prefers-reduced-motion: reduce) {
 		.photo-icon-arm,
 		.footer-scrim,
+		.footer-photo img,
 		.footer-content {
 			transition: none;
 		}
@@ -210,7 +220,7 @@ const footerLinks = [
 						{ transform: 'none', clipPath: 'inset(0)' },
 						{ transform: `translateY(${offset}px)`, clipPath: FOOTER_CLIP },
 					],
-					{ duration: 380, easing: EASE, fill: 'both' },
+					{ duration: 200, easing: EASE, fill: 'both' },
 				);
 			}
 
